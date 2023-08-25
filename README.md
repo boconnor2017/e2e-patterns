@@ -1,10 +1,5 @@
-# Welcome to the E2E Patterns Lab
-The purpose of this lab is to demo or experiment with VMware technologies (such as vSphere) or VMware concepts (such as Docker or Kubernetes) using a series of automated, zero-touch labs. All code in this repository is tested regularly and updated based on relevant field use cases (such as demos or training). All labs are standardized to run on PhotonOS.
-
-❗ WARNING: the contents of this wiki are not intended for production networks. In most cases, best practices for operational compliance are not followed. The intended use of this wiki is for home labs only.
-
 # Quick Start
-For a detailed documentation of this lab please see the wiki page: https://tinyurl.com/e2e-patterns
+❗ WARNING: the contents of this wiki are not intended for production networks. In most cases, best practices for operational compliance are not followed. The intended use of this wiki is for home labs only. For a detailed documentation of this lab please see the wiki page: https://tinyurl.com/e2e-patterns
 
 ## Step 1: Deploy Photon (photon-ova-4.0-ca7c9e9330.ova)
 For downloads visit: https://github.com/vmware/photon/wiki/Downloading-Photon-OS 
