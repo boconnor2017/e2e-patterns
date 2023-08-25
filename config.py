@@ -16,6 +16,9 @@ class E2EP_ENVIRONMENT():
 	esxi_host_virtual_switch = "VM Network" #virtual switch that will be used as the target port group for patterns
 
 # Lab Variables - below are things that will be created as part of the automation, editing these are OPTIONAL 
+class UNIVERSAL():
+	password = "VMware1!"
+	
 class LOGS():
 	dns = "_dns.log"
 	nfs = "_nfs.log"
@@ -66,3 +69,4 @@ class IPAM():
 		"DNS", # The zone itself
 		"" #Last one Blank
 	]
+
