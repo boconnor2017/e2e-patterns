@@ -16,7 +16,7 @@ curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photo
 
 ## Step 3: Download refresher script
 ```
-curl https://tinyurl.com/e2e-refresh-e2e-patterns >> refresh-e2e-patterns.sh
+curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/refresh-e2e-patterns.sh >> refresh-e2e-patterns.sh
 ```
 
 ## Step 4: Run E2E lab PhotonOS prep script
