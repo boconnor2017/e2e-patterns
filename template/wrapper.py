@@ -6,6 +6,7 @@
 # Date: <MONTH YEAR>
 # Add python script (example below)
 import os
+import shutil
 
 a = "This works!!"
 print(a)
