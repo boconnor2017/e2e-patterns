@@ -11,7 +11,7 @@ import json
 import os
 from vmware.vapi.vsphere.client import create_vsphere_client
 from datetime import datetime
-import labvars
+import config
 
 ## LOGGING
 def write_to_logs(err, logfile_name):
