@@ -29,8 +29,8 @@ import lib
 
 #TEST 
 a = "This works!!"
-b = IPAM().tag[0] 
-c = IPAM().fqdn[0]
-d = IPAM().ip[0]
+b = config.IPAM().tag[0] 
+c = config.IPAM().fqdn[0]
+d = config.IPAM().ip[0]
 print(a)
 print(b+" "+c+" "+d)
