@@ -32,5 +32,10 @@ a = "This works!!"
 b = config.IPAM().tag[0] 
 c = config.IPAM().fqdn[0]
 d = config.IPAM().ip[0]
+e = a 
+f = "_log_test.log"
+
 print(a)
 print(b+" "+c+" "+d)
+lib.write_to_logs(e, f)
+
