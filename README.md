@@ -4,7 +4,7 @@ The purpose of this lab is to demo or experiment with VMware technologies (such 
 ❗ WARNING: the contents of this wiki are not intended for production networks. In most cases, best practices for operational compliance are not followed. The intended use of this wiki is for home labs only.
 
 # Quick Start
-For a detailed documentation of this lab please see the wiki page: https://github.com/boconnor2017/e2e-k8-lab/wiki
+For a detailed documentation of this lab please see the wiki page: https://tinyurl.com/e2e-patterns
 
 ## Step 1: Deploy Photon (photon-ova-4.0-ca7c9e9330.ova)
 For downloads visit: https://github.com/vmware/photon/wiki/Downloading-Photon-OS 
