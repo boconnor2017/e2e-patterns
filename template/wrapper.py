@@ -5,6 +5,8 @@
 # Author: Brendan O'Connor
 # Date: <MONTH YEAR>
 # Add python script (example below)
+import os
+
 a = "This works!!"
 print(a)
 
