@@ -16,7 +16,7 @@ curl https://tinyurl.com/e2e-patterns-prep-photon >> prep-photon.sh
 
 ## Step 3: Download refresher script
 ```
-curl https://raw.githubusercontent.com/boconnor2017/e2e-k8-lab/main/refresh-e2e-k8-lab.sh >> refresh-e2e-k8-lab.sh
+curl https://tinyurl.com/e2e-refresh-e2e-patterns >> refresh-e2e-patterns.sh
 ```
 
 ## Step 4: Run E2E lab PhotonOS prep script
@@ -26,9 +26,9 @@ sh prep-photon.sh
 
 ## Step 5: Refresh local repo (as needed)
 ```
-sh refresh-e2e-k8-lab.sh
+sh refresh-e2e-patterns.sh
 ```
 
 # Labs
-See table of contents in the wiki: https://github.com/boconnor2017/e2e-k8-lab/wiki/Table-of-Contents
+See table of contents in the wiki: https://tinyurl.com/e2e-patterns-toc
 
