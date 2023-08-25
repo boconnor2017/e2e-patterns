@@ -20,7 +20,7 @@ print(str(outpt))
 print("")
 
 # Get pattern library
-src_file = '/usr/local/e2e-k8-lab/lib.py'
+src_file = '/usr/local/e2e-patterns/lib.py'
 des_dir = os.getcwd()
 print("Retrieving library file from "+src_file+" and copying to "+des_dir)
 outpt = shutil.copy(src_file, des_dir)
