@@ -8,9 +8,6 @@
 import os
 import shutil
 
-a = "This works!!"
-print(a)
-
 # Get pattern config file
 src_file = '/usr/local/e2e-patterns/config.py'
 des_dir = os.getcwd()
@@ -29,3 +26,11 @@ print("")
 
 import config
 import lib
+
+#TEST 
+a = "This works!!"
+b = IPAM().tag[0] 
+c = IPAM().fqdn[0]
+d = IPAM().ip[0]
+print(a)
+print(b+" "+c+" "+d)
