@@ -11,7 +11,7 @@ cd /usr/local/
 
 ## Step 2: Download controller prep script 
 ```
-curl https://tinyurl.com/e2e-patterns-prep-photon >> prep-photon.sh
+curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> prep-photon.sh
 ```
 
 ## Step 3: Download refresher script
