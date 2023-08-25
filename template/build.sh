@@ -10,5 +10,8 @@ python3 -m pip install --upgrade pip
 python3 -m pip install --upgrade pip setuptools
 # Add necessary pip packages (example below)
 python3 -m pip install flask-restful
+# Add these when you need to use the vSphere Python SDK
+python3 -m pip install --upgrade pip setuptools
+python3 -m pip install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git
 # Call wrapper (example below)
-python3 wrapper-build-e2e-pattern-mc.py
+python3 wrapper.py
