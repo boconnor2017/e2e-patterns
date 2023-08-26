@@ -5,6 +5,7 @@
 import os
 import shutil
 import subprocess
+import sys
 
 # Get pattern config file
 src_file = '/usr/local/e2e-patterns/config.py'
@@ -29,13 +30,20 @@ import lib
 logfile_name = config.LOGS().photonos
 err = "Starting wrapper-build-e2e-pattern-photon.py"
 lib.write_to_logs(err, logfile_name)
+err = "Input variables:"
+lib.write_to_logs(err, logfile_name)
+i=0 
+for args in sys.argv:
+	err = "    "+args[i]
+	lib.write_to_logs(err, logfile_name)
+	i=i+1
 
 # Virtual Machine Details
 class VM():
-	name = "e2ep-test-02" # as displayed in vCenter
-	hostname = "e2ep-test-01" # guest os config 
-	ip = "172.16.0.210" # guest os config
-	source = "photon-ova-4.0-ca7c9e9330.ova" # (syntax: ova-name.ova)
+	name = sys.argv[1] # as displayed in vCenter
+	hostname = sys.argv[2] # guest os config 
+	ip = sys.argv[3] # guest os config
+	source = sys.argv[4] # (syntax: ova-name.ova)
 
 err = "Class VM():"
 lib.write_to_logs(err, logfile_name)
