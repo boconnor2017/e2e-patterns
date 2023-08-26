@@ -24,6 +24,7 @@ class LOGS():
 	nfs = "_nfs.log"
 	mvc = "_mvc.log"
 	mnsx = "_mnsx.log"
+	photonos = "_photonos.log"
 
 class DNS():
 	ip = "172.16.0.9"
