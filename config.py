@@ -15,7 +15,7 @@ class E2EP_ENVIRONMENT():
 	esxi_host_datastore = "datastore1" #datastore that will be used as the target storage for patterns
 	esxi_host_virtual_switch = "VM Network" #virtual switch that will be used as the target port group for patterns
 	photonos_username = "root" #default username to login to photon vms 
-	photonos_password = "VMware1!VMware1!"
+	photonos_password = "VMware1!VMware1!" #default password to login to photon vms
 
 # Lab Variables - below are things that will be created as part of the automation, editing these are OPTIONAL 
 class UNIVERSAL():
