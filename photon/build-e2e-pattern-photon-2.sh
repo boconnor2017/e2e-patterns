@@ -5,4 +5,4 @@ python3 -m ensurepip
 python3 -m pip install --upgrade pip
 python3 -m pip install --upgrade pip setuptools
 python3 -m pip install docker
-python3 wrapper-build-e2e-pattern.photon-2.py
+python3 wrapper-build-e2e-pattern-photon-2.py
