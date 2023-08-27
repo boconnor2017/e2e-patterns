@@ -29,6 +29,6 @@ sh prep-photon.sh
 sh refresh-e2e-patterns.sh
 ```
 
-# Labs
+# Patterns
 See table of contents in the wiki: https://tinyurl.com/e2e-patterns-toc
 
