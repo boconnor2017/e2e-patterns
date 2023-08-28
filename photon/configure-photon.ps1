@@ -6,20 +6,27 @@
 # 0: ESXi Host 
 # 1: ESXi User (root recommended)
 # 2: ESXi Password
-# 3: PhotonOS Guest User (root recommended)
-# 4: PhotonOS Guest Password 
+# 3: PhotonOS VM Name
+# 4: PhotonOS New Guest Password 
+#
+# Syntax: docker run --rm --entrypoint="/usr/bin/pwsh" -v ${PWD}:/tmp vmware/powerclicore /tmp/test.ps1 '172.16.0.201 root VMware1! e2ep-photontest-09 VMware1!VMware1!'
+
 param(
 [string]$a
 )
 
 # Parse Command Line Inputs
 $b = $a.Split(" ")
+foreach($args in $b){
+	Write-Host $args
+}
 
 # Connect to ESXi Host
 Connect-VIServer -Server $b[0] -Protocol https -User $b[1] -Password $b[2] -Force
-$vm_list = Get-VM
-$vm_config_script = "mkdir /usr/local/TEST"
-foreach($vm in $vm_list){
-	Get-VMGuest -VM $vm
-	Invoke-VMScript -VM $vm -ScriptText $vm_config_script -GuestUser $b[3] -GuestPassword $b[4]
-}
+
+# Configure new password
+Set-VMKeystrokes -VM $b[3] -Stringinput "root" -ReturnCarriage $true -DebugOn $true
+Set-VMKeystrokes -VM $b[3] -Stringinput "changeme" -ReturnCarriage $true -DebugOn $true
+Set-VMKeystrokes -VM $b[3] -Stringinput "changeme" -ReturnCarriage $true -DebugOn $true
+Set-VMKeystrokes -VM $b[3] -Stringinput $b[4] -ReturnCarriage $true -DebugOn $true
+Set-VMKeystrokes -VM $b[3] -Stringinput $b[4] -ReturnCarriage $true -DebugOn $true
