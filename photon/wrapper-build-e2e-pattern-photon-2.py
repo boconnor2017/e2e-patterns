@@ -4,6 +4,8 @@
 import os
 import shutil
 import paramiko
+import docker
+import subprocess
 
 # Get pattern config file
 src_file = '/usr/local/e2e-patterns/config.py'
@@ -49,20 +51,38 @@ def run_ssh_command(run_cmd):
 	    lib.write_to_logs(err, logfile_name)
 	    err = stderr.read().decode()
 	    lib.write_to_logs(err, logfile_name)
-	    #pause_dur = 0
-	    #err = "Pausing python runtime for "+str(pause_dur)+" seconds..."
-	    #lib.write_to_logs(err, logfile_name)
-	    #lib.pause_python_for_duration(pause_dur)
-	    #err = "Resuming python runtime"
-	    #lib.write_to_logs(err, logfile_name)
 	    err = ""
 	    lib.write_to_logs(err, logfile_name)
 	    i=i+1
 
 # Parameters
-photon_host = "172.16.0.128"
+photon_host = "172.16.0.136"
+photon_vm_name = "e2ep-photontest-11"
 photon_prep_source = "/usr/local/prep-photon.sh"
 photon_refresh_source = "/usr/local/refresh-e2e-patterns.sh" 
+
+# Configure password using powercli container
+err = "Configure password using pcli container:"
+lib.write_to_logs(err, logfile_name)
+docker_rm = True 
+docker_entrypoint = "/usr/bin/pwsh"
+docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+docker_image = "vmware/powerclicore"
+docker_cmd = "/tmp/configure-photon.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+photon_vm_name+" "+config.E2EP_ENVIRONMENT().photonos_password+"\""
+err = "    docker_cmd: "+docker_cmd
+lib.write_to_logs(err, logfile_name)
+client = docker.from_env()
+client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Pause to allow password change to take effect 
+seconds = 30
+err = "Pausing for "+str(seconds)+" to let password change to take effect..."
+lib.write_to_logs(err, logfile_name)
+lib.pause_python_for_duration(seconds)
+err = "Resuming script."
+lib.write_to_logs(err, logfile_name)
 
 # Create commands for PhotonOS
 photon_prep_downloads = [
