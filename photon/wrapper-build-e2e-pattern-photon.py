@@ -41,9 +41,7 @@ for args in sys.argv:
 # Virtual Machine Details
 class VM():
 	name = sys.argv[1] # as displayed in vCenter
-	hostname = sys.argv[2] # guest os config 
-	ip = sys.argv[3] # guest os config
-	source = sys.argv[4] # (syntax: ova-name.ova)
+	source = sys.argv[2] # (syntax: ova-name.ova)
 
 err = "Class VM():"
 lib.write_to_logs(err, logfile_name)
