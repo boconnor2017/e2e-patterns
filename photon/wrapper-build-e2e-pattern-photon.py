@@ -47,10 +47,6 @@ err = "Class VM():"
 lib.write_to_logs(err, logfile_name)
 err = "	   name: "+VM().name
 lib.write_to_logs(err, logfile_name)
-err = "	   hostname: "+VM().hostname
-lib.write_to_logs(err, logfile_name)
-err = "	   ip: "+VM().ip
-lib.write_to_logs(err, logfile_name)
 err = "	   source: "+VM().source
 lib.write_to_logs(err, logfile_name)
 
