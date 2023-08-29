@@ -46,6 +46,8 @@ err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
 lib.write_to_logs(err, logfile_name)
 err = "Starting wrapper-build-e2e-pattern-photon-2.py"
 lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
 # Functions 
 def run_ssh_command(run_cmd):
@@ -62,6 +64,36 @@ def run_ssh_command(run_cmd):
 	    lib.write_to_logs(err, logfile_name)
 	    i=i+1
 
+def get_vm_ip_address(vm_name):
+	docker_rm = True
+	docker_entrypoint = "/usr/bin/pwsh"
+	docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+	docker_image = "vmware/powerclicore"
+	#docker_cmd = "/tmp/get-vm-ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
+	docker_cmd = "/tmp/test.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
+	client = docker.from_env()
+	ip_address_raw = client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+	ip_address_raw = str(ip_address_raw)
+	ip_address = ip_address_raw[-17:-5]
+	return ip_address
+
+def ssh_to_photon(client, ip, un, pw, retry):
+	if retry < 5:
+		try: 
+			client.connect(hostname=ip, username=un, password=pw)
+		except:
+			err = "[!] Cannot connect to the SSH Server"
+			lib.write_to_logs(err, logfile_name)
+			seconds = (10)
+			err = "Pausing for "+str(seconds)+" seconds before retry number "+str(retry)
+			retry=retry+1
+			ssh_to_photon(client, ip, un, pw, retry)
+	else:
+		err = "[!] Cannot connect to the SSH Server"
+		lib.write_to_logs(err, logfile_name)
+		err = "Closing connection."
+		lib.write_to_logs(err, logfile_name)
+		exit()
 
 # Virtual Machine Details
 class VM():
@@ -70,9 +102,42 @@ class VM():
 	prep_script = "/usr/local/prep-photon.sh"
 	refresh_script = "/usr/local/refresh-e2e-patterns.sh"
 
+err = "VM() Class:"
+lib.write_to_logs(err, logfile_name)
+err = "    .name: "+VM().name
+lib.write_to_logs(err, logfile_name)
+err = "    .source: "+VM().source
+lib.write_to_logs(err, logfile_name)
+err = "    .prep_scrip: "+VM().prep_script
+lib.write_to_logs(err, logfile_name)
+err = "    .refresh_script: "+VM().refresh_script
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
 # Deploy Photon Appliance using ovftool container
-print("TEMPORARY: in the future this will deploy photon.")
+err = "Deploying photon machine: "+VM().name+" "+VM().source
+lib.write_to_logs(err, logfile_name)
+subprocess.run(["sh", "build-e2e-pattern-photon.sh", VM().name, VM().source])
+
+# Pause to allow password change to take effect 
+seconds = (60*2)
+err = "Pausing for "+str(seconds)+" seconds to let the ova to complete its build..."
+lib.write_to_logs(err, logfile_name)
+lib.pause_python_for_duration(seconds)
+err = "Resuming script."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Get IP Address of the photon vm
+err = "Getting ip address:"
+lib.write_to_logs(err, logfile_name)
+photon_ip_address = get_vm_ip_address(VM().name)
+err = "    IP Address: "+photon_ip_address
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
 # Configure password using powercli container
 err = "Configure password using pcli container:"
@@ -89,12 +154,9 @@ client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Get IP Address of the new photon os by name using powercli container
-photon_ip_address = "172.16.0.138"
-
 # Pause to allow password change to take effect 
 seconds = 30
-err = "Pausing for "+str(seconds)+" to let password change to take effect..."
+err = "Pausing for "+str(seconds)+" seconds to let password change to take effect..."
 lib.write_to_logs(err, logfile_name)
 lib.pause_python_for_duration(seconds)
 err = "Resuming script."
@@ -136,11 +198,8 @@ for command_validate in photon_prep_run_script:
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-try:
-    client.connect(hostname=photon_ip_address, username=config.E2EP_ENVIRONMENT().photonos_username, password=config.E2EP_ENVIRONMENT().photonos_password)
-except:
-    print("[!] Cannot connect to the SSH Server")
-    exit()
+retry = 0
+ssh_to_photon(client, photon_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, retry)
 
 # Download scripts to PhotonOS
 err = "Downloading scripts to Photon from github:"
@@ -160,3 +219,4 @@ lib.write_to_logs(err, logfile_name)
 client.close()
 err = "Finished. SSH Session closed."
 lib.write_to_logs(err, logfile_name)
+
