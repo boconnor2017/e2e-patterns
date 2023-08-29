@@ -7,4 +7,4 @@ python3 -m pip install --upgrade pip
 python3 -m pip install --upgrade pip setuptools
 python3 -m pip install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git
 python3 -m pip install docker
-python3 wrapper-build-e2e-pattern-photon-1.py $1 $2 $3 $4
+python3 wrapper-build-e2e-pattern-photon.py $1 $2
