@@ -77,6 +77,14 @@ def get_vm_ip_address(vm_name):
 	return ip_address
 
 def ssh_to_photon(client, ip, un, pw, retry):
+    err = "Attempting connection to the SSH Server:"
+	lib.write_to_logs(err, logfile_name)
+	err = "    ip: "+ip 
+	lib.write_to_logs(err, logfile_name)
+	err = "    username: "+un 
+	lib.write_to_logs(err, logfile_name)
+	err = "    password: "+pw 
+	lib.write_to_logs(err, logfile_name)
 	if retry < 5:
 		try: 
 			client.connect(hostname=ip, username=un, password=pw)
@@ -85,6 +93,7 @@ def ssh_to_photon(client, ip, un, pw, retry):
 			lib.write_to_logs(err, logfile_name)
 			seconds = (10)
 			err = "Pausing for "+str(seconds)+" seconds before retry number "+str(retry)
+			lib.write_to_logs(err, logfile_name)
 			retry=retry+1
 			ssh_to_photon(client, ip, un, pw, retry)
 	else:
