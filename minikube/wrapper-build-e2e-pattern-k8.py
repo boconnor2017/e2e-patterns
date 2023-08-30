@@ -7,6 +7,7 @@ import shutil
 import sys
 import paramiko
 import docker
+import subprocess
 
 # Get pattern config file
 src_file = '/usr/local/e2e-patterns/config.py'
@@ -102,6 +103,23 @@ class VM():
 
 
 # Run /usr/local/e2e-patterns/photon/build-e2e-pattern-controller.sh 
+err = "Building photon controller:"
+lib.write_to_logs(err, logfile_name)
+err = "    sh /usr/local/e2e-patterns/photon/build-e2e-pattern-controller.sh "+VM().name+" "+VM().source
+lib.write_to_logs(err, logfile_name)
+err = "    LOGS WILL NOW BE REDIRECTED...."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+subprocess.run(["sh", "sh /usr/local/e2e-patterns/photon/build-e2e-pattern-controller.sh", VM().name, VM().source])
+err = "    LOGS RESUMING HERE......"
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
 # Get IP Address
 src_file = '/usr/local/e2e-patterns/photon/get-vm-ip.ps1'
