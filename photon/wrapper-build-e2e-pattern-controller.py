@@ -69,8 +69,7 @@ def get_vm_ip_address(vm_name):
 	docker_entrypoint = "/usr/bin/pwsh"
 	docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
 	docker_image = "vmware/powerclicore"
-	#docker_cmd = "/tmp/get-vm-ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
-	docker_cmd = "/tmp/test.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
+	docker_cmd = "/tmp/get-vm-ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
 	client = docker.from_env()
 	ip_address_raw = client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
 	ip_address_raw = str(ip_address_raw)
@@ -219,4 +218,3 @@ lib.write_to_logs(err, logfile_name)
 client.close()
 err = "Finished. SSH Session closed."
 lib.write_to_logs(err, logfile_name)
-
