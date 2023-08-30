@@ -22,11 +22,13 @@ class UNIVERSAL():
 	password = "VMware1!"
 	
 class LOGS():
+	template = "_template.log"
 	dns = "_dns.log"
 	nfs = "_nfs.log"
 	mvc = "_mvc.log"
 	mnsx = "_mnsx.log"
 	photonos = "_photonos.log"
+	minikube = "_k8.log"
 
 class DNS():
 	ip = "172.16.0.9"
