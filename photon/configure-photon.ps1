@@ -25,8 +25,8 @@ foreach($args in $b){
 Connect-VIServer -Server $b[0] -Protocol https -User $b[1] -Password $b[2] -Force
 
 # Configure new password
-Set-VMKeystrokes -VM $b[3] -Stringinput "root" -ReturnCarriage $true -DebugOn $true
-Set-VMKeystrokes -VM $b[3] -Stringinput "changeme" -ReturnCarriage $true -DebugOn $true
-Set-VMKeystrokes -VM $b[3] -Stringinput "changeme" -ReturnCarriage $true -DebugOn $true
-Set-VMKeystrokes -VM $b[3] -Stringinput $b[4] -ReturnCarriage $true -DebugOn $true
-Set-VMKeystrokes -VM $b[3] -Stringinput $b[4] -ReturnCarriage $true -DebugOn $true
+Set-VMKeystrokes -VM $b[3] -Stringinput "root" -ReturnCarriage $true -DebugOn $false | Out-Null
+Set-VMKeystrokes -VM $b[3] -Stringinput "changeme" -ReturnCarriage $true -DebugOn $false | Out-Null
+Set-VMKeystrokes -VM $b[3] -Stringinput "changeme" -ReturnCarriage $true -DebugOn $false | Out-Null
+Set-VMKeystrokes -VM $b[3] -Stringinput $b[4] -ReturnCarriage $true -DebugOn $false | Out-Null
+Set-VMKeystrokes -VM $b[3] -Stringinput $b[4] -ReturnCarriage $true -DebugOn $false | Out-Null
