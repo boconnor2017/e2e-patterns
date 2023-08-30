@@ -27,15 +27,27 @@ print("")
 import config
 import lib
 
+# Start log file
+logfile_name = config.LOGS().template
+err = "Starting wrapper-build-e2e-pattern-photon.py"
+lib.write_to_logs(err, logfile_name)
+err = "Input variables:"
+lib.write_to_logs(err, logfile_name)
+i=0 
+for args in sys.argv:
+	err = "    "+args[i]
+	lib.write_to_logs(err, logfile_name)
+	i=i+1
+
+
 #TEST 
 a = "This works!!"
 b = config.IPAM().tag[0] 
 c = config.IPAM().fqdn[0]
 d = config.IPAM().ip[0]
 e = a 
-f = "_log_test.log"
+
 
 print(a)
 print(b+" "+c+" "+d)
-lib.write_to_logs(e, f)
 
