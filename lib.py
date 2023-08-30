@@ -55,18 +55,6 @@ def create_dns_record(e2e_tag, e2e_fqdn, e2e_ip, token):
   response = requests.get(api_url)
   return response.json()
 
-## PCLI: VM CALLS
-def get_vm_ip_address(vm_name):
-	docker_rm = True
-	docker_entrypoint = "/usr/bin/pwsh"
-	docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
-	docker_image = "vmware/powerclicore"
-	docker_cmd = "/tmp/get-vm-ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
-	client = docker.from_env()
-	ip_address_raw = client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
-	ip_address_raw = str(ip_address_raw)
-	ip_address = ip_address_raw[-17:-5]
-	return ip_address
 
 ## VAPI: GET CALLS
 def get_vc_session_id(vcenter_hostname, vcenter_username, vcenter_password):
