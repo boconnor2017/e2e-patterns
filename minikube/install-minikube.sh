@@ -1,4 +1,4 @@
-# I
+# Installs Minikube on PhotonOS
 # Author: Brendan O'Connor
 # Date: August 2023
 
