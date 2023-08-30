@@ -1,13 +1,14 @@
-# Deploys a Minikube Pattern
+# Builds Minikube on a photon controller
+#     Starting point for this script see ../photon/wrapper-build-e2e-controller.py
 # Author: Brendan O'Connor
 # Date: August 2023
-# Add python script (example below)
+
 import os
 import shutil
-import sys
 import paramiko
 import docker
 import subprocess
+import sys
 
 # Get pattern config file
 src_file = '/usr/local/e2e-patterns/config.py'
@@ -30,15 +31,20 @@ import lib
 
 # Start log file
 logfile_name = config.LOGS().minikube
-err = "Starting wrapper-build-e2e-pattern-photon.py"
+err = ""
 lib.write_to_logs(err, logfile_name)
-err = "Input variables:"
+err = ""
 lib.write_to_logs(err, logfile_name)
-i=0 
-for args in sys.argv:
-	err = "    "+args[i]
-	lib.write_to_logs(err, logfile_name)
-	i=i+1
+err = ""
+lib.write_to_logs(err, logfile_name)
+err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+lib.write_to_logs(err, logfile_name)
+err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+lib.write_to_logs(err, logfile_name)
+err = "Starting wrapper-build-e2e-pattern-k8.py"
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
 # Functions 
 def run_ssh_command(run_cmd):
@@ -54,6 +60,18 @@ def run_ssh_command(run_cmd):
 	    err = ""
 	    lib.write_to_logs(err, logfile_name)
 	    i=i+1
+
+def get_vm_ip_address(vm_name):
+	docker_rm = True
+	docker_entrypoint = "/usr/bin/pwsh"
+	docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+	docker_image = "vmware/powerclicore"
+	docker_cmd = "/tmp/get-vm-ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
+	client = docker.from_env()
+	ip_address_raw = client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+	ip_address_raw = str(ip_address_raw)
+	ip_address = ip_address_raw[-17:-5]
+	return ip_address
 
 def ssh_to_photon(client, ip, un, pw, retry):
 	err = "Attempting connection to the SSH Server:"
@@ -82,64 +100,135 @@ def ssh_to_photon(client, ip, un, pw, retry):
 		lib.write_to_logs(err, logfile_name)
 		exit()
 
-def get_vm_ip_address(vm_name):
-	docker_rm = True
-	docker_entrypoint = "/usr/bin/pwsh"
-	docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
-	docker_image = "vmware/powerclicore"
-	docker_cmd = "/tmp/get-vm-ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
-	client = docker.from_env()
-	ip_address_raw = client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
-	ip_address_raw = str(ip_address_raw)
-	ip_address = ip_address_raw[-17:-5]
-	return ip_address
-
-
 # Virtual Machine Details
 class VM():
 	name = sys.argv[1] # as displayed in vCenter
 	source = sys.argv[2] # (syntax: ova-name.ova)
-	prep_script = "/usr/local/e2e-patterns/minikube/install-minikube.sh"
+	prep_script = "/usr/local/prep-photon.sh"
+	refresh_script = "/usr/local/refresh-e2e-patterns.sh"
+	minikube_script = "/usr/local/e2e-patterns/minikube/install-minikube.sh"
 
-
-# Run /usr/local/e2e-patterns/photon/build-e2e-pattern-controller.sh 
-err = "Building photon controller:"
+err = "VM() Class:"
 lib.write_to_logs(err, logfile_name)
-err = "    sh /usr/local/e2e-patterns/photon/build-e2e-pattern-controller.sh "+VM().name+" "+VM().source
+err = "    .name: "+VM().name
 lib.write_to_logs(err, logfile_name)
-err = "    LOGS WILL NOW BE REDIRECTED...."
+err = "    .source: "+VM().source
 lib.write_to_logs(err, logfile_name)
-err = ""
+err = "    .prep_scrip: "+VM().prep_script
 lib.write_to_logs(err, logfile_name)
-err = ""
-lib.write_to_logs(err, logfile_name)
-err = ""
-lib.write_to_logs(err, logfile_name)
-subprocess.run(["sh", "sh /usr/local/e2e-patterns/photon/build-e2e-pattern-controller.sh", VM().name, VM().source])
-err = "    LOGS RESUMING HERE......"
+err = "    .refresh_script: "+VM().refresh_script
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Get IP Address
-src_file = '/usr/local/e2e-patterns/photon/get-vm-ip.ps1'
+# Copy necessary pcli scripts from ../photon repository
+src_file = '/usr/local/e2e-patterns/photon/configure-photon.ps1'
 des_dir = os.getcwd()
-err = "Retrieving get-vm-ip file from "+src_file+" and copying to "+des_dir
+err = "Retrieving "+src_file+" and copying to "+des_dir
 lib.write_to_logs(err, logfile_name)
 outpt = shutil.copy(src_file, des_dir)
+err = str(outpt)
+lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
-err = "Running get_vm_ip_address("+VM().name+")"
+
+src_file = '/usr/local/e2e-patterns/photon/get-vm-ip.ps1'
+des_dir = os.getcwd()
+err = "Retrieving "+src_file+" and copying to "+des_dir
+lib.write_to_logs(err, logfile_name)
+outpt = shutil.copy(src_file, des_dir)
+err = str(outpt)
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Copy necessary bash scripts and dependencies from ../photon repository
+src_file = '/usr/local/e2e-patterns/photon/build-e2e-pattern-photon.sh'
+des_dir = os.getcwd()
+err = "Retrieving "+src_file+" and copying to "+des_dir
+lib.write_to_logs(err, logfile_name)
+outpt = shutil.copy(src_file, des_dir)
+err = str(outpt)
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+src_file = '/usr/local/e2e-patterns/photon/wrapper-build-e2e-pattern-photon.py'
+des_dir = os.getcwd()
+err = "Retrieving "+src_file+" and copying to "+des_dir
+lib.write_to_logs(err, logfile_name)
+outpt = shutil.copy(src_file, des_dir)
+err = str(outpt)
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Deploy Photon Appliance using ovftool container
+err = "Deploying photon machine: "+VM().name+" "+VM().source
+lib.write_to_logs(err, logfile_name)
+subprocess.run(["sh", "build-e2e-pattern-photon.sh", VM().name, VM().source])
+
+# Pause to allow password change to take effect 
+seconds = (60*2)
+err = "Pausing for "+str(seconds)+" seconds to let the ova to complete its build..."
+lib.write_to_logs(err, logfile_name)
+lib.pause_python_for_duration(seconds)
+err = "Resuming script."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Get IP Address of the photon vm
+err = "Getting ip address:"
 lib.write_to_logs(err, logfile_name)
 photon_ip_address = get_vm_ip_address(VM().name)
-err = "    ip address: "+photon_ip_address
+err = "    IP Address: "+photon_ip_address
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Configure password using powercli container
+err = "Configure password using pcli container:"
+lib.write_to_logs(err, logfile_name)
+docker_rm = True 
+docker_entrypoint = "/usr/bin/pwsh"
+docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+docker_image = "vmware/powerclicore"
+docker_cmd = "/tmp/configure-photon.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+VM().name+" "+config.E2EP_ENVIRONMENT().photonos_password+"\""
+err = "    docker_cmd: "+docker_cmd
+lib.write_to_logs(err, logfile_name)
+client = docker.from_env()
+client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Pause to allow password change to take effect 
+seconds = 30
+err = "Pausing for "+str(seconds)+" seconds to let password change to take effect..."
+lib.write_to_logs(err, logfile_name)
+lib.pause_python_for_duration(seconds)
+err = "Resuming script."
+lib.write_to_logs(err, logfile_name)
+err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Create commands for PhotonOS paramiko configuration
+photon_prep_downloads = [
+    "curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> "+VM().prep_script,
+    "curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/refresh-e2e-patterns.sh >> "+VM().refresh_script,
+    "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/minikube/install-minikube.sh >> "+VM().minikube_script
+]
+
+# Populate variables with script info
 with open(VM().prep_script) as file:
 	txt = file.read()
 
 photon_prep_run_script = txt.split('\n')
+
+with open(VM().minikube_script) as file:
+	txt = file.read()
+
+photon_install_minikube_script = txt.split('\n')
 
 # Connect to SSH Host
 err = "Connecting to ssh host "+photon_ip_address
@@ -147,6 +236,14 @@ lib.write_to_logs(err, logfile_name)
 
 # Validate commands
 err = "Validating commands:"
+lib.write_to_logs(err, logfile_name)
+i=0
+for command_validate in photon_prep_downloads:
+	err = "    ["+str(i)+"] "+command_validate
+	lib.write_to_logs(err, logfile_name)
+	i=i+1
+
+err = ""
 lib.write_to_logs(err, logfile_name)
 i=0
 for command_validate in photon_prep_run_script:
@@ -159,6 +256,13 @@ client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 retry = 0
 ssh_to_photon(client, photon_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, retry)
 
+# Download scripts to PhotonOS
+err = "Downloading scripts to Photon from github:"
+lib.write_to_logs(err, logfile_name)
+run_ssh_command(photon_prep_downloads)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
 # Execute prep scripts to PhotonOS
 err = "Executing photon prep scripts:"
 lib.write_to_logs(err, logfile_name)
@@ -166,5 +270,14 @@ run_ssh_command(photon_prep_run_script)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+# Install minikube
+err = "Installing Minikube:"
+lib.write_to_logs(err, logfile_name)
+run_ssh_command(photon_install_minikube_script)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
 # Close SSH Session
 client.close()
+err = "Finished. SSH Session closed."
+lib.write_to_logs(err, logfile_name)
