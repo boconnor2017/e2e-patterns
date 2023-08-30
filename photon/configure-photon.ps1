@@ -26,7 +26,11 @@ Connect-VIServer -Server $b[0] -Protocol https -User $b[1] -Password $b[2] -Forc
 
 # Configure new password
 Set-VMKeystrokes -VM $b[3] -Stringinput "root" -ReturnCarriage $true -DebugOn $false | Out-Null
+Start-Sleep -Seconds 1.5
 Set-VMKeystrokes -VM $b[3] -Stringinput "changeme" -ReturnCarriage $true -DebugOn $false | Out-Null
+Start-Sleep -Seconds 1.5
 Set-VMKeystrokes -VM $b[3] -Stringinput "changeme" -ReturnCarriage $true -DebugOn $false | Out-Null
+Start-Sleep -Seconds 1.5
 Set-VMKeystrokes -VM $b[3] -Stringinput $b[4] -ReturnCarriage $true -DebugOn $false | Out-Null
+Start-Sleep -Seconds 1.5
 Set-VMKeystrokes -VM $b[3] -Stringinput $b[4] -ReturnCarriage $true -DebugOn $false | Out-Null
