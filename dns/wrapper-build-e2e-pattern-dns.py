@@ -301,17 +301,30 @@ lib.write_to_logs(err, logfile_name)
 # Deploy Tanium container 
 err = "Install Tanium Container:"
 lib.write_to_logs(err, logfile_name)
-# "iptables", "-A", "INPUT", "-i", "eth0", "-p", "udp", "--dport", "53", "-j", "ACCEPT"
-# "sh", "saveiptables.sh"
-# "iptables", "-L"
-# "systemctl", "disable", "systemd-resolved.service"
-# "systemctl", "stop", "systemd-resolved"
-# "sh", "run-docker-compose.sh"
-# return_code = labfunlib.check_web_service_status("http://localhost:5380")
 
-# Configure IPAM using Tanium API (see lines 128+)
+with open("/usr/local/e2e-patterns/dns/install-tanium.sh") as file:
+	txt = file.read()
+
+install_tanium_script = txt.split('\n')
+run_ssh_command(install_tanium_script)
+
+# Check status (local)
+err = "Checking local status of Tanium service:"
+lib.write_to_logs(err, logfile_name)
+return_code = lib.check_web_service_status("http://localhost:5380")
+err = "    return code "+str(return_code)
+lib.write_to_logs(err, logfile_name)
 
 # Close SSH Session
 client.close()
 err = "Finished. SSH Session closed."
 lib.write_to_logs(err, logfile_name)
+
+# Check status (network)
+err = "Checking network status of Tanium service:"
+lib.write_to_logs(err, logfile_name)
+return_code = lib.check_web_service_status("http://"+config.DNS().ip+"":5380")
+err = "    return code "+str(return_code)
+lib.write_to_logs(err, logfile_name)
+
+# Configure IPAM using Tanium API (see lines 128+)
