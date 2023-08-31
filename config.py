@@ -33,6 +33,8 @@ class LOGS():
 class DNS():
 	ip = "172.16.0.9"
 	zone = "e2e.local"
+	vm_name = "e2ep-002"
+	photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
 
 class IPAM():
 	fqdn = [
