@@ -3,4 +3,4 @@ sh /usr/local/e2e-patterns/dns/saveiptables.sh
 iptables -L
 systemctl disable systemd-resolved.service
 systemctl stop systemd-resolved
-sh /usr/local/e2e-patterns/dns/run-docker-compose.sh
+#sh /usr/local/e2e-patterns/dns/run-docker-compose.sh
