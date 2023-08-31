@@ -298,6 +298,10 @@ lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+####################
+### FIX THIS #######
+####################
+
 # Deploy Tanium container 
 err = "Install Tanium Container:"
 lib.write_to_logs(err, logfile_name)
@@ -306,7 +310,35 @@ with open("/usr/local/e2e-patterns/dns/install-tanium.sh") as file:
 	txt = file.read()
 
 install_tanium_script = txt.split('\n')
+
+# Validate commands
+err = "Validating commands:"
+lib.write_to_logs(err, logfile_name)
+i=0
+for command_validate in install_tanium_script:
+	err = "    ["+str(i)+"] "+command_validate
+	lib.write_to_logs(err, logfile_name)
+	i=i+1
+
+err = ""
 run_ssh_command(install_tanium_script)
+
+with open("/usr/local/e2e-patterns/dns/run-docker-compose.sh") as file:
+	txt = file.read()
+
+docker_compose_script = txt.split('\n')
+
+# Validate commands
+err = "Validating commands:"
+lib.write_to_logs(err, logfile_name)
+i=0
+for command_validate in docker_compose_script:
+	err = "    ["+str(i)+"] "+command_validate
+	lib.write_to_logs(err, logfile_name)
+	i=i+1
+
+err = ""
+run_ssh_command(docker_compose_script)
 
 # Check status (local)
 err = "Checking local status of Tanium service:"
