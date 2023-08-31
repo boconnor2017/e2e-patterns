@@ -323,7 +323,7 @@ lib.write_to_logs(err, logfile_name)
 # Check status (network)
 err = "Checking network status of Tanium service:"
 lib.write_to_logs(err, logfile_name)
-return_code = lib.check_web_service_status("http://"+config.DNS().ip+"":5380")
+return_code = lib.check_web_service_status("http://"+config.DNS().ip+":5380")
 err = "    return code "+str(return_code)
 lib.write_to_logs(err, logfile_name)
 
