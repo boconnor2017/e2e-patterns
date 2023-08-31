@@ -7,6 +7,7 @@
 # Add python script (example below)
 import os
 import shutil
+import sys
 
 # Get pattern config file
 src_file = '/usr/local/e2e-patterns/config.py'
