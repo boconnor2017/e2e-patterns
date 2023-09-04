@@ -41,12 +41,12 @@ for args in sys.argv:
 	i=i+1
 
 # Functions 
-def run_ssh_command(run_cmd):
+def run_ssh_command(run_cmd, pclient):
 	i=0
 	for command in run_cmd:
 	    err = "    ["+str(i)+"] "+command
 	    lib.write_to_logs(err, logfile_name)
-	    stdin, stdout, stderr = client.exec_command(command, timeout=None)
+	    stdin, stdout, stderr = pclient.exec_command(command, timeout=None)
 	    err = (stdout.read().decode())
 	    lib.write_to_logs(err, logfile_name)
 	    err = stderr.read().decode()
@@ -61,13 +61,13 @@ def get_vm_ip_address(vm_name):
 	docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
 	docker_image = "vmware/powerclicore"
 	docker_cmd = "/tmp/get-vm-ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
-	client = docker.from_env()
-	ip_address_raw = client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+	dclient = docker.from_env()
+	ip_address_raw = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
 	ip_address_raw = str(ip_address_raw)
 	ip_address = ip_address_raw[-17:-5]
 	return ip_address
 
-def ssh_to_photon(client, ip, un, pw, retry):
+def ssh_to_photon(pclient, ip, un, pw, retry):
 	err = "Attempting connection to the SSH Server:"
 	lib.write_to_logs(err, logfile_name)
 	err = "    ip: "+ip 
@@ -78,7 +78,7 @@ def ssh_to_photon(client, ip, un, pw, retry):
 	lib.write_to_logs(err, logfile_name)
 	if retry < 5:
 		try: 
-			client.connect(hostname=ip, username=un, password=pw)
+			pclient.connect(hostname=ip, username=un, password=pw)
 		except:
 			err = "[!] Cannot connect to the SSH Server"
 			lib.write_to_logs(err, logfile_name)
@@ -86,7 +86,7 @@ def ssh_to_photon(client, ip, un, pw, retry):
 			err = "Pausing for "+str(seconds)+" seconds before retry number "+str(retry)
 			lib.write_to_logs(err, logfile_name)
 			retry=retry+1
-			ssh_to_photon(client, ip, un, pw, retry)
+			ssh_to_photon(pclient, ip, un, pw, retry)
 	else:
 		err = "[!] Cannot connect to the SSH Server"
 		lib.write_to_logs(err, logfile_name)
@@ -188,8 +188,8 @@ docker_image = "vmware/powerclicore"
 docker_cmd = "/tmp/configure-photon.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+VM().name+" "+config.E2EP_ENVIRONMENT().photonos_password+"\""
 err = "    docker_cmd: "+docker_cmd
 lib.write_to_logs(err, logfile_name)
-client = docker.from_env()
-client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+dclient = docker.from_env()
+dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
@@ -236,22 +236,22 @@ for command_validate in photon_prep_run_script:
 	lib.write_to_logs(err, logfile_name)
 	i=i+1
 
-client = paramiko.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+pclient = paramiko.SSHClient()
+pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 retry = 0
-ssh_to_photon(client, photon_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, retry)
+ssh_to_photon(pclient, photon_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, retry)
 
 # Download scripts to PhotonOS
 err = "Downloading scripts to Photon from github:"
 lib.write_to_logs(err, logfile_name)
-run_ssh_command(photon_prep_downloads)
+run_ssh_command(photon_prep_downloads, pclient)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Execute prep scripts to PhotonOS
 err = "Executing photon prep scripts:"
 lib.write_to_logs(err, logfile_name)
-run_ssh_command(photon_prep_run_script)
+run_ssh_command(photon_prep_run_script, pclient)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
@@ -283,8 +283,8 @@ docker_image = "vmware/powerclicore"
 docker_cmd = "/tmp/change_vm_ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+VM().name+" "+config.DNS().ip+" "+config.E2EP_ENVIRONMENT().subnet_mask+" "+config.E2EP_ENVIRONMENT().default_gw+"\""
 err = "    docker_cmd: "+docker_cmd
 lib.write_to_logs(err, logfile_name)
-client = docker.from_env()
-client.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+dclient = docker.from_env()
+dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
@@ -321,7 +321,7 @@ for command_validate in install_tanium_script:
 	i=i+1
 
 err = ""
-run_ssh_command(install_tanium_script)
+run_ssh_command(install_tanium_script, pclient)
 
 with open("/usr/local/e2e-patterns/dns/run-docker-compose.sh") as file:
 	txt = file.read()
@@ -338,7 +338,7 @@ for command_validate in docker_compose_script:
 	i=i+1
 
 err = ""
-run_ssh_command(docker_compose_script)
+run_ssh_command(docker_compose_script, pclient)
 
 # Check status (local)
 err = "Checking local status of Tanium service:"
@@ -348,7 +348,7 @@ err = "    return code "+str(return_code)
 lib.write_to_logs(err, logfile_name)
 
 # Close SSH Session
-client.close()
+pclient.close()
 err = "Finished. SSH Session closed."
 lib.write_to_logs(err, logfile_name)
 
