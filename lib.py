@@ -80,41 +80,6 @@ def change_vm_os_password(vm_name, new_vm_password):
     err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
     return err 
 
-def run_photon_prep_scripts(retry, ip, un, pw):
-    if retry < 5:
-        photon_prep_script_src = "/usr/local/prep-photon.sh"
-        photon_prep_script_txt = populate_var_from_file(photon_prep_script_src)
-        photon_prep_script_cmd_list = photon_prep_script_txt.split('\n')
-        pclient = paramiko.SSHClient()
-        pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        try:
-            err = connect_to_ssh_server(pclient, ip, un, pw)
-            if err > 0:
-                for command in photon_prep_script_cmd_list:
-                    pclient.exec_command(command, timeout=None)
-        except:
-            seconds = (10)
-            pause_python_for_duration(seconds)
-            retry=retry+1
-            run_photon_prep_scripts(retry, ip, un, pw)
-            err = "[!] Cannot connect to SSH server, retry "+str(retry)+" after "+seconds+" pause."
-    else:
-        err = "[!] Cannot connect to the SSH Server. Disconnecting."
-        pclient.close()
-
-def download_photon_prep_scripts(ip, un, pw):
-    pclient = paramiko.SSHClient()
-    pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    err = connect_to_ssh_server(pclient, ip, un, pw) 
-    if err > 0:
-        command = "curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> /usr/local/prep-photon.sh"
-        pclient.exec_command(command, timeout=None)
-        err = "SSH command sent."
-        return err
-    else:
-        err = "[!] SSH conenction failed. Connection closed."
-        return err
-
 def connect_to_ssh_server(pclient, ip, un, pw):
     try:
         pclient.connect(hostname=ip, username=un, password=pw)
@@ -123,3 +88,14 @@ def connect_to_ssh_server(pclient, ip, un, pw):
     except:
         err = 0
         return err
+
+def send_command_over_ssh(cmd, ip, un, pw):
+    pclient = paramiko.SSHClient()
+    pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    connect_to_ssh_server(pclient, ip, un, pw)
+    pclient.exec_command(cmd, timeout=None)
+    pclient.close()
+
+def download_photon_prep_script_via_ssh(ip, un, pw):
+    cmd = "curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> /usr/local/prep-photon.sh"
+    send_command_over_ssh(cmd, ip, un, pw)
