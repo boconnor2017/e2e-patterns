@@ -29,38 +29,21 @@ def write_to_logs(err, logfile_name):
     logfile.write(tstamp+": "+err+" \n")
     logfile.close
 
-## DOCKER FUNCTIONS
-def get_vm_ip_address(vm_name):
-	docker_rm = True
-	docker_entrypoint = "/usr/bin/pwsh"
-	docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
-	docker_image = "vmware/powerclicore"
-	docker_cmd = "/tmp/get-vm-ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
-	dclient = docker.from_env()
-	ip_address_raw = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
-	ip_address_raw = str(ip_address_raw)
-	ip_address = ip_address_raw[-17:-5]
-	return ip_address
+def build_photon_with_ovftool_container(vm_name, vm_source):
+    docker_image = "ovftool" 
+    docker_volume = {"/usr/local/drop":{'bind':'/root/home', 'mode':'rw'}}
+    docker_cmd = "--sourceType=OVA "
+    docker_cmd = docker_cmd+"--acceptAllEulas "
+    docker_cmd = docker_cmd+"--allowExtraConfig "
+    docker_cmd = docker_cmd+"--noSSLVerify "
+    docker_cmd = docker_cmd+"--diskMode=thin "
+    docker_cmd = docker_cmd+"--powerOn "
+    docker_cmd = docker_cmd+"--datastore='"+config.E2EP_ENVIRONMENT().esxi_host_datastore+"' "
+    docker_cmd = docker_cmd+"--network='"+config.E2EP_ENVIRONMENT().esxi_host_virtual_switch+"' "
+    docker_cmd = docker_cmd+"--name='"+vm_name+"' "
+    docker_cmd = docker_cmd+"'"+vm_source+"' "
+    docker_cmd = docker_cmd+"vi://'"+config.E2EP_ENVIRONMENT().esxi_host_username+"':'"+config.E2EP_ENVIRONMENT().esxi_host_password+"'@"+config.E2EP_ENVIRONMENT().esxi_host_ip
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir="/root/home", remove=True, command=docker_cmd)
+    return str(err)
 
-def deploy_photon_ovftool_container():
-    #TODO: replace wrapper-build-e2e-pattern-photon.py
-
-## PARAMIKO (SSH) FUNCTIONS
-def ssh_to_photon(ip, un, pw, retry):
-    pclient = paramiko.SSHClient()
-    pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	if retry < 5:
-		try: 
-			err = pclient.connect(hostname=ip, username=un, password=pw)
-            return str(err)
-		except:
-			seconds = (10)
-			retry=retry+1
-			ssh_to_photon(ip, un, pw, retry)
-            err = "[!] Cannot connect to the SSH Server"
-            return err
-
-	else:
-		err = "[!] Cannot connect to the SSH Server"
-        exit()
-        return err
