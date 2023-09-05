@@ -80,19 +80,21 @@ def change_vm_os_password(vm_name, new_vm_password):
     err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
     return err 
 
-def connect_to_ssh_server(pclient, ip, un, pw):
+def connect_to_ssh_server_test(ip, un, pw):
     try:
+        pclient = paramiko.SSHClient()
+        pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         pclient.connect(hostname=ip, username=un, password=pw)
-        err = 1
-        return err
+        pclient.close()
+        return True
     except:
-        err = 0
-        return err
+        pclient.close()
+        return False
 
 def send_command_over_ssh(cmd, ip, un, pw):
     pclient = paramiko.SSHClient()
     pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    connect_to_ssh_server(pclient, ip, un, pw)
+    pclient.connect(hostname=ip, username=un, password=pw)
     pclient.exec_command(cmd, timeout=None)
     pclient.close()
 
