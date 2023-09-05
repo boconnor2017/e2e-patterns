@@ -1,6 +1,6 @@
 # E2E Patterns Python Library
 # Author: Brendan O'Connor
-# Date: September 2023 (Version 2.0)
+# Date: September 2023
 
 import requests
 import urllib3
@@ -21,6 +21,11 @@ import config
 ## GENERIC PYTHON
 def pause_python_for_duration(seconds):
     time.sleep(seconds)
+
+def populate_var_from_file(file_name):
+    with open(file_name) as file:
+        file_txt = file.read()
+        return file_txt
 
 ## E2E LOGGING
 def write_to_logs(err, logfile_name):
@@ -61,7 +66,7 @@ def get_vm_ip_address(vm_name):
     ip_address = ip_address_raw[-17:-5]
     return ip_address
 
-def change_vm_ip_address(vm_name, new_vm_password):
+def change_vm_os_password(vm_name, new_vm_password):
     dclient = docker.from_env()
     docker_entrypoint = "/usr/bin/pwsh"
     docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
@@ -72,4 +77,40 @@ def change_vm_ip_address(vm_name, new_vm_password):
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_password+" "
     docker_cmd = docker_cmd+vm_name+" "
     docker_cmd = docker_cmd+new_vm_password+"\""
-    dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    return err 
+
+def run_photon_prep_scripts(retry, ip, un, pw):
+    if retry < 5:
+        photon_prep_script_src = "/usr/local/prep-photon.sh"
+        photon_prep_script_txt = populate_var_from_file(photon_prep_script_src)
+        photon_prep_script_cmd_list = photon_prep_script_txt.split('\n')
+        pclient = paramiko.SSHClient()
+        pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        try:
+            pclient.connect(hostname=ip, username=un, password=pw)
+            err = "Connecting to "+ip+"...."
+            return err
+        except:
+            seconds = (10)
+            pause_python_for_duration(seconds)
+            retry=retry+1
+            run_photon_prep_scripts(retry, ip, un, pw)
+            err = "[!] Cannot connect to the SSH Server, retry "+str(retry)+" after "+seconds+" pause."
+            return err
+    else:
+        err = "[!] Cannot connect to the SSH Server. Disconnecting."
+        pclient.close()
+        return err
+
+def download_photon_prep_scripts():
+    pclient = paramiko.SSHClient()
+    pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    command = "curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> /usr/local/prep-photon.sh"
+    stdin, stdout, stderr = pclient.exec_command(command, timeout=None)
+    err = "STDOUT:"
+    err = err+"\n"+str(stdout.read().decode())
+    err = err+""
+    err = err+"STDERR:"
+    err = err+"\n"+str(stderr.read().decode())
+    return err 
