@@ -95,8 +95,10 @@ def send_command_over_ssh(cmd, ip, un, pw):
     pclient = paramiko.SSHClient()
     pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     pclient.connect(hostname=ip, username=un, password=pw)
-    pclient.exec_command(cmd, timeout=None)
+    stdin, stdout, stderr = pclient.exec_command(cmd, timeout=None)
+    stdout=stdout.readlines()
     pclient.close()
+    return stdout
 
 def download_photon_prep_script_via_ssh(ip, un, pw):
     cmd = "curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> /usr/local/prep-photon.sh"
