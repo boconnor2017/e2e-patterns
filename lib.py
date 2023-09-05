@@ -88,29 +88,38 @@ def run_photon_prep_scripts(retry, ip, un, pw):
         pclient = paramiko.SSHClient()
         pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         try:
-            pclient.connect(hostname=ip, username=un, password=pw)
-            err = "Connecting to "+ip+"...."
-            return err
+            err = connect_to_ssh_server(pclient, ip, un, pw)
+            if err > 0:
+                for command in photon_prep_script_cmd_list:
+                    pclient.exec_command(command, timeout=None)
         except:
             seconds = (10)
             pause_python_for_duration(seconds)
             retry=retry+1
             run_photon_prep_scripts(retry, ip, un, pw)
-            err = "[!] Cannot connect to the SSH Server, retry "+str(retry)+" after "+seconds+" pause."
-            return err
+            err = "[!] Cannot connect to SSH server, retry "+str(retry)+" after "+seconds+" pause."
     else:
         err = "[!] Cannot connect to the SSH Server. Disconnecting."
         pclient.close()
-        return err
 
-def download_photon_prep_scripts():
+def download_photon_prep_scripts(ip, un, pw):
     pclient = paramiko.SSHClient()
     pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    command = "curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> /usr/local/prep-photon.sh"
-    stdin, stdout, stderr = pclient.exec_command(command, timeout=None)
-    err = "STDOUT:"
-    err = err+"\n"+str(stdout.read().decode())
-    err = err+""
-    err = err+"STDERR:"
-    err = err+"\n"+str(stderr.read().decode())
-    return err 
+    err = connect_to_ssh_server(pclient, ip, un, pw) 
+    if err > 0:
+        command = "curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> /usr/local/prep-photon.sh"
+        pclient.exec_command(command, timeout=None)
+        err = "SSH command sent."
+        return err
+    else:
+        err = "[!] SSH conenction failed. Connection closed."
+        return err
+
+def connect_to_ssh_server(pclient, ip, un, pw):
+    try:
+        pclient.connect(hostname=ip, username=un, password=pw)
+        err = 1
+        return err
+    except:
+        err = 0
+        return err
