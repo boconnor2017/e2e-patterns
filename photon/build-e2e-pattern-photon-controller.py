@@ -1,8 +1,8 @@
 # Builds a photon controller (a prepped photon appliance ready for building patterns)
 # 	Deploy photon: uses ovftool container
-#	  Change password: uses powercli container
-#	  Get IP address (DHCP assigned): uses powercli container
-#	  Configure photon: uses paramiko to ssh into the os 
+#	Change password: uses powercli container
+#	Get IP address (DHCP assigned): uses powercli container
+#	Configure photon: uses paramiko to ssh into the os 
 # Author: Brendan O'Connor
 # Date: September 2023 (Version 2.0)
 
@@ -44,7 +44,7 @@ err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
 lib.write_to_logs(err, logfile_name)
 err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
 lib.write_to_logs(err, logfile_name)
-err = "Starting wrapper-build-e2e-pattern-photon-2.py"
+err = "Starting build-e2e-pattern-photon-controller.py"
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
@@ -131,7 +131,7 @@ lib.write_to_logs(err, logfile_name)
 # Change default password of the Photon Appliance
 err = "Changing the default password using powercli container."
 lib.write_to_logs(err, logfile_name)
-lib.change_vm_ip_address(VM().name, config.E2EP_ENVIRONMENT().photonos_password)
+lib.change_vm_os_password(VM().name, config.E2EP_ENVIRONMENT().photonos_password)
 
 # Pause to allow password change to take effect 
 seconds = (20)
@@ -152,3 +152,16 @@ lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+# Download prep-photon scripts
+err = "Downloading photon prep scripts."
+lib.write_to_logs(err, logfile_name)
+err = lib.download_photon_prep_scripts(photon_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Run Prep Script
+err = "Running photon prep scripts."
+lib.write_to_logs(err, logfile_name)
+retry = 0
+lib.run_photon_prep_scripts(retry, photon_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
