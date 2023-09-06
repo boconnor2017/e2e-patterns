@@ -1,10 +1,13 @@
-# Wrapper files should follow this naming convention: wrapper-build-e2e-pattern-<NAME>.py
+# Python template for E2E Patterns
+# Python files should follow this naming convention: build-e2e-pattern-<NAME>.py
 # Copy Template Below
-# # # # # # # # # # # # # # # # # # # # # # # # #
-# <DESCRIPTION>
+# # # # # # # # # # # # # # # # # #
+# Description: <Add description>
 # Author: Brendan O'Connor
-# Date: <MONTH YEAR>
-# Add python script (example below)
+# Date: <month year>
+# Version: <version>
+
+# Base imports
 import os
 import shutil
 import sys
@@ -25,30 +28,28 @@ outpt = shutil.copy(src_file, des_dir)
 print(str(outpt))
 print("")
 
+# Import pattern config and library
 import config
 import lib
 
 # Start log file
-logfile_name = config.LOGS().template
-err = "Starting wrapper-build-e2e-pattern-photon.py"
+logfile_name = config.LOGS().photonos
+err = ""
 lib.write_to_logs(err, logfile_name)
-err = "Input variables:"
+err = ""
 lib.write_to_logs(err, logfile_name)
-i=0 
-for args in sys.argv:
-	err = "    "+args[i]
-	lib.write_to_logs(err, logfile_name)
-	i=i+1
+err = ""
+lib.write_to_logs(err, logfile_name)
+err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+lib.write_to_logs(err, logfile_name)
+err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+lib.write_to_logs(err, logfile_name)
+err = "Starting build-e2e-pattern-photon-controller.py"
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
+# Build photon controller
+lib.build_photon_controller(sys.argv[1], sys.argv[2], logfile_name)
 
-#TEST 
-a = "This works!!"
-b = config.IPAM().tag[0] 
-c = config.IPAM().fqdn[0]
-d = config.IPAM().ip[0]
-e = a 
-
-
-print(a)
-print(b+" "+c+" "+d)
-
+# CUSTOM:
