@@ -102,3 +102,100 @@ def send_command_over_ssh(cmd, ip, un, pw):
 def download_photon_prep_script_via_ssh(ip, un, pw):
     cmd = "curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> /usr/local/prep-photon.sh"
     send_command_over_ssh(cmd, ip, un, pw)
+
+def build_photon_controller(vm_name, vm_source, logfile_name):
+    class VM():
+        name = vm_name 
+        source = vm_source 
+    
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Running download_photon_prep_script_via_ssh()"
+    write_to_logs(err, logfile_name)
+    err = "VM() Class:"
+    write_to_logs(err, logfile_name)
+    err = "    .name: "+VM().name
+    write_to_logs(err, logfile_name)
+    err = "    .source: "+VM().source
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Building generic photon appliance:"
+    write_to_logs(err, logfile_name)
+    err = build_photon_with_ovftool_container(VM().name, VM().source)
+    write_to_logs(err, logfile_name)
+    err = ""
+    seconds = (60*2)
+    err = "Pausing for "+str(seconds)+" seconds to let the ova to complete its build..."
+    write_to_logs(err, logfile_name)
+    pause_python_for_duration(seconds)
+    err = "Resuming script."
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Changing the default password using powercli container."
+    write_to_logs(err, logfile_name)
+    change_vm_os_password(VM().name, config.E2EP_ENVIRONMENT().photonos_password)
+    seconds = (20)
+    err = "Pausing for "+str(seconds)+" seconds to let the password change to take effect..."
+    write_to_logs(err, logfile_name)
+    pause_python_for_duration(seconds)
+    err = "Resuming script."
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Getting ip address:"
+    write_to_logs(err, logfile_name)
+    photon_ip_address = get_vm_ip_address(VM().name)
+    err = "    IP Address: "+photon_ip_address
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Testing SSH connection to "+photon_ip_address
+    write_to_logs(err, logfile_name)
+    ssh_test = connect_to_ssh_server_test(photon_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+    if ssh_test:
+        err = "   connection succeeded."
+        write_to_logs(err, logfile_name)
+    else:
+        err = "[!] connection failed"
+        write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    if ssh_test:
+        err = "Downloading photon prep scripts."
+        write_to_logs(err, logfile_name)
+        download_photon_prep_script_via_ssh(photon_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+        err = ""
+        write_to_logs(err, logfile_name)
+    if ssh_test:
+        err = "Pulling prep script into variable"
+        write_to_logs(err, logfile_name)
+        prep_photon_script_source = "/usr/local/prep-photon.sh"
+        prep_photon_script_txt = populate_var_from_file(prep_photon_script_source)
+        prep_photon_script_commands = prep_photon_script_txt.split('\n')
+        err = "Validating Commands:"
+        write_to_logs(err, logfile_name)
+        i=0
+        for commands in prep_photon_script_commands:
+            err = "    ["+str(i)+"] "+commands
+            write_to_logs(err, logfile_name)
+            i=i+1
+    err = ""
+    write_to_logs(err, logfile_name)
+    if ssh_test:
+        err = "Pulling prep script into variable"
+        write_to_logs(err, logfile_name)
+        prep_photon_script_source = "/usr/local/prep-photon.sh"
+        prep_photon_script_txt = populate_var_from_file(prep_photon_script_source)
+        prep_photon_script_commands = prep_photon_script_txt.split('\n')
+        err = "Running Commands:"
+        write_to_logs(err, logfile_name)
+        i=0
+        for commands in prep_photon_script_commands:
+            err = "    Running: ["+str(i)+"] "+commands
+            write_to_logs(err, logfile_name)
+            stdout = send_command_over_ssh(commands, photon_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+            i=i+1
+    err = "Finished."
+    write_to_logs(err, logfile_name)
