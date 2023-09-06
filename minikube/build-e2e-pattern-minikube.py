@@ -1,9 +1,7 @@
-# Python template for E2E Patterns
-# # # # # # # # # # # # # # # # # #
-# Description: <Add description>
+# Description: Installs Miniukbe on a photon controller
 # Author: Brendan O'Connor
-# Date: <month year>
-# Version: <version>
+# Date: September 2023
+# Version: 2.0
 
 # Base imports
 import os
