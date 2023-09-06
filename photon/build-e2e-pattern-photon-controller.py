@@ -49,48 +49,6 @@ lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Functions 
-def run_ssh_command(run_cmd):
-	i=0
-	for command in run_cmd:
-	    err = "    ["+str(i)+"] "+command
-	    lib.write_to_logs(err, logfile_name)
-	    stdin, stdout, stderr = client.exec_command(command, timeout=None)
-	    err = (stdout.read().decode())
-	    lib.write_to_logs(err, logfile_name)
-	    err = stderr.read().decode()
-	    lib.write_to_logs(err, logfile_name)
-	    err = ""
-	    lib.write_to_logs(err, logfile_name)
-	    i=i+1
-
-def ssh_to_photon(client, ip, un, pw, retry):
-	err = "Attempting connection to the SSH Server:"
-	lib.write_to_logs(err, logfile_name)
-	err = "    ip: "+ip 
-	lib.write_to_logs(err, logfile_name)
-	err = "    username: "+un 
-	lib.write_to_logs(err, logfile_name)
-	err = "    password: "+pw 
-	lib.write_to_logs(err, logfile_name)
-	if retry < 5:
-		try: 
-			client.connect(hostname=ip, username=un, password=pw)
-		except:
-			err = "[!] Cannot connect to the SSH Server"
-			lib.write_to_logs(err, logfile_name)
-			seconds = (10)
-			err = "Pausing for "+str(seconds)+" seconds before retry number "+str(retry)
-			lib.write_to_logs(err, logfile_name)
-			retry=retry+1
-			ssh_to_photon(client, ip, un, pw, retry)
-	else:
-		err = "[!] Cannot connect to the SSH Server"
-		lib.write_to_logs(err, logfile_name)
-		err = "Closing connection."
-		lib.write_to_logs(err, logfile_name)
-		exit()
-
 # Virtual Machine Details
 class VM():
 	name = sys.argv[1] # as displayed in vCenter
