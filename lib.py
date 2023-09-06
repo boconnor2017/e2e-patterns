@@ -67,18 +67,17 @@ def get_vm_ip_address(vm_name):
     return ip_address
 
 def change_vm_os_password(vm_name, new_vm_password):
-    dclient = docker.from_env()
     docker_entrypoint = "/usr/bin/pwsh"
     docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
     docker_image = "vmware/powerclicore"
-    docker_cmd = "/tmp/configure-photon.ps1 \" "
+    docker_cmd = "/tmp/change-photon_default_pw.ps1 \'"
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_username+" "
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_password+" "
     docker_cmd = docker_cmd+vm_name+" "
-    docker_cmd = docker_cmd+new_vm_password+"\""
-    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
-    return err 
+    docker_cmd = docker_cmd+new_vm_password+"\'"
+    dclient = docker.from_env()
+    dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
 
 def connect_to_ssh_server_test(ip, un, pw):
     try:
