@@ -27,6 +27,10 @@ def populate_var_from_file(file_name):
         file_txt = file.read()
         return file_txt
 
+def check_web_service_status(web_svc_url):
+    return_code = urllib.request.urlopen(web_svc_url).getcode()
+    return return_code
+
 ## E2E LOGGING
 def write_to_logs(err, logfile_name):
     tstamp = str(datetime.now())
@@ -217,3 +221,4 @@ def build_photon_controller(vm_name, vm_source, logfile_name):
             i=i+1
     err = "Finished."
     write_to_logs(err, logfile_name)
+
