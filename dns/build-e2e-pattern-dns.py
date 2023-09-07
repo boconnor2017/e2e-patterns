@@ -105,7 +105,7 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Validating Configure IP Tables 
-configure_tanium_ip_tables_script = os.getcwd()+"/configure-tanium-ip-tables.sh.sh"
+configure_tanium_ip_tables_script = os.getcwd()+"/configure-tanium-ip-tables.sh"
 err = "Pulling scripts from "+configure_tanium_ip_tables_script
 lib.write_to_logs(err, logfile_name)
 configure_tanium_ip_tables_raw = lib.populate_var_from_file(configure_tanium_ip_tables_script)
@@ -133,6 +133,9 @@ for command in configure_tanium_ip_tables_commands:
     i=i+1
 err = ""
 lib.write_to_logs(err, logfile_name)
+
+
+
 
 err = "Finished."
 lib.write_to_logs(err, logfile_name)
