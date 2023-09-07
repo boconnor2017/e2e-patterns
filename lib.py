@@ -76,10 +76,12 @@ def change_vm_ip_address(vm_name, new_ip, new_subnet, new_df_gw):
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_username+" "
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_password+" "
     docker_cmd = docker_cmd+vm_name+" "
+    docker_cmd = docker_cmd+new_ip+" "
     docker_cmd = docker_cmd+new_subnet+" "
     docker_cmd = docker_cmd+new_df_gw+" "
     docker_cmd = docker_cmd+"\""
     dclient = docker.from_env()
+    dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
 
 
 def change_vm_os_password(vm_name, new_vm_password):
