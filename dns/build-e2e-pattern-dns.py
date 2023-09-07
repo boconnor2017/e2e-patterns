@@ -29,7 +29,7 @@ import config
 import lib
 
 # Start log file
-logfile_name = config.LOGS().minikube
+logfile_name = config.LOGS().dns
 err = ""
 lib.write_to_logs(err, logfile_name)
 err = ""
@@ -40,7 +40,7 @@ err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
 lib.write_to_logs(err, logfile_name)
 err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
 lib.write_to_logs(err, logfile_name)
-err = "Starting build-e2e-pattern-minikube.py"
+err = "Starting build-e2e-pattern-dns.py"
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
@@ -133,8 +133,6 @@ for command in configure_tanium_ip_tables_commands:
     i=i+1
 err = ""
 lib.write_to_logs(err, logfile_name)
-
-# THE REST
 
 err = "Finished."
 lib.write_to_logs(err, logfile_name)
