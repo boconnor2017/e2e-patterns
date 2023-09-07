@@ -104,6 +104,16 @@ lib.change_vm_ip_address(config.DNS().vm_name, config.DNS().ip, config.E2EP_ENVI
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+# Pause to allow network config to take effect
+seconds = 10
+err = "Pausing for "+str(seconds)+" to allow networking configuration to take effect."
+lib.write_to_logs(err, logfile_name)
+pause_python_for_duration(seconds)
+err = "Resuming script."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
 # Validating Configure IP Tables 
 configure_tanium_ip_tables_script = os.getcwd()+"/configure-tanium-ip-tables.sh"
 err = "Pulling scripts from "+configure_tanium_ip_tables_script
@@ -129,7 +139,7 @@ i=0
 for command in configure_tanium_ip_tables_commands:
     err = "    ["+str(i)+"] "+command
     lib.write_to_logs(err, logfile_name)
-    lib.send_command_over_ssh(command, ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+    lib.send_command_over_ssh(command, config.DNS().ip, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
     i=i+1
 err = ""
 lib.write_to_logs(err, logfile_name)
@@ -138,7 +148,7 @@ lib.write_to_logs(err, logfile_name)
 seconds = 10
 err = "Pausing for "+str(seconds)+" to allow networking configuration to take effect."
 lib.write_to_logs(err, logfile_name)
-pause_python_for_duration(seconds)
+lib.pause_python_for_duration(seconds)
 err = "Resuming script."
 lib.write_to_logs(err, logfile_name)
 err = ""
