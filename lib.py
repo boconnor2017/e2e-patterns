@@ -66,6 +66,22 @@ def get_vm_ip_address(vm_name):
     ip_address = ip_address_raw[-17:-5]
     return ip_address
 
+def change_vm_ip_address(vm_name, new_ip, new_subnet, new_df_gw):
+    docker_rm = True
+    docker_entrypoint = "/usr/bin/pwsh"
+    docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+    docker_image = "vmware/powerclicore"
+    docker_cmd = "/tmp/change-vm-ip.ps1 \""
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_username+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_password+" "
+    docker_cmd = docker_cmd+vm_name+" "
+    docker_cmd = docker_cmd+new_subnet+" "
+    docker_cmd = docker_cmd+new_df_gw+" "
+    docker_cmd = docker_cmd+"\""
+    dclient = docker.from_env()
+
+
 def change_vm_os_password(vm_name, new_vm_password):
     docker_entrypoint = "/usr/bin/pwsh"
     docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
