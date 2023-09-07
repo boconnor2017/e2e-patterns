@@ -31,10 +31,11 @@ class LOGS():
 	minikube = "_k8.log"
 
 class DNS():
-	ip = "172.16.0.9"
-	zone = "e2e.local"
-	vm_name = "e2ep-002"
-	photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
+    ip = "172.16.0.9"
+    zone = "e2e.local"
+    vm_name = "e2ep-002"
+    photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
+    port = "5380"
 
 class IPAM():
 	fqdn = [
@@ -76,4 +77,3 @@ class IPAM():
 		"DNS", # The zone itself
 		"" #Last one Blank
 	]
-
