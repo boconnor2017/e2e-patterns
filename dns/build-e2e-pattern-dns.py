@@ -82,13 +82,12 @@ DNS Server Installation process:
     01. Change VM IP address using change-vm-ip.ps1 with pcli container
     02. Configure IP tables using paramiko and configure-tanium-ip-tables.sh script
     03. Install Technitium Container using paramiko and run-docker-compose.sh script
-    04. Check local service status http://localhost:5380 
-    05. Check remote service status http://config.DNS().ip:5380 
-    06. First time login: admin/admin > get token 
-    07. Change password config.DNS().password 
-    08. Retrieve new token
-    09. Create e2e.local zone 
-    10. Add records to e2e.local zone from config.E2E_IPAM()
+    04. Check remote service status http://config.DNS().ip:5380 
+    05. First time login: admin/admin > get token 
+    06. Change password config.DNS().password 
+    07. Retrieve new token
+    08. Create e2e.local zone 
+    09. Add records to e2e.local zone from config.E2E_IPAM()
 '''
 
 # Change VM IP 
@@ -183,6 +182,20 @@ for command in run_docker_compose_commands:
     i=i+1
 err = ""
 lib.write_to_logs(err, logfile_name)
+
+# Check web service status
+dns_web_service_url = "http://"+config.DNS().ip+":"+config.DNS().port
+err = "Checing web service status:"
+lib.write_to_logs(err, logfile_name)
+dns_web_service_status = lib.check_web_service_status(dns_web_service_url)
+err = "    return code: "+str(dns_web_service_status)
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+#####################################
+# CONTINUE HERE
+#####################################
 
 err = "Finished."
 lib.write_to_logs(err, logfile_name)
