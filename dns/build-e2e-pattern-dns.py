@@ -169,7 +169,7 @@ i=0
 for command in run_docker_compose_commands:
     err = "    ["+str(i)+"] "+command
     lib.write_to_logs(err, logfile_name)
-    lib.send_command_over_ssh(command, ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+    lib.send_command_over_ssh(command, config.DNS().ip, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
     i=i+1
 err = ""
 lib.write_to_logs(err, logfile_name)
