@@ -129,13 +129,50 @@ i=0
 for command in configure_tanium_ip_tables_commands:
     err = "    ["+str(i)+"] "+command
     lib.write_to_logs(err, logfile_name)
-    lib.send_command_over_ssh(command, ip_address, E2EP_ENVIRONMENT().photonos_username, E2EP_ENVIRONMENT().photonos_password)
+    lib.send_command_over_ssh(command, ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
     i=i+1
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+# Pause to allow network config to take effect
+seconds = 10
+err = "Pausing for "+str(seconds)+" to allow networking configuration to take effect."
+lib.write_to_logs(err, logfile_name)
+pause_python_for_duration(seconds)
+err = "Resuming script."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
+# Validating Install Technitium script 
+run_docker_compose_script = os.getcwd()+"/run-docker-compose.sh"
+err = "Pulling scripts from "+run_docker_compose_script
+lib.write_to_logs(err, logfile_name)
+run_docker_compose_raw = lib.populate_var_from_file(run_docker_compose_script)
+run_docker_compose_commands = run_docker_compose_raw.split('\n')
+err = ""
+lib.write_to_logs(err, logfile_name)
+err = "Validating commands:"
+lib.write_to_logs(err, logfile_name)
+i=0
+for command in run_docker_compose_commands:
+    err = "    ["+str(i)+"] "+command
+    lib.write_to_logs(err, logfile_name)
+    i=i+1
+err = ""
+lib.write_to_logs(err, logfile_name)
 
+# Run Install Technitium script
+err = "Configuring Tanium IP Tables:"
+lib.write_to_logs(err, logfile_name)
+i=0
+for command in run_docker_compose_commands:
+    err = "    ["+str(i)+"] "+command
+    lib.write_to_logs(err, logfile_name)
+    lib.send_command_over_ssh(command, ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+    i=i+1
+err = ""
+lib.write_to_logs(err, logfile_name)
 
 err = "Finished."
 lib.write_to_logs(err, logfile_name)
