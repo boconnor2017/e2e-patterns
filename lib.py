@@ -28,9 +28,20 @@ def populate_var_from_file(file_name):
         file_txt = file.read()
         return file_txt
 
-def check_web_service_status(web_svc_url):
-    return_code = urllib.request.urlopen(web_svc_url).getcode()
-    return return_code
+def check_web_service_status(web_svc_url, retry, retry_max, retry_pause):
+    if retry < retry_max:
+        try:
+            return_code = urllib.request.urlopen(web_svc_url).getcode()
+            return return_code 
+        except:
+            pause_python_for_duration(retry_pause)
+            retry = retry+1
+            return_code = check_web_service_status(web_svc_url, retry, retry_max, retry_pause)
+            return return_code
+    else:
+        return "[!] Web service check failed "+str(retry_max)+" times."
+
+            
 
 def api_get(api_url):
     api_response = requests.get(api_url)
@@ -227,8 +238,9 @@ def build_photon_controller(vm_name, vm_source, logfile_name):
     err = "Finished."
     write_to_logs(err, logfile_name)
 
+# Syntax: http://localhost:5380/api/zones/records/add?token=x&domain=example.com&zone=example.com
 def create_dns_record(token, domain, zone, ip):
-    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zone/addRecord?token="+token
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/records/add?token="+token
     api_url = api_url+"&domain="+domain
     api_url = api_url+"&zone="+zone
     api_url = api_url+"&type=A"
