@@ -1,6 +1,7 @@
 # E2E Patterns Python Library
 # Author: Brendan O'Connor
 # Date: September 2023
+# Version: 2.0
 
 import requests
 import urllib3
@@ -226,3 +227,14 @@ def build_photon_controller(vm_name, vm_source, logfile_name):
     err = "Finished."
     write_to_logs(err, logfile_name)
 
+def create_dns_record(token, domain, zone, ip):
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zone/addRecord?token="+token
+    api_url = api_url+"&domain="+domain
+    api_url = api_url+"&zone="+zone
+    api_url = api_url+"&type=A"
+    api_url = api_url+"&ttl=3600"
+    api_url = api_url+"&ipAddress="+ip
+    api_url = api_url+"&ptr=true"
+    api_url = api_url+"&createPtrZone=true"
+    api_response = api_get(api_url)
+    return api_response 
