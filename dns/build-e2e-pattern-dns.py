@@ -262,25 +262,5 @@ err = "    api response: "+str(api_response.json())
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
-
-# Add records to DNS zone
-err = "Adding records to "+config.DNS().zone+" zone:"
-lib.write_to_logs(err, logfile_name)
-
-i=0
-for x in config.IPAM().tag:
-    err = "    ["+str(i)+"] tag: "+config.IPAM().tag[i]
-    lib.write_to_logs(err, logfile_name)
-    err = "    ["+str(i)+"] fqdn: "+config.IPAM().fqdn[i]
-    lib.write_to_logs(err, logfile_name)
-    err = "    ["+str(i)+"] ip: "+config.IPAM().ip[i]
-    lib.write_to_logs(err, logfile_name)
-    api_response = lib.create_dns_record(api_token, config.IPAM().fqdn[i], config.DNS().zone, config.IPAM().ip[i])
-    err = "    api response: "+str(api_response.json())
-    lib.write_to_logs(err, logfile_name)
-    i=i+1
-
-err = ""
-lib.write_to_logs(err, logfile_name)
 err = "Finished."
 lib.write_to_logs(err, logfile_name)
