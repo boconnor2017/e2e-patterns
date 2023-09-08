@@ -5,7 +5,7 @@
 # Environment Variables (example: 172.16.0.0/24 subnet) - below are things that are part of your environment, editing these are REQUIRED
 class E2EP_ENVIRONMENT():
 	subnet_mask = "255.255.255.0"
-	subnet_size = "24" #CIDR block, default /24
+	subnet_size = "24" #CIDR block, default /24 (/24 recommended)
 	subnet_prefix = "172.16.0." #first four numbers of the subnet
 	default_gw = subnet_prefix+"1" #default: .01 gateway address
 	ntp_server = "pool.ntp.org"
@@ -17,9 +17,54 @@ class E2EP_ENVIRONMENT():
 	photonos_username = "root" #default username to login to photon vms 
 	photonos_password = "VMware1!VMware1!" #default password to login to photon vms
 
-# Lab Variables - below are things that will be created as part of the automation, editing these are OPTIONAL 
+'''
+Below are variables that are created to manage the lab environment. Editing these are OPTIONAL.
+- UNIVERSAL() is a class containing variables that are applied universally to a pattern
+- LOGS() is a class containing variables that apply to logging
+- DNS() is a class containing variables that apply to the DNS pattern
+- VCSA() is a class containing variables that apply to the vcenter server pattern
+
+IPAM: the recommended subnet size for this environment is /24
+- x.x.x.01 = reserved for gateway
+- x.x.x.02-08 = reserved for physical equipment
+- x.x.x.200-254 = reserved for physical equipment
+- x.x.x.09 = dns
+- x.x.x.10 = vcsa
+- x.x.x.11 = nsx
+- x.x.x.12 = aria lifecycle manager 
+- x.x.x.13 = vmware identity manager 
+- x.x.x.14 = aria automation
+- x.x.x.15 = aria operations 
+- x.x.x.16 = aria operations for logs (Log Insight)
+- x.x.x.17 = aria saltstack master
+- x.x.x.18 = reserved for additional aria appliances
+- x.x.x.19 = reserved for additional aria appliances
+- x.x.x.20 = reserved for nested esxi
+- x.x.x.21 = reserved for nested esxi
+- x.x.x.22 = reserved for nested esxi
+- x.x.x.23 = reserved for nested esxi
+- x.x.x.24 = reserved for nested esxi
+- x.x.x.25 = reserved for NSX edge / Avi appliances
+- x.x.x.26 = reserved for NSX edge / Avi appliances
+- x.x.x.27 = reserved for NSX edge / Avi appliances
+- x.x.x.28 = reserved for NSX edge / Avi appliances
+- x.x.x.29 = reserved for NSX edge / Avi appliances
+- x.x.x.30 = reserved for aria workloads under management
+- x.x.x.31 = reserved for aria workloads under management
+- x.x.x.32 = reserved for aria workloads under management
+- x.x.x.33 = reserved for aria workloads under management
+- x.x.x.34 = reserved for aria workloads under management
+- x.x.x.35 = reserved for aria workloads under management
+- x.x.x.36 = reserved for aria workloads under management
+- x.x.x.37 = reserved for aria workloads under management
+- x.x.x.38 = reserved for aria workloads under management
+- x.x.x.39 = reserved for aria workloads under management
+'''
+
 class UNIVERSAL():
-	password = "VMware1!"
+    password = "VMware1!"
+    vm_naming_convention = "e2ep"
+    fqdn_naming_convention "vmw"
 	
 class LOGS():
 	template = "_template.log"
@@ -34,47 +79,13 @@ class LOGS():
 class DNS():
     ip = "172.16.0.9"
     zone = "e2e.local"
-    vm_name = "e2ep-002"
+    vm_name = UNIVERSAL().vm_naming_convention+"-002"
     photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
     port = "5380"
 
-class IPAM():
-	fqdn = [
-		"esxi01"+"."+DNS().zone, # ESXi Host
-		"lab-nfs-001"+"."+DNS().zone, # NFS Server
-		"lab-vc-000"+"."+DNS().zone, # MGT vCenter
-		"lab-vc-001"+"."+DNS().zone, # Site A vCenter
-		"lab-nsxm-000"+"."+DNS().zone, # MGT NSX Manager
-		"lab-vesxi-001"+"."+DNS().zone, # Nested ESXi 1
-		"lab-vesxi-002"+"."+DNS().zone, # Nested ESXi 2
-		"lab-vesxi-003"+"."+DNS().zone, # Nested ESXi 3
-		"lab-vesxi-004"+"."+DNS().zone, # Nested ESXi 4
-		"@"+"."+DNS().zone, # The zone itself 
-		"" #Last one Blank
-	]
-	ip = [
-		E2EP_ENVIRONMENT().esxi_host_ip, # ESXi Host
-		"172.16.0.10", # NFS Server
-		"172.16.0.23", # MGT vCenter
-		"172.16.0.22", # Site A vCenter
-		"172.16.0.24", # MGT NSX Manager
-		"172.16.0.30", # Nested ESXi 1
-		"172.16.0.31", # Nested ESXi 2
-		"172.16.0.32", # Nested ESXi 3
-		"172.16.0.33", # Nested ESXi 4
-		DNS().ip, # The zone itself 
-		"" #Last one Blank
-	]
-	tag = [
-		"PESXI", # ESXi Host
-		"NFS", # NFS Server
-		"MGT_VC", # MGT vCenter
-		"SITEA_VC", # Site A vCenter
-		"MGT_NSX", # MGT NSX Manager 
-		"VESXi", # Nested ESXi 1
-		"VESXi", # Nested ESXi 2
-		"VESXi", # Nested ESXi 3
-		"VESXi", # Nested ESXi 4
-		"DNS", # The zone itself
-		"" #Last one Blank
-	]
+class VCSA():
+    photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-003" 
+    vcsa_vm_name = UNIVERSAL().vm_naming_convention+"-004"
+    ip = E2EP_ENVIRONMENT().subnet_prefix+"10"
+    fqdn = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
+    photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
