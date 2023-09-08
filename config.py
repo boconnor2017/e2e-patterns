@@ -64,7 +64,7 @@ IPAM: the recommended subnet size for this environment is /24
 class UNIVERSAL():
     password = "VMware1!"
     vm_naming_convention = "e2ep"
-    fqdn_naming_convention "vmw"
+    fqdn_naming_convention = "vmw"
 	
 class LOGS():
 	template = "_template.log"
@@ -89,3 +89,4 @@ class VCSA():
     ip = E2EP_ENVIRONMENT().subnet_prefix+"10"
     fqdn = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
     photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
+    
