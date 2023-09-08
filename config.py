@@ -29,6 +29,7 @@ class LOGS():
 	mnsx = "_mnsx.log"
 	photonos = "_photonos.log"
 	minikube = "_k8.log"
+	vcsa = "_vcsa.log"
 
 class DNS():
     ip = "172.16.0.9"
