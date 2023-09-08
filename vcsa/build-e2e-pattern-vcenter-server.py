@@ -7,6 +7,7 @@
 import os
 import shutil
 import sys
+import json
 
 # Get pattern config file
 src_file = '/usr/local/e2e-patterns/config.py'
@@ -63,16 +64,33 @@ outpt = shutil.copy(src_file, des_dir)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Build photon controller
-lib.build_photon_controller(config.VCSA().photon_controller_vm_name, config.VCSA().photon_source, logfile_name)
-err = ""
+# Check for input parameters
+err = "Checking for input parameters:"
 lib.write_to_logs(err, logfile_name)
+err = "    parameters: "+sys.argv[1]
+lib.write_to_logs(err, logfile_name)
+if sys.argv[1] == "-p":
+    skip_build_photon_controller = True
+    err = "    skipping build photon controller"
+    lib.write_to_logs(err, logfile_name)
+else:
+    skip_build_photon_controller = False
+
+# Build photon controller
+if skip_build_photon_controller:
+    skip_build_photon_controller = True 
+else:
+    err = "Building photon controller:"
+    lib.write_to_logs(err, logfile_name)
+    lib.build_photon_controller(config.VCSA().photon_controller_vm_name, config.VCSA().photon_source, logfile_name)
+    err = ""
+    lib.write_to_logs(err, logfile_name)
 
 # Get Photon controller IP
 err = "Getting IP address of photon controller:"
 lib.write_to_logs(err, logfile_name)
-photon_controller_ip_address = lib.get_vm_ip_address(sys.argv[1])
-err = "    ip address: "+ip_address
+photon_controller_ip_address = lib.get_vm_ip_address(config.VCSA().photon_controller_vm_name)
+err = "    ip address: "+photon_controller_ip_address
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
@@ -96,24 +114,27 @@ lib.write_to_logs(err, logfile_name)
 create_dir_cmd = "mkdir /usr/local/mount"
 err = "    command: "+create_dir_cmd
 lib.write_to_logs(err, logfile_name)
-send_command_over_ssh(create_dir_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+lib.send_command_over_ssh(create_dir_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Prompt user to continue with script
-err = "Prompting user and pausing until the ISO is attached to the photon controller..."
-lib.write_to_logs(err, logfile_name)
-print("")
-print("")
-print("This next step requires manual intervention.")
-print("Attach the vCenter ISO to the photon controller (vm name: "+config.VCSA().photon_controller_vm_name+")")
-pressanykeytocontinue = input("Press Enter to continue:")
-print("")
-print("")
-err = "Prompt received. Continuing with the script. "
-lib.write_to_logs(err, logfile_name)
-err = ""
-lib.write_to_logs(err, logfile_name)
+if skip_build_photon_controller:
+    skip_build_photon_controller = True 
+else:
+    err = "Prompting user and pausing until the ISO is attached to the photon controller..."
+    lib.write_to_logs(err, logfile_name)
+    print("")
+    print("")
+    print("This next step requires manual intervention.")
+    print("Attach the vCenter ISO to the photon controller (vm name: "+config.VCSA().photon_controller_vm_name+")")
+    pressanykeytocontinue = input("Press Enter to continue:")
+    print("")
+    print("")
+    err = "Prompt received. Continuing with the script. "
+    lib.write_to_logs(err, logfile_name)
+    err = ""
+    lib.write_to_logs(err, logfile_name)
 
 # Mount ISO to the photon controller 
 err = "Mounting ISO:"
@@ -121,7 +142,7 @@ lib.write_to_logs(err, logfile_name)
 mount_iso_cmd = "mount -t iso9660 -o loop /dev/cdrom /usr/local/mount/"
 err = "    command: "+mount_iso_cmd
 lib.write_to_logs(err, logfile_name)
-send_command_over_ssh(mount_iso_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+lib.send_command_over_ssh(mount_iso_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
@@ -160,7 +181,7 @@ vcsa_config_json_as_string = {
         },
         "os": {
             "password": config.UNIVERSAL().password,
-            "ntp_servers": config.UNIVERSAL().ntp_server,
+            "ntp_servers": config.E2EP_ENVIRONMENT().ntp_server,
             "ssh_enable": False
         },
         "sso": {
@@ -184,22 +205,35 @@ vcsa_config_json = json.dumps(vcsa_config_json_as_string)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Write json to file
-err = "Writing JSON to file "+config.VCSA().json_filename
+# Insert each line of the json into an array
+vcsa_config_json_lines = vcsa_config_json.split('\n')
+err = "Validate JSON:"
 lib.write_to_logs(err, logfile_name)
-lib.write_text_to_file(vcsa_config_json, config.VCSA().json_filename)
-err = ""
-lib.write_to_logs(err, logfile_name)
+i=0
+for line in vcsa_config_json_lines:
+    err = "    ["+str(i)+"] "+line 
+    lib.write_to_logs(err, logfile_name)
 
+# Write json to file
+err = "Writing json to file on the photon controller:"
+lib.write_to_logs(err, logfile_name)
+err = "    filename: "+config.VCSA().json_filename
+i=0
+for line in vcsa_config_json_lines:
+    cmd = "echo \""+line+"\" >> "+config.VCSA().json_filename
+    err = "   cmd: "+cmd 
+    lib.write_to_logs(err, logfile_name)
+    stdout = lib.send_command_over_ssh(cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+    
 # Run the installer
 err = "Running the installer:"
 lib.write_to_logs(err, logfile_name)
 run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
-run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+"/usr/local/e2e-patterns/vcsa/"config.VCSA().json_filename+" "
+run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+config.VCSA().json_filename+" "
 run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--acknowledge-ceip --no-ssl-certificate-verification"
 err = "    command: "+run_vcsa_installer_cmd
 lib.write_to_logs(err, logfile_name)
-send_command_over_ssh(run_vcsa_installer_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+stdout = lib.send_command_over_ssh(run_vcsa_installer_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
