@@ -64,47 +64,147 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Build photon controller
-lib.build_photon_controller(sys.argv[1], sys.argv[2], logfile_name)
+lib.build_photon_controller(config.VCSA().photon_controller_vm_name, config.VCSA().photon_source, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Get VM IP
+# Get Photon controller IP
 err = "Getting IP address of photon controller:"
 lib.write_to_logs(err, logfile_name)
-ip_address = lib.get_vm_ip_address(sys.argv[1])
+photon_controller_ip_address = lib.get_vm_ip_address(sys.argv[1])
 err = "    ip address: "+ip_address
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Convert <PATTERN> Install Script to variable (sample: Minikube)
-minikube_install_script = os.getcwd()+"/install-minikube.sh"
-err = "Pulling scripts from "+minikube_install_script
+'''
+vCenter Build Process:
+01. Create photon controller using naming convention from config file
+02. Create directory /usr/local/mount
+03. MANUAL: attach the vcenter iso to the photon controller
+04. Mount the iso to the /mount directory 
+05. Generate JSON for vcenter using config file
+06. Run the installer using Paramiko 
+07: Get vcenter api session id
+08. Configure SSO domain using info from config file
+09. Configure datacenter using info from config file 
+'''
+
+# Create directory /usr/local/mount
+err = "Creating mount directory."
 lib.write_to_logs(err, logfile_name)
-minikube_install_raw = lib.populate_var_from_file(minikube_install_script)
-minikube_install_commands = minikube_install_raw.split('\n')
-err = ""
+create_dir_cmd = "mkdir /usr/local/mount"
+err = "    command: "+create_dir_cmd
 lib.write_to_logs(err, logfile_name)
-err = "Validating commands:"
-lib.write_to_logs(err, logfile_name)
-i=0
-for command in minikube_install_commands:
-    err = "    ["+str(i)+"] "+command
-    lib.write_to_logs(err, logfile_name)
-    i=i+1
+send_command_over_ssh(create_dir_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Install <PATTERN> (sample: Minikube)
-err = "Installing Minikube"
+# Prompt user to continue with script
+err = "Prompting user and pausing until the ISO is attached to the photon controller..."
 lib.write_to_logs(err, logfile_name)
-i=0
-for command in minikube_install_commands:
-    err = "    ["+str(i)+"] "+command
-    lib.write_to_logs(err, logfile_name)
-    lib.send_command_over_ssh(command, ip_address, E2EP_ENVIRONMENT().photonos_username, E2EP_ENVIRONMENT().photonos_password)
-    i=i+1
+print("")
+print("")
+print("This next step requires manual intervention.")
+print("Attach the vCenter ISO to the photon controller (vm name: "+config.VCSA().photon_controller_vm_name+")")
+pressanykeytocontinue = input("Press Enter to continue:")
+print("")
+print("")
+err = "Prompt received. Continuing with the script. "
+lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
-err = "Finished."
+
+# Mount ISO to the photon controller 
+err = "Mounting ISO:"
 lib.write_to_logs(err, logfile_name)
+mount_iso_cmd = "mount -t iso9660 -o loop /dev/cdrom /usr/local/mount/"
+err = "    command: "+mount_iso_cmd
+lib.write_to_logs(err, logfile_name)
+send_command_over_ssh(mount_iso_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Generate JSON for vCenter configuration 
+err = "Generating JSON for vCenter configuration."
+lib.write_to_logs(err, logfile_name)
+vcsa_config_json_as_string = {
+    "__version": "2.13.0",
+    "__comments": "https://github.com/boconnor2017/e2e-patterns",
+    "new_vcsa": {
+        "esxi": {
+            "hostname": config.E2EP_ENVIRONMENT().esxi_host_ip,
+            "username": config.E2EP_ENVIRONMENT().esxi_host_username,
+            "password": config.E2EP_ENVIRONMENT().esxi_host_password,
+            "deployment_network": config.E2EP_ENVIRONMENT().esxi_host_virtual_switch,
+            "datastore": config.E2EP_ENVIRONMENT().esxi_host_datastore
+        },
+        "appliance": {
+            "__comments": [
+                "E2E Pattern: deploy vcsa"
+            ],
+            "thin_disk_mode": True,
+            "deployment_option": "small",
+            "name": config.VCSA().vcsa_vm_name
+        },
+        "network": {
+            "ip_family": "ipv4",
+            "mode": "static",
+            "system_name": config.VCSA().fqdn,
+            "ip": config.VCSA().ip,
+            "prefix": config.E2EP_ENVIRONMENT().subnet_size,
+            "gateway": config.E2EP_ENVIRONMENT().default_gw,
+            "dns_servers": [
+                config.DNS().ip
+            ]
+        },
+        "os": {
+            "password": config.UNIVERSAL().password,
+            "ntp_servers": config.UNIVERSAL().ntp_server,
+            "ssh_enable": False
+        },
+        "sso": {
+            "password": config.UNIVERSAL().password,
+            "domain_name": config.VCSA().sso_domain
+        }
+    },
+    "ceip": {
+        "description": {
+            "__comments": [
+                "E2E Pattern"
+            ]
+        },
+        "settings": {
+            "ceip_enabled": True
+        }
+    }
+}
+
+vcsa_config_json = json.dumps(vcsa_config_json_as_string)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Write json to file
+err = "Writing JSON to file "+config.VCSA().json_filename
+lib.write_to_logs(err, logfile_name)
+lib.write_text_to_file(vcsa_config_json, config.VCSA().json_filename)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Run the installer
+err = "Running the installer:"
+lib.write_to_logs(err, logfile_name)
+run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
+run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+"/usr/local/e2e-patterns/vcsa/"config.VCSA().json_filename+" "
+run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--acknowledge-ceip --no-ssl-certificate-verification"
+err = "    command: "+run_vcsa_installer_cmd
+lib.write_to_logs(err, logfile_name)
+send_command_over_ssh(run_vcsa_installer_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Get vCenter API session ID 
+
+# Configure SSO domain
+
+# Configure datacenter 
