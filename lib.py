@@ -31,6 +31,10 @@ def check_web_service_status(web_svc_url):
     return_code = urllib.request.urlopen(web_svc_url).getcode()
     return return_code
 
+def api_get(api_url):
+    api_response = requests.get(api_url)
+    return api_response
+
 ## E2E LOGGING
 def write_to_logs(err, logfile_name):
     tstamp = str(datetime.now())
