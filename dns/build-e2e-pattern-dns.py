@@ -107,7 +107,7 @@ lib.write_to_logs(err, logfile_name)
 seconds = 10
 err = "Pausing for "+str(seconds)+" to allow networking configuration to take effect."
 lib.write_to_logs(err, logfile_name)
-pause_python_for_duration(seconds)
+lib.pause_python_for_duration(seconds)
 err = "Resuming script."
 lib.write_to_logs(err, logfile_name)
 err = ""
@@ -145,7 +145,7 @@ lib.write_to_logs(err, logfile_name)
 
 # Pause to allow network config to take effect
 seconds = 10
-err = "Pausing for "+str(seconds)+" to allow networking configuration to take effect."
+err = "Pausing for "+str(seconds)+" seconds to allow networking configuration to take effect."
 lib.write_to_logs(err, logfile_name)
 lib.pause_python_for_duration(seconds)
 err = "Resuming script."
@@ -183,27 +183,37 @@ for command in run_docker_compose_commands:
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+# Pause to allow Technitium to finish install
+seconds = 60
+err = "Pausing for "+str(seconds)+" seconds to allow Technitium to complete its install."
+lib.write_to_logs(err, logfile_name)
+lib.pause_python_for_duration(seconds)
+err = "Resuming script."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 # Check web service status
 dns_web_service_url = "http://"+config.DNS().ip+":"+config.DNS().port
-err = "Checing web service status:"
+err = "Checking web service status:"
 lib.write_to_logs(err, logfile_name)
-dns_web_service_status = lib.check_web_service_status(dns_web_service_url)
+retry = 0
+retry_max = 5
+retry_pause = 10
+dns_web_service_status = lib.check_web_service_status(dns_web_service_url, retry, retry_max, retry_pause)
 err = "    return code: "+str(dns_web_service_status)
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-#####################################
-# CONTINUE HERE
-#####################################
-
 # Get token, first time login using admin/admin credentials
 err = "First time API call to DNS server using admin/admin credentials."
 lib.write_to_logs(err, logfile_name)
-api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/login?user=admin&pass=admin"
+api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/user/login?user=admin&pass=admin&includeInfo=true"
 err = "    url: "+api_url
 lib.write_to_logs(err, logfile_name)
 api_response = lib.api_get(api_url)
+err = "    json: "+str(api_response.json())
+lib.write_to_logs(err, logfile_name)
 api_token = (api_response.json()['token'])
 err = "    token: "+api_token
 lib.write_to_logs(err, logfile_name)
@@ -211,15 +221,16 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Change default password
+# Syntax: http://localhost:5380/api/user/changePassword?token=x&pass=password
 err = "Change default password"
 lib.write_to_logs(err, logfile_name)
-api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/changePassword?token="+api_token+"&pass="+config.UNIVERSAL().password
+api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/user/changePassword?token="+api_token+"&pass="+config.UNIVERSAL().password
 err = "    url: "+api_url
 lib.write_to_logs(err, logfile_name)
 err = "    new password: "+config.UNIVERSAL().password
 lib.write_to_logs(err, logfile_name)
 api_response = lib.api_get(api_url)
-err = "    api response: "+api_response
+err = "    api response: "+str(api_response.json())
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
@@ -227,10 +238,12 @@ lib.write_to_logs(err, logfile_name)
 # Get new token using permanent password
 err = "Get token with permanent password."
 lib.write_to_logs(err, logfile_name)
-api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/login?user=admin&pass="+config.UNIVERSAL().password
+api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/user/login?user=admin&pass="+config.UNIVERSAL().password+"&includeInfo=true"
 err = "    url: "+api_url
 lib.write_to_logs(err, logfile_name)
 api_response = lib.api_get(api_url)
+err = "    json: "+str(api_response.json())
+lib.write_to_logs(err, logfile_name)
 api_token = (api_response.json()['token'])
 err = "    token: "+api_token
 lib.write_to_logs(err, logfile_name)
@@ -238,13 +251,14 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Create DNS zone 
+# Syntax: http://localhost:5380/api/zones/create?token=x&zone=example.com&type=Primary
 err = "Create "+config.DNS().zone+" zone."
 lib.write_to_logs(err, logfile_name)
-api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zone/create?token="+api_token+"&zone="+config.DNS().zone+"&type=Primary"
+api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/create?token="+api_token+"&zone="+config.DNS().zone+"&type=Primary"
 err = "    url: "+api_url
 lib.write_to_logs(err, logfile_name)
 api_response = lib.api_get(api_url)
-err = "    api response: "+api_response
+err = "    api response: "+str(api_response.json())
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
@@ -261,10 +275,12 @@ for x in config.IPAM().tag:
     lib.write_to_logs(err, logfile_name)
     err = "    ["+str(i)+"] ip: "+config.IPAM().ip[i]
     lib.write_to_logs(err, logfile_name)
-    api_response = lib.create_dns_record(api_toke, config.IPAM().fqdn[i], config.DNS().zone, config.IPAM().ip[i])
-    err = "    api response: "+api_response
+    api_response = lib.create_dns_record(api_token, config.IPAM().fqdn[i], config.DNS().zone, config.IPAM().ip[i])
+    err = "    api response: "+str(api_response.json())
     lib.write_to_logs(err, logfile_name)
     i=i+1
 
+err = ""
+lib.write_to_logs(err, logfile_name)
 err = "Finished."
 lib.write_to_logs(err, logfile_name)
