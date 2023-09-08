@@ -197,5 +197,74 @@ lib.write_to_logs(err, logfile_name)
 # CONTINUE HERE
 #####################################
 
+# Get token, first time login using admin/admin credentials
+err = "First time API call to DNS server using admin/admin credentials."
+lib.write_to_logs(err, logfile_name)
+api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/login?user=admin&pass=admin"
+err = "    url: "+api_url
+lib.write_to_logs(err, logfile_name)
+api_response = lib.api_get(api_url)
+api_token = (api_response.json()['token'])
+err = "    token: "+api_token
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Change default password
+err = "Change default password"
+lib.write_to_logs(err, logfile_name)
+api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/changePassword?token="+api_token+"&pass="+config.UNIVERSAL().password
+err = "    url: "+api_url
+lib.write_to_logs(err, logfile_name)
+err = "    new password: "+config.UNIVERSAL().password
+lib.write_to_logs(err, logfile_name)
+api_response = lib.api_get(api_url)
+err = "    api response: "+api_response
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Get new token using permanent password
+err = "Get token with permanent password."
+lib.write_to_logs(err, logfile_name)
+api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/login?user=admin&pass="+config.UNIVERSAL().password
+err = "    url: "+api_url
+lib.write_to_logs(err, logfile_name)
+api_response = lib.api_get(api_url)
+api_token = (api_response.json()['token'])
+err = "    token: "+api_token
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Create DNS zone 
+err = "Create "+config.DNS().zone+" zone."
+lib.write_to_logs(err, logfile_name)
+api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zone/create?token="+api_token+"&zone="+config.DNS().zone+"&type=Primary"
+err = "    url: "+api_url
+lib.write_to_logs(err, logfile_name)
+api_response = lib.api_get(api_url)
+err = "    api response: "+api_response
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Add records to DNS zone
+err = "Adding records to "+config.DNS().zone+" zone:"
+lib.write_to_logs(err, logfile_name)
+
+i=0
+for x in config.IPAM().tag:
+    err = "    ["+str(i)+"] tag: "+config.IPAM().tag[i]
+    lib.write_to_logs(err, logfile_name)
+    err = "    ["+str(i)+"] fqdn: "+config.IPAM().fqdn[i]
+    lib.write_to_logs(err, logfile_name)
+    err = "    ["+str(i)+"] ip: "+config.IPAM().ip[i]
+    lib.write_to_logs(err, logfile_name)
+    api_response = lib.create_dns_record(api_toke, config.IPAM().fqdn[i], config.DNS().zone, config.IPAM().ip[i])
+    err = "    api response: "+api_response
+    lib.write_to_logs(err, logfile_name)
+    i=i+1
+
 err = "Finished."
 lib.write_to_logs(err, logfile_name)
