@@ -1,6 +1,7 @@
 # Configuration for the E2E Patterns Lab
 # Author: Brendan O'Connor
-# Date: August 2023
+# Date: September 2023
+# Version: 2.0
 
 # Environment Variables (example: 172.16.0.0/24 subnet) - below are things that are part of your environment, editing these are REQUIRED
 class E2EP_ENVIRONMENT():
@@ -89,4 +90,6 @@ class VCSA():
     ip = E2EP_ENVIRONMENT().subnet_prefix+"10"
     fqdn = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
     photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
+    sso_domain = "vsphere.local"
+    json_filename = "vcsa.json"
     
