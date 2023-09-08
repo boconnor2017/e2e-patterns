@@ -91,5 +91,5 @@ class VCSA():
     fqdn = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
     photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
     sso_domain = "vsphere.local"
-    json_filename = "vcsa.json"
+    json_filename = "/usr/local/e2e-patterns/vcsa/vcsa.json"
     
