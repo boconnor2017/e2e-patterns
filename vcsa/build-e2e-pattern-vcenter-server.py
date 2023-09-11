@@ -146,6 +146,18 @@ lib.send_command_over_ssh(mount_iso_cmd, photon_controller_ip_address, config.E2
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+# Create DNS Record
+err = "Creating DNS Record:"
+lib.write_to_logs(err, logfile_name)
+dns_token = lib.get_dns_token()
+err = "    token: "+dns_token
+lib.write_to_logs(err, logfile_name)
+err = "    ip: "+dns_token
+lib.write_to_logs(err, logfile_name)
+create_dns_record(dns_token, config.VCSA().domain_hostname, config.DNS().zone, config.VCSA().ip)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
 # Generate JSON for vCenter configuration 
 err = "Generating JSON for vCenter configuration."
 lib.write_to_logs(err, logfile_name)
@@ -212,6 +224,16 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Write json to file
+if skip_build_photon_controller:
+    skip_build_photon_controller = True 
+    err = "Cleaning up old json config file."
+    cmd = "rm "+config.VCSA().json_filename
+    err = "    cmd: "+cmd
+    lib.write_to_logs(err, logfile_name)
+    stdout = lib.send_command_over_ssh(cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+    err = ""
+    lib.write_to_logs(err, logfile_name)
+
 err = "Writing json to file on the photon controller:"
 lib.write_to_logs(err, logfile_name)
 err = "    filename: "+config.VCSA().json_filename
@@ -234,12 +256,29 @@ lib.write_to_logs(err, logfile_name)
 err = "[i] This might take a few minutes, monitor progress using powercli or vSphere UI."
 lib.write_to_logs(err, logfile_name)
 stdout = lib.send_command_over_ssh(run_vcsa_installer_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+err = stdout
+lib.write_to_logs(err, logfile_name)
 err = "[i] The build has completed."
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+# Pause to let vCenter finish deployment
+seconds = 60
+err = "Pausing "+str(seconds)+" seconds to let vCenter finish its deployment."
+lib.write_to_logs(err, logfile_name)
+lib.pause_python_for_duration(seconds)
+err = "Resuming script."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
 # Get vCenter API session ID 
+err = "Getting vCenter Session ID:"
+lib.write_to_logs(err, logfile_name)
+vc_session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
+err = "    session id: "
+lib.write_to_logs(err, logfile_name)
 
 # Configure SSO domain
 
