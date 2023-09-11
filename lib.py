@@ -245,7 +245,7 @@ def build_photon_controller(vm_name, vm_source, logfile_name):
 
 def get_dns_token():
     api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/user/login?user=admin&pass="+config.UNIVERSAL().password+"&includeInfo=true"
-    api_response = lib.api_get(api_url)
+    api_response = api_get(api_url)
     api_token = (api_response.json()['token'])
     return api_token
 
