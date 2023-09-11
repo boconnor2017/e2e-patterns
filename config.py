@@ -88,8 +88,10 @@ class VCSA():
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-003" 
     vcsa_vm_name = UNIVERSAL().vm_naming_convention+"-004"
     ip = E2EP_ENVIRONMENT().subnet_prefix+"10"
-    fqdn = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
+    domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
+    fqdn = domain_hostname+"."+DNS().zone
     photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
     sso_domain = "vsphere.local"
     json_filename = "/usr/local/e2e-patterns/vcsa/vcsa.json"
+    username = "administrator@"+sso_domain
     
