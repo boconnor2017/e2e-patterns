@@ -243,6 +243,13 @@ def build_photon_controller(vm_name, vm_source, logfile_name):
     err = "Finished."
     write_to_logs(err, logfile_name)
 
+def get_dns_token():
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/user/login?user=admin&pass="+config.UNIVERSAL().password+"&includeInfo=true"
+    api_response = lib.api_get(api_url)
+    api_token = (api_response.json()['token'])
+    return api_token
+
+
 # Syntax: http://localhost:5380/api/zones/records/add?token=x&domain=example.com&zone=example.com
 def create_dns_record(token, domain, zone, ip):
     api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/records/add?token="+token
@@ -255,3 +262,9 @@ def create_dns_record(token, domain, zone, ip):
     api_url = api_url+"&createPtrZone=true"
     api_response = api_get(api_url)
     return api_response 
+
+def get_vc_session_id(vcenter_hostname, vcenter_username, vcenter_password):
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    sess = requests.post("https://"+vcenter_hostname+"/rest/com/vmware/cis/session", auth=(vcenter_username, vcenter_password), verify=False)
+    session_id = sess.json()['value']
+    return(session_id)
