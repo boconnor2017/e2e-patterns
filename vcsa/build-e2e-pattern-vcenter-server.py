@@ -204,33 +204,29 @@ vcsa_config_json_as_string = {
 vcsa_config_json = json.dumps(vcsa_config_json_as_string)
 err = ""
 lib.write_to_logs(err, logfile_name)
-
-# Insert each line of the json into an array
-vcsa_config_json_lines = vcsa_config_json.split('\n')
-err = "Validate JSON:"
+err = "Validating json:"
 lib.write_to_logs(err, logfile_name)
-i=0
-for line in vcsa_config_json_lines:
-    err = "    ["+str(i)+"] "+line 
-    lib.write_to_logs(err, logfile_name)
+err = "    json: "+vcsa_config_json
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
 # Write json to file
 err = "Writing json to file on the photon controller:"
 lib.write_to_logs(err, logfile_name)
 err = "    filename: "+config.VCSA().json_filename
-i=0
-for line in vcsa_config_json_lines:
-    cmd = "echo \""+line+"\" >> "+config.VCSA().json_filename
-    err = "   cmd: "+cmd 
-    lib.write_to_logs(err, logfile_name)
-    stdout = lib.send_command_over_ssh(cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
-    
+lib.write_to_logs(err, logfile_name)
+cmd = "echo \'"+vcsa_config_json+"\' >> "+config.VCSA().json_filename
+err = "    cmd: "+cmd
+lib.write_to_logs(err, logfile_name)
+stdout = lib.send_command_over_ssh(cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+
 # Run the installer
 err = "Running the installer:"
 lib.write_to_logs(err, logfile_name)
 run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
 run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+config.VCSA().json_filename+" "
-run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--acknowledge-ceip --no-ssl-certificate-verification"
+run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--accept-eula --acknowledge-ceip --no-ssl-certificate-verification"
 err = "    command: "+run_vcsa_installer_cmd
 lib.write_to_logs(err, logfile_name)
 stdout = lib.send_command_over_ssh(run_vcsa_installer_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
