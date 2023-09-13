@@ -268,3 +268,13 @@ def get_vc_session_id(vcenter_hostname, vcenter_username, vcenter_password):
     sess = requests.post("https://"+vcenter_hostname+"/rest/com/vmware/cis/session", auth=(vcenter_username, vcenter_password), verify=False)
     session_id = sess.json()['value']
     return(session_id)
+
+def create_vc_datacenter(session_id, vcenter_hostname, datacenter_name):
+    api_call = requests.post("https://"+vcenter_hostname+"/api/vcenter/datacenter", verify=False, headers={
+    "vmware-api-session-id": session_id
+    }, json={
+    "folder": "group-d1",
+    "name": datacenter_name
+    })
+    datacenter = api_call.json()
+    return datacenter
