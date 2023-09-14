@@ -101,10 +101,10 @@ vCenter Build Process:
 02. Create directory /usr/local/mount
 03. MANUAL: attach the vcenter iso to the photon controller
 04. Mount the iso to the /mount directory 
-05. Generate JSON for vcenter using config file
-06. Run the installer using Paramiko 
-07: Get vcenter api session id
-08. Configure SSO domain using info from config file
+05. Create DNS entries for the new vCSA
+06. Generate JSON for vcenter using config file
+07. Run the installer using Paramiko 
+08: Get vcenter api session id
 09. Configure datacenter using info from config file 
 '''
 
@@ -146,15 +146,30 @@ lib.send_command_over_ssh(mount_iso_cmd, photon_controller_ip_address, config.E2
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+# List DNS zones
+err = "Validating "+config.DNS().zone+" zone."
+lib.write_to_logs(err, logfile_name)
+dns_token = lib.get_dns_token()
+err = "    token: "+dns_token
+lib.write_to_logs(err, logfile_name)
+api_response = lib.get_dns_zones(dns_token)
+err = "    api response: "+str(api_response.json())
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
 # Create DNS Record
 err = "Creating DNS Record:"
 lib.write_to_logs(err, logfile_name)
 dns_token = lib.get_dns_token()
 err = "    token: "+dns_token
 lib.write_to_logs(err, logfile_name)
-err = "    ip: "+dns_token
+err = "    ip: "+ip
 lib.write_to_logs(err, logfile_name)
-create_dns_record(dns_token, config.VCSA().domain_hostname, config.DNS().zone, config.VCSA().ip)
+api_response = lib.create_dns_record(dns_token, config.VCSA().domain_hostname, config.DNS().zone, config.VCSA().ip)
+err = "    api response: "+str(api_response.json())
+lib.write_to_logs(err, logfile_name)
+lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
@@ -277,9 +292,14 @@ lib.write_to_logs(err, logfile_name)
 err = "Getting vCenter Session ID:"
 lib.write_to_logs(err, logfile_name)
 vc_session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
-err = "    session id: "
+err = "    session id: "+vc_session_id
+lib.write_to_logs(err, logfile_name)
+err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Configure SSO domain
-
 # Configure datacenter 
+err = "Creating Datacenter:"
+lib.write_to_logs(err, logfile_name)
+err = "    session id: "+vc_session_id
+lib.write_to_logs(err, logfile_name)
+lib.create_vc_datacenter(vc_session_id, config.VCSA().fqdn, config.VCSA().datacenter)
