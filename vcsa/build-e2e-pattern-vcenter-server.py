@@ -263,12 +263,15 @@ err = "Running the installer:"
 lib.write_to_logs(err, logfile_name)
 run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
 run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+config.VCSA().json_filename+" "
-run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--accept-eula --acknowledge-ceip --no-ssl-certificate-verification"
+run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--accept-eula --acknowledge-ceip --no-ssl-certificate-verification "
+run_vcsa_installer_cmd = run_vcsa_installer_cmd+">> /usr/local/e2e-patterns/vcsa/__vcsa-deploy.log"
 err = "    command: "+run_vcsa_installer_cmd
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 err = "[i] This might take a few minutes, monitor progress using powercli or vSphere UI."
+lib.write_to_logs(err, logfile_name)
+err = "[i] Also check logs at /usr/local/e2e-patterns/vcsa/__vcsa-deploy.log"
 lib.write_to_logs(err, logfile_name)
 stdout = lib.send_command_over_ssh(run_vcsa_installer_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
 err = stdout
