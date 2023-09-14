@@ -164,7 +164,7 @@ lib.write_to_logs(err, logfile_name)
 dns_token = lib.get_dns_token()
 err = "    token: "+dns_token
 lib.write_to_logs(err, logfile_name)
-err = "    ip: "+ip
+err = "    ip: "+config.VCSA().ip
 lib.write_to_logs(err, logfile_name)
 api_response = lib.create_dns_record(dns_token, config.VCSA().domain_hostname, config.DNS().zone, config.VCSA().ip)
 err = "    api response: "+str(api_response.json())
@@ -269,20 +269,14 @@ err = "    command: "+run_vcsa_installer_cmd
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
-err = "[i] This might take a few minutes, monitor progress using powercli or vSphere UI."
+err = "[i] This might take a few minutes. Check logs at /usr/local/e2e-patterns/vcsa/__vcsa-deploy.log"
 lib.write_to_logs(err, logfile_name)
-err = "[i] Also check logs at /usr/local/e2e-patterns/vcsa/__vcsa-deploy.log"
-lib.write_to_logs(err, logfile_name)
-stdout = lib.send_command_over_ssh(run_vcsa_installer_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
-err = stdout
-lib.write_to_logs(err, logfile_name)
-err = "[i] The build has completed."
-lib.write_to_logs(err, logfile_name)
+lib.send_command_over_ssh(run_vcsa_installer_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Pause to let vCenter finish deployment
-seconds = 60
+seconds = (60*10)
 err = "Pausing "+str(seconds)+" seconds to let vCenter finish its deployment."
 lib.write_to_logs(err, logfile_name)
 lib.pause_python_for_duration(seconds)
