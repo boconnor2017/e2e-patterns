@@ -259,11 +259,17 @@ def create_dns_zone(token):
     api_response = api_get(api_url)
     return api_response
 
+def get_dns_zones(token):
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/list?"
+    api_url = api_url+"token="+token
+    api_response = api_get(api_url)
+    return api_response
+
 # Syntax: http://localhost:5380/api/zones/records/add?token=x&domain=example.com&zone=example.com
 def create_dns_record(token, domain_name, zone, ip):
     api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/records/add?"
     api_url = api_url+"token="+token
-    api_url = api_url+"&domain="+domain_name
+    api_url = api_url+"&domain="+domain_name+"."+zone
     api_url = api_url+"&zone="+zone
     api_url = api_url+"&type=A"
     api_url = api_url+"&ttl=3600"
