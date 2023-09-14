@@ -249,14 +249,25 @@ def get_dns_token():
     api_token = (api_response.json()['token'])
     return api_token
 
+# Syntax: http://localhost:5380/api/zones/create?token=x&zone=example.com&type=Primary
+def create_dns_zone(token):
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/create?"
+    api_url = api_url+"token="+token
+    api_url = api_url+"&zone="+config.DNS().zone
+    api_url = api_url+"&type=Primary"
+    api_url = api_url+"&forwarder=this-server"
+    api_response = api_get(api_url)
+    return api_response
 
 # Syntax: http://localhost:5380/api/zones/records/add?token=x&domain=example.com&zone=example.com
-def create_dns_record(token, domain, zone, ip):
-    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/records/add?token="+token
-    api_url = api_url+"&domain="+domain
+def create_dns_record(token, domain_name, zone, ip):
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/records/add?"
+    api_url = api_url+"token="+token
+    api_url = api_url+"&domain="+domain_name
     api_url = api_url+"&zone="+zone
     api_url = api_url+"&type=A"
     api_url = api_url+"&ttl=3600"
+    api_url = api_url+"&overwrite=true"
     api_url = api_url+"&ipAddress="+ip
     api_url = api_url+"&ptr=true"
     api_url = api_url+"&createPtrZone=true"
