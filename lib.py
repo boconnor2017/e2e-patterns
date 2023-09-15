@@ -281,7 +281,7 @@ def create_dns_record(token, domain_name, zone, ip):
     return api_response 
 
 def create_new_vcenter(logfile_name, ip, un, pw, pause_seconds):
-    err = "def create_new_vcenter("+installer_logfile_source+", "+master_logfile+", "+ip+", "+un+", "+pw+", "+str(pause_seconds)
+    err = "def create_new_vcenter("+master_logfile+", "+ip+", "+un+", "+pw+", "+str(pause_seconds)
     write_to_logs(err, logfile_name)    
     run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
     run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+config.VCSA().json_filename+" "
