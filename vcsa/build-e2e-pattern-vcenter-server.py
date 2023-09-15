@@ -285,19 +285,11 @@ def retry_vc(retry, max_retry, pause_seconds):
     return vc_session_id
 
 err = "Getting vCenter Session ID:"
+retry = 0
+max_retry = 10
+pause_seconds = (60*3)
 lib.write_to_logs(err, logfile_name)
-try:
-    vc_session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
-    err = "    session id: "+vc_session_id
-    lib.write_to_logs(err, logfile_name)
-except:
-    err = "[i] Failed to connect:"
-    lib.write_to_logs(err, logfile_name)
-    max_retry = 10
-    retry = 0
-    pause_seconds = (60*3)
-    retry_vc(retry, max_retry, pause_seconds)
-    
+vc_session_id = retry_vc(retry, max_retry, pause_seconds)
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
