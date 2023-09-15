@@ -258,32 +258,14 @@ err = "    cmd: "+cmd
 lib.write_to_logs(err, logfile_name)
 stdout = lib.send_command_over_ssh(cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
 
-# Run the installer
-err = "Running the installer:"
-lib.write_to_logs(err, logfile_name)
-run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
-run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+config.VCSA().json_filename+" "
-run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--accept-eula --acknowledge-ceip --no-ssl-certificate-verification "
-run_vcsa_installer_cmd = run_vcsa_installer_cmd+">> /usr/local/e2e-patterns/vcsa/__vcsa-deploy.log"
-err = "    command: "+run_vcsa_installer_cmd
+# Create vCenter
+err = "Creating vCenter:"
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
-err = "[i] This might take a few minutes. Check logs at /usr/local/e2e-patterns/vcsa/__vcsa-deploy.log"
-lib.write_to_logs(err, logfile_name)
-lib.send_command_over_ssh(run_vcsa_installer_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
-err = ""
-lib.write_to_logs(err, logfile_name)
-
-# Pause to let vCenter finish deployment
 seconds = (60*10)
-err = "Pausing "+str(seconds)+" seconds to let vCenter finish its deployment."
-lib.write_to_logs(err, logfile_name)
-lib.pause_python_for_duration(seconds)
-err = "Resuming script."
-lib.write_to_logs(err, logfile_name)
-err = ""
-lib.write_to_logs(err, logfile_name)
+lib.create_new_vcenter(logfile_name, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, seconds)
+
 
 # Get vCenter API session ID 
 err = "Getting vCenter Session ID:"
