@@ -265,7 +265,14 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Pause to allow build to complete
-seconds = (60*25)
+minutes = 35
+err = "[!] This part is going to take a while... work on something productive while waiting. "
+lib.write_to_logs(err, logfile_name)
+err = "[!] View the logs on the photon controller at /usr/local/e2e-patterns/vcsa/_vcsa-deploy.log "
+lib.write_to_logs(err, logfile_name)
+err = "[!] Pausing for "+str(minutes)+" minutes:"
+lib.write_to_logs(err, logfile_name)
+seconds = (60*minutes)
 lib.create_new_vcenter(logfile_name, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, seconds)
 
 # Get vCenter API session ID 
