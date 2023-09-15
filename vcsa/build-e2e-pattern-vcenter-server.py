@@ -265,7 +265,7 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Pause to allow build to complete
-seconds = (60*15)
+seconds = (60*25)
 lib.create_new_vcenter(logfile_name, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, seconds)
 
 # Get vCenter API session ID 
@@ -275,21 +275,27 @@ def retry_vc(retry, max_retry, pause_seconds):
     if retry < max_retry:
         try:
             vc_session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
+            return vc_session_id
         except:
+            err = "    [!] Failed on retry "+str(retry)+" of "+max_retry 
+            lib.write_to_logs(err, logfile_name)
             retry = retry+1
             lib.pause_python_for_duration(pause_seconds)
             retry_vc(retry, max_retry, pause_seconds)
-            vc_session_id = ""
     else:
+        err = "    [!] Max retry exceeded."
+        lib.write_to_logs(err, logfile_name)
         vc_session_id = ""
-    return vc_session_id
+        return vc_session_id
 
 err = "Getting vCenter Session ID:"
 retry = 0
-max_retry = 10
+max_retry = 20
 pause_seconds = (60*3)
 lib.write_to_logs(err, logfile_name)
 vc_session_id = retry_vc(retry, max_retry, pause_seconds)
+lib.write_to_logs(err, logfile_name)
+err = "    session id: "+vc_session_id
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
@@ -297,6 +303,11 @@ lib.write_to_logs(err, logfile_name)
 # Configure datacenter 
 err = "Creating Datacenter:"
 lib.write_to_logs(err, logfile_name)
-err = "    session id: "+vc_session_id
+err = "    session id: "+vc_session_id 
 lib.write_to_logs(err, logfile_name)
-lib.create_vc_datacenter(vc_session_id, config.VCSA().fqdn, config.VCSA().datacenter)
+err = "    VCSA FQDN: "+config.VCSA().fqdn
+lib.write_to_logs(err, logfile_name)
+err = "    VCSA datacenter: "+config.VCSA().datacenter
+vc_datacenter = lib.create_vc_datacenter(vc_session_id, config.VCSA().fqdn, config.VCSA().datacenter)
+err = str(vc_datacenter)
+lib.write_to_logs(err, logfile_name)
