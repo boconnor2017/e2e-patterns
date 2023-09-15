@@ -294,7 +294,7 @@ def create_new_vcenter(logfile_name, ip, un, pw, pause_seconds):
     pclient.connect(hostname=ip, username=un, password=pw)
     pclient.exec_command(run_vcsa_installer_cmd, timeout=None)
     pclient.close()
-    err = "Command sent to SSH host. Pausing for "+str(pause_seconds)+" to allow VCSA install to complete."
+    err = "Command sent to SSH host. Pausing for "+str(pause_seconds)+" seconds to allow VCSA install to complete."
     write_to_logs(err, logfile_name)  
     pause_python_for_duration(pause_seconds)
     err = "Resuming script. Exiting create_new_vcenter()."
