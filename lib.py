@@ -280,6 +280,28 @@ def create_dns_record(token, domain_name, zone, ip):
     api_response = api_get(api_url)
     return api_response 
 
+def create_new_vcenter(logfile_name, ip, un, pw, pause_seconds):
+    err = "def create_new_vcenter("+installer_logfile_source+", "+master_logfile+", "+ip+", "+un+", "+pw+", "+str(pause_seconds)
+    write_to_logs(err, logfile_name)    
+    run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
+    run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+config.VCSA().json_filename+" "
+    run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--accept-eula --acknowledge-ceip --no-ssl-certificate-verification "
+    run_vcsa_installer_cmd = run_vcsa_installer_cmd+">> /usr/local/e2e-patterns/vcsa/__vcsa-deploy.log"
+    err = "    run_vcsa_installer_cmd: "+run_vcsa_installer_cmd
+    write_to_logs(err, logfile_name)    
+    pclient = paramiko.SSHClient()
+    pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    pclient.connect(hostname=ip, username=un, password=pw)
+    pclient.exec_command(run_vcsa_installer_cmd, timeout=None)
+    pclient.close()
+    err = "Command sent to SSH host. Pausing for "+str(pause_seconds)+" to allow VCSA install to complete."
+    write_to_logs(err, logfile_name)  
+    pause_python_for_duration(pause_seconds)
+    err = "Resuming script. Exiting create_new_vcenter()."
+    write_to_logs(err, logfile_name)  
+    err = ""
+    write_to_logs(err, logfile_name)
+    
 def get_vc_session_id(vcenter_hostname, vcenter_username, vcenter_password):
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     sess = requests.post("https://"+vcenter_hostname+"/rest/com/vmware/cis/session", auth=(vcenter_username, vcenter_password), verify=False)
