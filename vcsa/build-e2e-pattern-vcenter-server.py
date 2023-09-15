@@ -272,7 +272,7 @@ lib.create_new_vcenter(logfile_name, photon_controller_ip_address, config.E2EP_E
 def retry_vc(retry, max_retry, pause_seconds):
     err = "    Retry: "+str(retry)
     lib.write_to_logs(err, logfile_name)
-    if retry < retry_max:
+    if retry < max_retry:
         try:
             vc_session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
         except:
@@ -295,7 +295,8 @@ except:
     lib.write_to_logs(err, logfile_name)
     max_retry = 10
     retry = 0
-    retry_vc(retry, max_retry)
+    pause_seconds = (60*3)
+    retry_vc(retry, max_retry, pause_seconds)
     
 lib.write_to_logs(err, logfile_name)
 err = ""
