@@ -263,15 +263,40 @@ err = "Creating vCenter:"
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
-seconds = (60*10)
+
+# Pause to allow build to complete
+seconds = (60*15)
 lib.create_new_vcenter(logfile_name, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, seconds)
 
-
 # Get vCenter API session ID 
+def retry_vc(retry, max_retry, pause_seconds):
+    err = "    Retry: "+str(retry)
+    lib.write_to_logs(err, logfile_name)
+    if retry < retry_max:
+        try:
+            vc_session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
+        except:
+            retry = retry+1
+            lib.pause_python_for_duration(pause_seconds)
+            retry_vc(retry, max_retry, pause_seconds)
+            vc_session_id = ""
+    else:
+        vc_session_id = ""
+    return vc_session_id
+
 err = "Getting vCenter Session ID:"
 lib.write_to_logs(err, logfile_name)
-vc_session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
-err = "    session id: "+vc_session_id
+try:
+    vc_session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
+    err = "    session id: "+vc_session_id
+    lib.write_to_logs(err, logfile_name)
+except:
+    err = "[i] Failed to connect:"
+    lib.write_to_logs(err, logfile_name)
+    max_retry = 10
+    retry = 0
+    retry_vc(retry, max_retry)
+    
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
