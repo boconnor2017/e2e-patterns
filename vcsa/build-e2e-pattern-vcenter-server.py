@@ -277,7 +277,7 @@ def retry_vc(retry, max_retry, pause_seconds):
             vc_session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
             return vc_session_id
         except:
-            err = "    [!] Failed on retry "+str(retry)+" of "+max_retry 
+            err = "    [!] Failed on retry "+str(retry)+" of "+str(max_retry) 
             lib.write_to_logs(err, logfile_name)
             retry = retry+1
             lib.pause_python_for_duration(pause_seconds)
