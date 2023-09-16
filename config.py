@@ -66,16 +66,16 @@ class UNIVERSAL():
     password = "VMware1!"
     vm_naming_convention = "e2ep"
     fqdn_naming_convention = "vmw"
-	
+
 class LOGS():
-	template = "_template.log"
-	dns = "_dns.log"
-	nfs = "_nfs.log"
-	mvc = "_mvc.log"
-	mnsx = "_mnsx.log"
-	photonos = "_photonos.log"
-	minikube = "_k8.log"
-	vcsa = "_vcsa.log"
+    template = "_template.log"
+    dns = "_dns.log"
+    nfs = "_nfs.log"
+    mvc = "_mvc.log"
+    mnsx = "_mnsx.log"
+    photonos = "_photonos.log"
+    minikube = "_k8.log"
+    vcsa = "_vcsa.log"
     nsx = "_nsx.log"
 
 class DNS():
