@@ -96,3 +96,10 @@ class VCSA():
     username = "administrator@"+sso_domain
     datacenter = "e2e"
     
+class NSX():
+    photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-005" 
+    nsx_vm_name = UNIVERSAL().vm_naming_convention+"-006"
+    ip = E2EP_ENVIRONMENT().subnet_prefix+"11"
+    domain_hostname = UNIVERSAL().fqdn_naming_convention+"nsx-01"
+    fqdn = domain_hostname+"."+DNS().zone
+    photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
