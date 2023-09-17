@@ -104,3 +104,6 @@ class NSX():
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"nsx-01"
     fqdn = domain_hostname+"."+DNS().zone
     photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
+    mgrformfactor = "small"
+    password = UNIVERSAL().password+UNIVERSAL().password
+    nsx_ova_source = "nsx-unified-appliance-3.2.1.2.0.20541216.ova" #Must be downloaded to /usr/local/drop of photon controller
