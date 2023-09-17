@@ -98,7 +98,7 @@ lib.write_to_logs(err, logfile_name)
 Install NSX:
 01. Build photon controller 
 02. Download NSX OVA to the /usr/local/drop repo of the photon controller
-03. Using PowerCLI run Import-Vapp to install NSX
+03. Using Install NSX using OVFTool
 '''
 
 # Prompt user to continue with script
@@ -119,3 +119,8 @@ else:
     err = ""
     lib.write_to_logs(err, logfile_name)
 
+#Install NSX using OVFtool container
+err = "Installing NSX with OVFTool container"
+lib.write_to_logs(err, logfile_name)
+err = lib.build_nsx_with_ovftool_container()
+lib.write_to_logs(err, logfile_name)
