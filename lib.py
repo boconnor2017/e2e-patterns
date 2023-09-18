@@ -46,11 +46,6 @@ def check_web_service_status(web_svc_url, retry, retry_max, retry_pause):
     else:
         return "[!] Web service check failed "+str(retry_max)+" times."
 
- def docker_build(image):
-    dclient = docker.from_env()
-    err = dclient.build(image)
-    return err
-
 def api_get(api_url):
     api_response = requests.get(api_url)
     return api_response
@@ -353,3 +348,8 @@ def build_nsx_with_ovftool_container():
     dclient = docker.from_env()
     err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir="/root/home", remove=True, command=docker_cmd)
     return str(err)
+
+ def docker_build(image):
+    dclient = docker.from_env()
+    err = dclient.build(image)
+    return err
