@@ -88,7 +88,7 @@ else:
 # Get VM IP
 err = "Getting IP address of photon controller:"
 lib.write_to_logs(err, logfile_name)
-ip_address = lib.get_vm_ip_address(sys.argv[1])
+ip_address = lib.get_vm_ip_address(config.NSX().photon_controller_vm_name)
 err = "    ip address: "+ip_address
 lib.write_to_logs(err, logfile_name)
 err = ""
@@ -122,7 +122,20 @@ else:
     err = ""
     lib.write_to_logs(err, logfile_name)
 
-#Install NSX using OVFtool container
+# Install OVFTool on the Photon Controller
+err = "Installing OVFTool container:"
+lib.write_to_logs(err, logfile_name)
+cmd = "cp /usr/local/drop/VMware-ovftool* $PWD"
+err = "    get ovftool bundle: "+cmd
+lib.write_to_logs(err, logfile_name)
+stdout = lib.send_command_over_ssh(cmd, ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
+ovftool_image = "ovftool"
+err = lib.docker_build(ovftool_image)
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Install NSX using OVFtool container
 err = "Installing NSX with OVFTool container"
 lib.write_to_logs(err, logfile_name)
 err = lib.build_nsx_with_ovftool_container()
