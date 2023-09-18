@@ -97,8 +97,9 @@ lib.write_to_logs(err, logfile_name)
 '''
 Install NSX:
 01. Build photon controller 
-02. Download NSX OVA to the /usr/local/drop repo of the photon controller
-03. Using Install NSX using OVFTool
+02. Download OVFTool OVA to the /usr/local/drio repo of the photon controller
+03. Download NSX OVA to the /usr/local/drop repo of the photon controller
+04. Using Install NSX using OVFTool
 '''
 
 # Prompt user to continue with script
@@ -110,6 +111,8 @@ else:
     print("")
     print("")
     print("This next step requires manual intervention.")
+    print("Download the OVFTool bundle (see Pattern A-01 for details) to the photon controller (vm name: "+config.VCSA().photon_controller_vm_name+")")
+    print("AND")
     print("Download the NSX-T OVA to the photon controller (vm name: "+config.VCSA().photon_controller_vm_name+")")
     pressanykeytocontinue = input("Press Enter to continue:")
     print("")
