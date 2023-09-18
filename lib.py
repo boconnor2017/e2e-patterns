@@ -48,7 +48,7 @@ def check_web_service_status(web_svc_url, retry, retry_max, retry_pause):
 
  def docker_build(image):
     dclient = docker.from_env()
-    err = dclient.build(image)    
+    err = dclient.build(image)
     return err
 
 def api_get(api_url):
