@@ -129,8 +129,9 @@ cmd = "cp /usr/local/drop/VMware-ovftool* $PWD"
 err = "    get ovftool bundle: "+cmd
 lib.write_to_logs(err, logfile_name)
 stdout = lib.send_command_over_ssh(cmd, ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
-ovftool_image = "ovftool"
-err = lib.docker_build(ovftool_image)
+path_to_Dockerfile = "/usr/local/e2e-patterns/photon/Dockerfile"
+#ovftool_image = "ovftool"
+err = lib.docker_build(path_to_Dockerfile)
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
