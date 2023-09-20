@@ -351,5 +351,5 @@ def build_nsx_with_ovftool_container():
 
 def docker_build(path_to_Dockerfile):
     dclient = docker.from_env()
-    err=dclient.images.build(path_to_Dockerfile)
+    err=dclient.images.build(path=path_to_Dockerfile)
     return err
