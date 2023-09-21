@@ -17,6 +17,7 @@ class E2EP_ENVIRONMENT():
 	esxi_host_virtual_switch = "VM Network" #virtual switch that will be used as the target port group for patterns
 	photonos_username = "root" #default username to login to photon vms 
 	photonos_password = "VMware1!VMware1!" #default password to login to photon vms
+    photonos_source = "photon-ova-4.0-ca7c9e9330.ova"
 
 '''
 Below are variables that are created to manage the lab environment. Editing these are OPTIONAL.
@@ -24,6 +25,7 @@ Below are variables that are created to manage the lab environment. Editing thes
 - LOGS() is a class containing variables that apply to logging
 - DNS() is a class containing variables that apply to the DNS pattern
 - VCSA() is a class containing variables that apply to the vcenter server pattern
+- NSX() is a class containing variables that apply to the NSX pattern
 
 IPAM: the recommended subnet size for this environment is /24
 - x.x.x.01 = reserved for gateway
@@ -63,6 +65,8 @@ IPAM: the recommended subnet size for this environment is /24
 '''
 
 class UNIVERSAL():
+    github_repo = "https://github.com/boconnor2017/e2e-patterns"
+    home_dir = "/usr/local/e2e-patterns"
     password = "VMware1!"
     vm_naming_convention = "e2ep"
     fqdn_naming_convention = "vmw"
@@ -74,15 +78,21 @@ class LOGS():
     mvc = "_mvc.log"
     mnsx = "_mnsx.log"
     photonos = "_photonos.log"
-    minikube = "_k8.log"
+    minikube = "_minikube.log"
     vcsa = "_vcsa.log"
     nsx = "_nsx.log"
+
+class TEMPLATE():
+    pattern = "A-00: Template"
+    photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-template"
+    template_vm_name = UNIVERSAL().vm_naming_convention+"-template"
+    ip = E2EP_ENVIRONMENT().subnet_prefix+"250"
 
 class DNS():
     ip = "172.16.0.9"
     zone = "e2e.local"
     vm_name = UNIVERSAL().vm_naming_convention+"-002"
-    photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
+    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
     port = "5380"
 
 class VCSA():
@@ -91,7 +101,7 @@ class VCSA():
     ip = E2EP_ENVIRONMENT().subnet_prefix+"10"
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
     fqdn = domain_hostname+"."+DNS().zone
-    photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
+    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
     sso_domain = "vsphere.local"
     json_filename = "/usr/local/e2e-patterns/vcsa/vcsa.json"
     username = "administrator@"+sso_domain
@@ -103,7 +113,7 @@ class NSX():
     ip = E2EP_ENVIRONMENT().subnet_prefix+"11"
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"nsx-01"
     fqdn = domain_hostname+"."+DNS().zone
-    photon_source = "photon-ova-4.0-ca7c9e9330.ova" #Must be downloaded to /usr/local/drop of master controller
+    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
     mgrformfactor = "small"
     password = UNIVERSAL().password+UNIVERSAL().password
     nsx_ova_source = "nsx-unified-appliance-3.2.1.2.0.20541216.ova" #Must be downloaded to /usr/local/drop of photon controller
