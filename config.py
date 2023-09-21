@@ -5,18 +5,18 @@
 
 # Environment Variables (example: 172.16.0.0/24 subnet) - below are things that are part of your environment, editing these are REQUIRED
 class E2EP_ENVIRONMENT():
-	subnet_mask = "255.255.255.0"
-	subnet_size = "24" #CIDR block, default /24 (/24 recommended)
-	subnet_prefix = "172.16.0." #first four numbers of the subnet
-	default_gw = subnet_prefix+"1" #default: .01 gateway address
-	ntp_server = "pool.ntp.org"
-	esxi_host_ip = subnet_prefix+"201" 
-	esxi_host_username = "root" #default username to login to esxi host
-	esxi_host_password = "VMware1!" #password to login to esxi host
-	esxi_host_datastore = "datastore1" #datastore that will be used as the target storage for patterns
-	esxi_host_virtual_switch = "VM Network" #virtual switch that will be used as the target port group for patterns
-	photonos_username = "root" #default username to login to photon vms 
-	photonos_password = "VMware1!VMware1!" #default password to login to photon vms
+    subnet_mask = "255.255.255.0"
+    subnet_size = "24" #CIDR block, default /24 (/24 recommended)
+    subnet_prefix = "172.16.0." #first four numbers of the subnet
+    default_gw = subnet_prefix+"1" #default: .01 gateway address
+    ntp_server = "pool.ntp.org"
+    esxi_host_ip = subnet_prefix+"201" 
+    esxi_host_username = "root" #default username to login to esxi host
+    esxi_host_password = "VMware1!" #password to login to esxi host
+    esxi_host_datastore = "datastore1" #datastore that will be used as the target storage for patterns
+    esxi_host_virtual_switch = "VM Network" #virtual switch that will be used as the target port group for patterns
+    photonos_username = "root" #default username to login to photon vms 
+    photonos_password = "VMware1!VMware1!" #default password to login to photon vms
     photonos_source = "photon-ova-4.0-ca7c9e9330.ova"
 
 '''
