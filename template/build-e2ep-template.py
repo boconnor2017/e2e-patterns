@@ -46,19 +46,16 @@ else:
     skip_build_photon_controller = False
 
 # Photon controller prerequisites
-if skip_build_photon_controller:
-    skip_build_photon_controller = True 
-else:
-    err = "Copying PowerCLI scripts from /photon repo"
-    lib.write_to_logs(err, logfile_name)
-    src_file = src_dir+'/photon/change-photon_default_pw.ps1'
-    outpt = shutil.copy(src_file, des_dir)
-    src_file = src_dir+'/photon/get-vm-ip.ps1'
-    outpt = shutil.copy(src_file, des_dir)
-    src_file = src_dir+'/photon/change-vm-ip.ps1'
-    outpt = shutil.copy(src_file, des_dir)
-    err = ""
-    lib.write_to_logs(err, logfile_name)
+err = "Copying PowerCLI scripts from /photon repo"
+lib.write_to_logs(err, logfile_name)
+src_file = src_dir+'/photon/change-photon_default_pw.ps1'
+outpt = shutil.copy(src_file, des_dir)
+src_file = src_dir+'/photon/get-vm-ip.ps1'
+outpt = shutil.copy(src_file, des_dir)
+src_file = src_dir+'/photon/change-vm-ip.ps1'
+outpt = shutil.copy(src_file, des_dir)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
 # Build photon controller 
 vm_name = config.TEMPLATE().photon_controller_vm_name
