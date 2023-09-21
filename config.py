@@ -62,6 +62,7 @@ IPAM: the recommended subnet size for this environment is /24
 - x.x.x.37 = reserved for aria workloads under management
 - x.x.x.38 = reserved for aria workloads under management
 - x.x.x.39 = reserved for aria workloads under management
+- x.x.x.40 = reserved for kubernetes
 '''
 
 class UNIVERSAL():
@@ -87,6 +88,12 @@ class TEMPLATE():
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-template"
     template_vm_name = UNIVERSAL().vm_naming_convention+"-template"
     ip = E2EP_ENVIRONMENT().subnet_prefix+"250"
+
+class MINIKUBE():
+    pattern = "A-05: Kubernetes"
+    photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-k8"
+    template_vm_name = UNIVERSAL().vm_naming_convention+"-k8"
+    ip = E2EP_ENVIRONMENT().subnet_prefix+"40"
 
 class DNS():
     ip = "172.16.0.9"
