@@ -1,7 +1,7 @@
 # Description: Installs Minikube (kubernetes) on a Photon controller
 # Author: Brendan O'Connor
-# Date: September 2023
-# Version: 2.0
+# Date: August 2023
+# Version: 1.0
 
 # Base imports
 import os
