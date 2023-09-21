@@ -57,6 +57,30 @@ def write_to_logs(err, logfile_name):
     logfile.write(tstamp+": "+err+" \n")
     logfile.close
 
+def e2e_patterns_header(logfile_name, pattern_name):
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "-----------------------------------------------------"
+    write_to_logs(err, logfile_name)
+    err = "-----------------------------------------------------"
+    write_to_logs(err, logfile_name)
+    err = "-----------------------------------------------------"
+    write_to_logs(err, logfile_name)
+    err = "WELCOME TO E2E PATTERNS!"
+    write_to_logs(err, logfile_name)
+    err = "-----------------------------------------------------"
+    write_to_logs(err, logfile_name)
+    err = "-----------------------------------------------------"
+    write_to_logs(err, logfile_name)
+    err = "-----------------------------------------------------"
+    write_to_logs(err, logfile_name)
+    err = "Starting build of pattern "+pattern_name
+    write_to_logs(err, logfile_name)
+    err = "Author: Brendan O'Connor"
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+
 # E2E LIBRARY
 def build_photon_with_ovftool_container(vm_name, vm_source):
     docker_image = "ovftool" 
@@ -341,7 +365,8 @@ def build_nsx_with_ovftool_container():
     docker_cmd = docker_cmd+"--prop:nsx_isSSHEnabled=True "
     docker_cmd = docker_cmd+"--prop:nsx_allowSSHRootLogin=True "
     docker_cmd = docker_cmd+"'"+config.NSX().nsx_ova_source+"' "
-    docker_cmd = docker_cmd+"vi://'"+config.E2EP_ENVIRONMENT().esxi_host_username+"':'"+config.E2EP_ENVIRONMENT().esxi_host_password+"'@"+config.E2EP_ENVIRONMENT().esxi_host_ip
+    #docker_cmd = docker_cmd+"vi://'"+config.E2EP_ENVIRONMENT().esxi_host_username+"':'"+config.E2EP_ENVIRONMENT().esxi_host_password+"'@"+config.E2EP_ENVIRONMENT().esxi_host_ip
+    docker_cmd = docker_cmd+"vi://'administrator@vsphere.local':'VMware1!'@172.16.0.10"
     dclient = docker.from_env()
     err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir="/root/home", remove=True, command=docker_cmd)
     return str(err)
