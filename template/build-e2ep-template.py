@@ -28,18 +28,8 @@ import lib
 
 # Start log file
 logfile_name = config.LOGS().template
-err = ""
-lib.write_to_logs(err, logfile_name)
-err = ""
-lib.write_to_logs(err, logfile_name)
-err = ""
-lib.write_to_logs(err, logfile_name)
-err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-lib.write_to_logs(err, logfile_name)
-err = "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-lib.write_to_logs(err, logfile_name)
-err = "Starting "+config.GITHUB().template
-lib.write_to_logs(err, logfile_name)
+pattern_name = config.TEMPLATE().pattern
+lib.e2e_patterns_header(logfile_name, pattern_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
@@ -81,7 +71,7 @@ else:
     err = ""
     lib.write_to_logs(err, logfile_name)
 
-# Get VM IP
+# Get Photon Controller IP
 err = "Getting IP address of photon controller:"
 lib.write_to_logs(err, logfile_name)
 err = "    vm name: "+vm_name
