@@ -29,18 +29,6 @@ lib.e2e_patterns_header(logfile_name, pattern_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Photon controller prerequisites
-err = "Copying PowerCLI scripts from /photon repo"
-lib.write_to_logs(err, logfile_name)
-src_file = src_dir+'/photon/change-photon_default_pw.ps1'
-outpt = shutil.copy(src_file, des_dir)
-src_file = src_dir+'/photon/get-vm-ip.ps1'
-outpt = shutil.copy(src_file, des_dir)
-src_file = src_dir+'/photon/change-vm-ip.ps1'
-outpt = shutil.copy(src_file, des_dir)
-err = ""
-lib.write_to_logs(err, logfile_name)
-
 # Build photon controller 
 vm_name = sys.argv[1]
 err = "Building photon controller."
