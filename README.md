@@ -1,34 +1,17 @@
-# Quick Start
-❗ WARNING: the contents of this wiki are not intended for production networks. In most cases, best practices for operational compliance are not followed. The intended use of this wiki is for home labs only. For a detailed documentation of this lab please see the wiki page: https://tinyurl.com/e2e-patterns
+# Welcome to the E2E Patterns Lab!
+This repository is intended to provide code samples to help you build immutable VMware Patterns. See the Wiki for details.
 
-## Step 1: Deploy Photon (photon-ova-4.0-ca7c9e9330.ova)
-For downloads visit: https://github.com/vmware/photon/wiki/Downloading-Photon-OS 
+:heavy_exclamation_mark: ***WARNING: the contents of this repository are not intended for production networks in their current state. It is recommended that these scripts are certified in a Development environment, functionally tested, and refactored with the appropriate security and operational considerations. Proper SDLC practices are advised.***
 
-The default password is `changeme`. For all labs, use `/usr/local/` as the working directory.
-```
-cd /usr/local/
-```
+# What is a Pattern?
+Think of a "Pattern" like a Docker Image. A Docker Image might be very generic or it might be fully baked with specific packages. Similarly, a Pattern is a set of packages (from this repo) designed to function on a PhotonOS virtual machine. The result of a Pattern (a Docker Container using the Docker analogy) is the VMware environment that the Pattern creates. For example: a Workload Domain Pattern might consist of a vCenter Server, an NSX Manager, and a few nested ESXi hosts. The Pattern in this example would contain all code from this repo to automate the build of a workload domain, formatted to run on PhotonOS. 
 
-## Step 2: Download controller prep script 
-```
-curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh >> prep-photon.sh
-```
+# Pattern Types
+* Basic PhotonOS Patterns: provide basic tools such as an OVFTool container, a PowerCLI container, and a Minikube environment.
+* Shared Services Patterns: provide standard shared services tools such as a DNS container, an LDAP container, and NFS container.
+* Workload Domain Patterns: provide VMware nested capabilities such as vCenter, NSX, Aria, and Tanzu.
 
-## Step 3: Download refresher script
-```
-curl https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/refresh-e2e-patterns.sh >> refresh-e2e-patterns.sh
-```
-
-## Step 4: Run E2E lab PhotonOS prep script
-```
-sh prep-photon.sh
-```
-
-## Step 5: Refresh local repo (as needed)
-```
-sh refresh-e2e-patterns.sh
-```
-
-# Patterns
-See table of contents in the wiki: https://tinyurl.com/e2e-patterns-toc
-
+# Architecture 
+* Environment: the available physical resources (compute, network, and storage) used to host Photon appliances and Patterns.
+* Master Controller: the primary photon appliance used to run all Patterns.
+* Photon Controller: secondary photon appliances used to store necessary binaries and to run necessary scripts for the Pattern.
