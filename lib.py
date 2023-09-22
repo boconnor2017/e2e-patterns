@@ -339,6 +339,26 @@ def create_vc_datacenter(session_id, vcenter_hostname, datacenter_name):
     datacenter = api_call.json()
     return datacenter
 
+def add_host_to_vcenter(session_id, vcenter_hostname, esxi_hostname, esxi_password, esxi_username, vc_folder):
+  api_call = requests.post("https://"+vcenter_hostname+"/api/vcenter/host", verify=False, headers={
+   "vmware-api-session-id": session_id
+   }, json={
+   "folder": vc_folder,
+   "hostname": esxi_hostname,
+   "password": esxi_password,
+   "thumbprint_verification": "NONE",
+   "user_name": esxi_username
+  })
+  esxi_host = api_call.json()
+  return esxi_host
+
+def get_vcenter_folders(session_id, vcenter_hostname):
+    api_call = requests.get("https://"+vcenter_hostname+"/api/vcenter/folder", verify=False, headers={
+    "vmware-api-session-id": session_id
+    })
+    folders = api_call.json()
+    return folders
+
 def build_nsx_with_ovftool_container():
     docker_image = "ovftool" 
     docker_volume = {"/usr/local/drop":{'bind':'/root/home', 'mode':'rw'}}
