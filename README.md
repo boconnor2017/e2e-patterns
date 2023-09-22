@@ -1,4 +1,5 @@
-# Welcome to the E2E Patterns Lab!
+# Welcome to E2E Patterns
+![alt text](https://github.com/boconnor2017/e2e-patterns/blob/main/img/E2E-Patterns-Logo-01.png)
 This repository is intended to provide code samples to help you build immutable VMware Patterns. See the Wiki for details.
 
 :heavy_exclamation_mark: ***WARNING: the contents of this repository are not intended for production networks in their current state. It is recommended that these scripts are certified in a Development environment, functionally tested, and refactored with the appropriate security and operational considerations. Proper SDLC practices are advised.***
