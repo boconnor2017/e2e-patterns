@@ -15,3 +15,6 @@ Think of a "Pattern" like a Docker Image. A Docker Image might be very generic o
 * Environment: the available physical resources (compute, network, and storage) used to host Photon appliances and Patterns.
 * Master Controller: the primary photon appliance used to run all Patterns.
 * Photon Controller: secondary photon appliances used to store necessary binaries and to run necessary scripts for the Pattern.
+
+# Documentation
+https://github.com/boconnor2017/e2e-patterns/wiki
