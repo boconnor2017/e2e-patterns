@@ -2,4 +2,4 @@
 # Author: Brendan O'Connor
 # Date: September 2023
 # Version: 1.0
-docker pull ansible/ansible
+docker pull alpinelinux/ansible
