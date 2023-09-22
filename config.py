@@ -113,7 +113,11 @@ class VCSA():
     json_filename = "/usr/local/e2e-patterns/vcsa/vcsa.json"
     username = "administrator@"+sso_domain
     datacenter = "e2e"
-    
+
+class ESXI():
+    pattern = "C-01A: Add ESXi host to vCenter"
+    username = "root"
+
 class NSX():
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-005" 
     nsx_vm_name = UNIVERSAL().vm_naming_convention+"-006"
