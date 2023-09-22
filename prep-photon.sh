@@ -4,7 +4,7 @@
 
 # Update/install basic Linux tools
 yum -y update
-yum -y install git bindutils ansible
+yum -y install git bindutils
 yum -y install https://repo.ius.io/ius-release-el$(rpm -E '%{rhel}').rpm
 # Install python3
 yum -y install python3
