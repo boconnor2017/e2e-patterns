@@ -129,3 +129,4 @@ class NSX():
     mgrformfactor = "small"
     password = UNIVERSAL().password+UNIVERSAL().password
     nsx_ova_source = "nsx-unified-appliance-3.2.1.2.0.20541216.ova" #Must be downloaded to /usr/local/drop of photon controller
+    nsx_terraform_source = UNIVERSAL().home_dir+"/terraform/install-nsx-manager/main.tf"
