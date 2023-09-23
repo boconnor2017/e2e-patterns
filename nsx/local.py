@@ -25,7 +25,7 @@ des_dir = "/usr/local/drop"
 outpt = shutil.copy(src_file, des_dir)
 
 # Run terraform init 
-err = run_terraform_init(des_dir)
+err = lib.run_terraform_init(des_dir)
 
 # Run terraform apply
-err = run_terraform_apply(des_dir)
+err = lib.run_terraform_apply(des_dir)
