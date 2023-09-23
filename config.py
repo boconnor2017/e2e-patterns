@@ -119,6 +119,7 @@ class ESXI():
     username = "root"
 
 class NSX():
+    pattern = "C-02: NSX Manager"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-005" 
     nsx_vm_name = UNIVERSAL().vm_naming_convention+"-006"
     ip = E2EP_ENVIRONMENT().subnet_prefix+"11"
