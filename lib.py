@@ -359,12 +359,22 @@ def get_vcenter_folders(session_id, vcenter_hostname):
     folders = api_call.json()
     return folders
 
-def run_terraform_init():
-    os.chdir("/usr/local/drop")
+def run_terraform_init(dir):
+    os.chdir(dir)
     docker_image = "hashicorp/terraform" 
     docker_volume = {str(os.getcwd()):{'bind':str(os.getcwd()), 'mode':'rw'}}
     docker_working_dir = str(os.getcwd())
     docker_cmd = "init"
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir=docker_working_dir, remove=True, command=docker_cmd)
+    return str(err)
+
+def run_terraform_apply(dir):
+    os.chdir(dir)
+    docker_image = "hashicorp/terraform" 
+    docker_volume = {str(os.getcwd()):{'bind':str(os.getcwd()), 'mode':'rw'}}
+    docker_working_dir = str(os.getcwd())
+    docker_cmd = "apply -auto-approve"
     dclient = docker.from_env()
     err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir=docker_working_dir, remove=True, command=docker_cmd)
     return str(err)
