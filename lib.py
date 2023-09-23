@@ -359,36 +359,14 @@ def get_vcenter_folders(session_id, vcenter_hostname):
     folders = api_call.json()
     return folders
 
-def build_nsx_with_ovftool_container():
-    docker_image = "ovftool" 
-    docker_volume = {"/usr/local/drop":{'bind':'/root/home', 'mode':'rw'}}
-    docker_cmd = "--noSSLVerify --skipManifestCheck --powerOn "
-    docker_cmd = docker_cmd+"--deploymentOption="+config.NSX().mgrformfactor+" "
-    docker_cmd = docker_cmd+"--diskMode=thin "
-    docker_cmd = docker_cmd+"--acceptAllEulas "
-    docker_cmd = docker_cmd+"--allowExtraConfig "
-    docker_cmd = docker_cmd+"--ipProtocol=IPv4 "
-    docker_cmd = docker_cmd+"--ipAllocationPolicy=fixedPolicy "
-    docker_cmd = docker_cmd+"--datastore='"+config.E2EP_ENVIRONMENT().esxi_host_datastore+"' "
-    docker_cmd = docker_cmd+"--network='"+config.E2EP_ENVIRONMENT().esxi_host_virtual_switch+"' "
-    docker_cmd = docker_cmd+"--name='"+config.NSX().nsx_vm_name+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_hostname='"+config.NSX().domain_hostname+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_role='NSX Manager' "
-    docker_cmd = docker_cmd+"--prop:nsx_ip_0='"+config.NSX().ip+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_netmask_0='"+config.E2EP_ENVIRONMENT().subnet_mask+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_gateway_0='"+config.E2EP_ENVIRONMENT().default_gw+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_dns1_0='"+config.DNS().ip+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_ntp_0='"+config.E2EP_ENVIRONMENT().ntp_server+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_passwd_0='"+config.NSX().password+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_cli_passwd_0='"+config.NSX().password+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_cli_audit_passwd_0='"+config.NSX().password+"' "
-    docker_cmd = docker_cmd+"--prop:nsx_isSSHEnabled=True "
-    docker_cmd = docker_cmd+"--prop:nsx_allowSSHRootLogin=True "
-    docker_cmd = docker_cmd+"'"+config.NSX().nsx_ova_source+"' "
-    #docker_cmd = docker_cmd+"vi://'"+config.E2EP_ENVIRONMENT().esxi_host_username+"':'"+config.E2EP_ENVIRONMENT().esxi_host_password+"'@"+config.E2EP_ENVIRONMENT().esxi_host_ip
-    docker_cmd = docker_cmd+"vi://'administrator@vsphere.local':'VMware1!'@172.16.0.10"
+def run_terraform_init():
+    os.chdir("/usr/local/drop")
+    docker_image = "hashicorp/terraform" 
+    docker_volume = {str(os.getcwd()):{'bind':str(os.getcwd()), 'mode':'rw'}}
+    docker_working_dir = str(os.getcwd())
+    docker_cmd = "init"
     dclient = docker.from_env()
-    err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir="/root/home", remove=True, command=docker_cmd)
+    err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir=docker_working_dir, remove=True, command=docker_cmd)
     return str(err)
 
 def docker_build(path_to_Dockerfile):
