@@ -130,3 +130,6 @@ class NSX():
     password = UNIVERSAL().password+UNIVERSAL().password
     nsx_ova_source = "nsx-unified-appliance-3.2.1.2.0.20541216.ova" #Must be downloaded to /usr/local/drop of photon controller
     nsx_terraform_source = UNIVERSAL().home_dir+"/terraform/install-nsx-manager/main.tf"
+    main_tf_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-nsx-manager/main.tf"
+    local_py_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-nsx-manager/local.py"
+    run_tf_local_dir = "/usr/local/drop/local.py"
