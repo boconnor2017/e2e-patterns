@@ -75,9 +75,19 @@ lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Run local.py
-err = "Running local.py on the photon controller"
+# Downloading local.py to Photon Controller
+err = "Downloading local.py to photon controller."
 lib.write_to_logs(err, logfile_name)
-cmd = "python3 "+config.UNIVERSAL().home_dir+"/nsx/local.py"
+url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-nsx-manager/local.py"
+local_file = "/usr/local/drop/local.py"
+err = lib.download_file_to_photon_controller(ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, url, local_file)
+lib.write_to_logs(err, logfile_name)
+
+# Run local.py on Photon Controller
+err = "Running local.py on photon controller."
+lib.write_to_logs(err, logfile_name)
+cmd = "python3 /usr/local/drop/local.py"
+err = "    cmd: "+cmd 
+lib.write_to_logs(err, logfile_name)
 err = lib.send_command_over_ssh(cmd, ip, un, pw)
 lib.write_to_logs(err, logfile_name)
