@@ -391,27 +391,27 @@ def docker_build(path_to_Dockerfile):
 def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_git_url, run_tf_local_dir, logfile):
     # Downloading local.py to Photon Controller
     err = "Downloading local.py to photon controller."
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
     err = "    ip: "+ip 
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
     err = "    photon username: "+un 
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
     err = "    photon password: "+pw
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
     err = "    main.tf git url: "+main_tf_git_url
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
     err = "    local.py git url: "+local_py_git_url
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
     err = "    local.py path: "+run_tf_local_dir
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
     err = lib.download_file_to_photon_controller(ip, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, local_py_git_url, run_tf_local_dir)
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
 
     # Run local.py on Photon Controller
     err = "Running local.py on photon controller."
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
     cmd = "python3 "+run_tf_local_dir
     err = "    cmd: "+cmd 
-    lib.write_to_logs(err, logfile_name)
+    write_to_logs(err, logfile_name)
     err = lib.send_command_over_ssh(cmd, ip, un, pw)
-    lib.write_to_logs(err, logfile_name)    
+    write_to_logs(err, logfile_name)    
