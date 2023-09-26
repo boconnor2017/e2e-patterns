@@ -404,7 +404,7 @@ def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_gi
     write_to_logs(err, logfile_name)
     err = "    local.py path: "+run_tf_local_dir
     write_to_logs(err, logfile_name)
-    err = lib.download_file_to_photon_controller(ip, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, local_py_git_url, run_tf_local_dir)
+    err = download_file_to_photon_controller(ip, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, local_py_git_url, run_tf_local_dir)
     write_to_logs(err, logfile_name)
 
     # Run local.py on Photon Controller
@@ -413,5 +413,5 @@ def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_gi
     cmd = "python3 "+run_tf_local_dir
     err = "    cmd: "+cmd 
     write_to_logs(err, logfile_name)
-    err = lib.send_command_over_ssh(cmd, ip, un, pw)
+    err = send_command_over_ssh(cmd, ip, un, pw)
     write_to_logs(err, logfile_name)    
