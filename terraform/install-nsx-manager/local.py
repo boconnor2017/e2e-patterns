@@ -25,19 +25,12 @@ import lib
 '''
 local.py steps:
 01. Build nsx.tfvars file
-02. Download file from github (main.tf)
-03. Run terraform init command (dir)
-04. Run terraform apply command (dir)
+02. Run terraform init command (dir)
+03. Run terraform apply command (dir)
 '''
 
 # Build nsx.tfvars file
 
-# Download main.tf from github
-
-# Copy main.tf to /usr/local/drop
-src_file = config.NSX().nsx_terraform_source
-des_dir = "/usr/local/drop"
-outpt = shutil.copy(src_file, des_dir)
 
 # Run terraform init 
 err = lib.run_terraform_init(des_dir)
