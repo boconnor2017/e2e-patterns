@@ -388,7 +388,7 @@ def docker_build(path_to_Dockerfile):
     err=dclient.images.build(path=path_to_Dockerfile)
     return err
 
-def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_git_url, run_tf_local_dir, logfile):
+def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_git_url, run_tf_local_dir, logfile_name):
     # Downloading local.py to Photon Controller
     err = "Downloading local.py to photon controller."
     write_to_logs(err, logfile_name)
