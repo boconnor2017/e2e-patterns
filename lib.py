@@ -414,5 +414,6 @@ def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_gi
     cmd = "python3 "+run_tf_local_dir
     err = "    cmd: "+cmd 
     write_to_logs(err, logfile_name)
-    err = send_command_over_ssh(cmd, ip, un, pw)
-    write_to_logs(err, logfile_name)    
+    errlist = send_command_over_ssh(cmd, ip, un, pw)
+    for err in errlist:
+        write_to_logs(err, logfile_name)    
