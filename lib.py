@@ -405,6 +405,7 @@ def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_gi
     err = "    local.py path: "+run_tf_local_dir
     write_to_logs(err, logfile_name)
     err = download_file_to_photon_controller(ip, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, local_py_git_url, run_tf_local_dir)
+    err = str(err) 
     write_to_logs(err, logfile_name)
 
     # Run local.py on Photon Controller
