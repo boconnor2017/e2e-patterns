@@ -23,14 +23,21 @@ outpt = shutil.copy(src_file, des_dir)
 import config
 import lib
 
-'''
-local.py steps:
-01. Build nsx.tfvars file
-02. Run terraform init command (dir)
-03. Run terraform apply command (dir)
-'''
+# Start log file
+logfile_name = config.LOGS().nsx
+pattern_name = config.NSX().pattern
+lib.e2e_patterns_header(logfile_name, pattern_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
 
-# Build nsx.tfvars file
+err = "Starting local.py"
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Build nsx_vars.tf file
+err = "Building nsx_vars.tf file"
+lib.write_to_logs(err, logfile_name)
 tf_var_txt = ["# nsx.tfvars file",
 "variable \"data_center\" { default = \""+config.VCSA().datacenter+"\" }" ,
 "variable \"vds\" { default = \""+config.E2EP_ENVIRONMENT().esxi_host_virtual_switch+"\" }",
@@ -61,6 +68,8 @@ tf_var_txt = ["# nsx.tfvars file",
 tf_var_file_name = "nsx_var.tf"
 tf_var_file_exists = exists(tf_var_file_name)
 if tf_var_file_exists:
+    err = "    removing old nsx_vars.tf file"
+    lib.write_to_logs(err, logfile_name)
     os.remove(tf_var_file_name)
 
 for line in tf_var_txt:
@@ -68,6 +77,19 @@ for line in tf_var_txt:
 
 # Run terraform init 
 stdout = lib.run_terraform_init(des_dir)
+stdout = stout.split('\n')
+
+for ln in stdout:
+    err = str(ln)
+    lib.write_to_logs(err, logfile_name)
 
 # Run terraform apply
 stdout = lib.run_terraform_apply(des_dir)
+stdout = stout.split('\n')
+
+for ln in stdout:
+    err = str(ln)
+    lib.write_to_logs(err, logfile_name)
+
+err = "Finished."
+lib.write_to_logs(err, logfile_name)
