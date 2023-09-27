@@ -10,6 +10,7 @@ import shutil
 import sys
 
 # Get pattern config file and library
+os.chdir("/usr/local/drop")
 src_file = '/usr/local/e2e-patterns/config.py'
 des_dir = '/usr/local/drop'
 outpt = shutil.copy(src_file, des_dir)
