@@ -62,6 +62,14 @@ def write_to_logs(err, logfile_name):
     logfile.write(tstamp+": "+err+" \n")
     logfile.close
 
+def read_logfile_from_pc(ip, un, pw, src_logfile_name, des_logfile_name):
+    err = "* * * * * * * * * * * * *"
+    write_to_logs(err, src_logfile_name)
+    err = "Reading logs from: "+des_logfile_name+" on "+ip
+    write_to_logs(err, src_logfile_name)
+    cmd = "tail -f "+des_logfile_name+" | sed '/^Finished.$/ q'"
+    err = send_command_over_ssh(cmd, ip, un, pw)
+
 def e2e_patterns_header(logfile_name, pattern_name):
     err = ""
     write_to_logs(err, logfile_name)
