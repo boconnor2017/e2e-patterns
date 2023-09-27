@@ -429,7 +429,7 @@ def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_gi
     # Run local.py on Photon Controller
     err = "Running local.py on photon controller."
     write_to_logs(err, logfile_name)
-    cmd = "python3 "+local_py_local_dir
+    cmd = "python3 "+local_py_local_dir+" >> _master_command.log"
     err = "    cmd: "+cmd 
     write_to_logs(err, logfile_name)
     errlist = send_command_over_ssh(cmd, ip, un, pw)
