@@ -24,7 +24,7 @@ import lib
 
 # Start log file
 logfile_name = config.LOGS().nsx
-pattern_name = config.TEMPLATE().pattern
+pattern_name = config.NSX().pattern
 lib.e2e_patterns_header(logfile_name, pattern_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
