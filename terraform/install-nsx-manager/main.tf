@@ -7,36 +7,6 @@ provider "vsphere" {
   allow_unverified_ssl = true
 }
 
-# vSphere Infrastructure Details
-variable "data_center" { default = "e2e" }
-variable "vds" { default = "VM Network" }
-variable "workload_datastore" { default = "datastore1" }
-variable "compute_host" {default = "172.16.0.201"}
-variable "vsphere_server" {default = "172.16.0.10"}
-
-# vCenter Credential Variables
-variable "vsphere_user" { default = "administrator@vsphere.local"}
-variable "vsphere_password" { default = "VMware1!"}
-
-# NSX-T Manager Deployment
-variable "mgmt_pg" { default = "VM Network" }
-variable "vm_name" { default = "nsx-test-01" }
-variable "local_ovf_path" { default = "/usr/local/drop/nsx-unified-appliance-3.2.1.2.0.20541216.ova" }
-variable "deployment_option" { default = "small" } # valid deployments are: extra_small, small, medium, large
-variable "nsx_role" { default = "NSX Manager" }          # valid roles are NSX Manager, NSX Global Manager
-variable "nsx_ip_0" { default = "172.16.0.11" }
-variable "nsx_netmask_0" { default = "255.255.255.0" }
-variable "nsx_gateway_0" { default = "172.16.0.1" }
-variable "nsx_dns1_0" { default = "172.16.0.9" }
-variable "nsx_domain_0" { default = "e2e.local" }
-variable "nsx_ntp_0" { default = "pool.ntp.org" }
-variable "nsx_isSSHEnabled" { default = "True" }
-variable "nsx_allowSSHRootLogin" { default = "True" }
-variable "nsx_passwd_0" { default = "VMware1!VMware1!" }
-variable "nsx_cli_passwd_0" { default = "VMware1!VMware1!" }
-variable "nsx_cli_audit_passwd_0" { default = "VMware1!VMware1!" }
-variable "nsx_hostname" { default = "vmwnsx-01.e2e.local" }
-
 # Data source for vCenter Datacenter
 data "vsphere_datacenter" "datacenter" {
   name = var.data_center
