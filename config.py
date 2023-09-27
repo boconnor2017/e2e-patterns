@@ -132,4 +132,5 @@ class NSX():
     nsx_terraform_source = UNIVERSAL().home_dir+"/terraform/install-nsx-manager/main.tf"
     main_tf_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-nsx-manager/main.tf"
     local_py_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-nsx-manager/local.py"
-    run_tf_local_dir = "/usr/local/drop/local.py"
+    local_py_local_dir = "/usr/local/drop/local.py"
+    main_tf_local_dir = "/usr/local/drop/main.tf"
