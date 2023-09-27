@@ -67,7 +67,7 @@ for line in tf_var_txt:
     lib.append_text_to_file(line+"\n", tf_var_file_name)
 
 # Run terraform init 
-#err = lib.run_terraform_init(des_dir)
+stdout = lib.run_terraform_init(des_dir)
 
 # Run terraform apply
-#err = lib.run_terraform_apply(des_dir)
+stdout = lib.run_terraform_apply(des_dir)
