@@ -33,6 +33,11 @@ def write_text_to_file(text, file_name):
     new_file.writelines(text)
     new_file.close()
 
+def append_text_to_file(text, file_name):
+    new_file = open(file_name, "a")
+    new_file.writelines(text)
+    new_file.close()
+
 def check_web_service_status(web_svc_url, retry, retry_max, retry_pause):
     if retry < retry_max:
         try:
