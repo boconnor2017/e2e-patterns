@@ -77,7 +77,7 @@ for line in tf_var_txt:
 
 # Run terraform init 
 stdout = lib.run_terraform_init(des_dir)
-stdout = stout.split('\n')
+stdout = stdout.split('\n')
 
 for ln in stdout:
     err = str(ln)
@@ -85,7 +85,7 @@ for ln in stdout:
 
 # Run terraform apply
 stdout = lib.run_terraform_apply(des_dir)
-stdout = stout.split('\n')
+stdout = stdout.split('\n')
 
 for ln in stdout:
     err = str(ln)
