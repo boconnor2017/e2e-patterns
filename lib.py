@@ -401,7 +401,7 @@ def docker_build(path_to_Dockerfile):
     err=dclient.images.build(path=path_to_Dockerfile)
     return err
 
-def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_git_url, main_tf_local_dir, local_py_local_dir, logfile_name):
+def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_git_url, main_tf_local_dir, local_py_local_dir, logfile_name, des_logfile_name):
     # Downloading local.py to Photon Controller
     err = "Downloading local.py and main.tf to photon controller."
     write_to_logs(err, logfile_name)
@@ -435,3 +435,6 @@ def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_gi
     errlist = send_command_over_ssh(cmd, ip, un, pw)
     for err in errlist:
         write_to_logs(err, logfile_name)    
+    
+    # Read Logfile on Photon Controller
+    read_logfile_from_pc(ip, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, logfile_name, des_logfile_name)
