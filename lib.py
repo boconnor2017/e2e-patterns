@@ -438,17 +438,4 @@ def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_gi
     err = ""
     write_to_logs(err, logfile_name)
 
-    # Create DNS Entry
-    err = "Creating DNS Entry:"
-    write_to_logs(err, logfile_name)
-    token = get_dns_token()
-    err = "    token: "+token
-    write_to_logs(err, logfile_name)
-    err = "    domain hostname: "+config.NSX().domain_hostname
-    write_to_logs(err, logfile_name)
-    err = "    zone: "+config.DNS().zone
-    write_to_logs(err, logfile_name)
-    err = "    ip: "+config.DNS().ip
-    write_to_logs(err, logfile_name)
-    create_dns_record(token, config.NSX().domain_hostname, config.DNS().zone, config.NSX().ip)
     
