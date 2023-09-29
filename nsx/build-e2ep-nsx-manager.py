@@ -83,7 +83,7 @@ err = lib.run_terraform_on_pattern_controller(ip_address, config.E2EP_ENVIRONMEN
 # Create DNS Entry
 err = "Creating DNS Entry:"
 lib.write_to_logs(err, logfile_name)
-token = get_dns_token()
+token = lib.get_dns_token()
 err = "    token: "+token
 lib.write_to_logs(err, logfile_name)
 err = "    domain hostname: "+config.NSX().domain_hostname
