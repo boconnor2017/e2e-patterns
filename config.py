@@ -134,3 +134,9 @@ class NSX():
     local_py_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-nsx-manager/local.py"
     local_py_local_dir = "/usr/local/drop/local.py"
     main_tf_local_dir = "/usr/local/drop/main.tf"
+
+class ARIA_LCM():
+    pattern = "C-03: Aria Lifecycle Manager"
+    photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-007"
+    aria_lcm_vm_name = UNIVERSAL().vm_naming_convention+"-008"
+    ip = E2EP_ENVIRONMENT().subnet_prefix+"12"
