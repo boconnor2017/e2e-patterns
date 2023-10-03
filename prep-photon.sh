@@ -33,5 +33,4 @@ python3 -m pip install flask-restful
 python3 -m pip install docker
 python3 -m pip install paramiko
 # Add vSphere Python SDK
-python3 -m pip install --upgrade pip setuptools
 python3 -m pip install --upgrade git+https://github.com/vmware/vsphere-automation-sdk-python.git
