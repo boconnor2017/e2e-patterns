@@ -69,8 +69,8 @@ err = "Getting IP address of photon controller:"
 lib.write_to_logs(err, logfile_name)
 err = "    vm name: "+vm_name
 lib.write_to_logs(err, logfile_name)
-ip_address = lib.get_vm_ip_address(vm_name)
-err = "    ip address: "+ip_address
+photon_controller_ip_address = lib.get_vm_ip_address(vm_name)
+err = "    ip address: "+photon_controller_ip_address
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
@@ -112,3 +112,4 @@ lib.write_to_logs(err, logfile_name)
 lib.send_command_over_ssh(mount_iso_cmd, photon_controller_ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password)
 err = ""
 lib.write_to_logs(err, logfile_name)
+
