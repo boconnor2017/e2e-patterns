@@ -82,6 +82,7 @@ class LOGS():
     minikube = "_minikube.log"
     vcsa = "_vcsa.log"
     nsx = "_nsx.log"
+    aria = "_aria.log"
 
 class TEMPLATE():
     pattern = "A-00: Template"
