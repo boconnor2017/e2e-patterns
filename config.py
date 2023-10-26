@@ -34,35 +34,7 @@ IPAM: the recommended subnet size for this environment is /24
 - x.x.x.09 = dns
 - x.x.x.10 = vcsa
 - x.x.x.11 = nsx
-- x.x.x.12 = aria lifecycle manager 
-- x.x.x.13 = vmware identity manager 
-- x.x.x.14 = aria automation
-- x.x.x.15 = aria operations 
-- x.x.x.16 = aria operations for logs (Log Insight)
-- x.x.x.17 = aria saltstack master
-- x.x.x.18 = reserved for additional aria appliances
-- x.x.x.19 = reserved for additional aria appliances
-- x.x.x.20 = reserved for nested esxi
-- x.x.x.21 = reserved for nested esxi
-- x.x.x.22 = reserved for nested esxi
-- x.x.x.23 = reserved for nested esxi
-- x.x.x.24 = reserved for nested esxi
-- x.x.x.25 = reserved for NSX edge / Avi appliances
-- x.x.x.26 = reserved for NSX edge / Avi appliances
-- x.x.x.27 = reserved for NSX edge / Avi appliances
-- x.x.x.28 = reserved for NSX edge / Avi appliances
-- x.x.x.29 = reserved for NSX edge / Avi appliances
-- x.x.x.30 = reserved for aria workloads under management
-- x.x.x.31 = reserved for aria workloads under management
-- x.x.x.32 = reserved for aria workloads under management
-- x.x.x.33 = reserved for aria workloads under management
-- x.x.x.34 = reserved for aria workloads under management
-- x.x.x.35 = reserved for aria workloads under management
-- x.x.x.36 = reserved for aria workloads under management
-- x.x.x.37 = reserved for aria workloads under management
-- x.x.x.38 = reserved for aria workloads under management
-- x.x.x.39 = reserved for aria workloads under management
-- x.x.x.40 = reserved for kubernetes
+- x.x.x.12 = cloud builder 
 '''
 
 class UNIVERSAL():
@@ -83,6 +55,7 @@ class LOGS():
     vcsa = "_vcsa.log"
     nsx = "_nsx.log"
     aria = "_aria.log"
+    vcf = "_vcf.log"
 
 class TEMPLATE():
     pattern = "A-00: Template"
@@ -136,8 +109,12 @@ class NSX():
     local_py_local_dir = "/usr/local/drop/local.py"
     main_tf_local_dir = "/usr/local/drop/main.tf"
 
-class ARIA_LCM():
-    pattern = "C-03: Aria Lifecycle Manager"
+class CLOUD_BUILDER():
+    pattern = "C-03: Cloud Builder"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-007"
-    aria_lcm_vm_name = UNIVERSAL().vm_naming_convention+"-008"
+    template_vm_name = UNIVERSAL().vm_naming_convention+"-008"
     ip = E2EP_ENVIRONMENT().subnet_prefix+"12"
+    domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcfcb-01"
+    fqdn = domain_hostname+"."+DNS().zone
+    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
+    password = UNIVERSAL().password+UNIVERSAL().password    
