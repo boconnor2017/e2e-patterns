@@ -40,6 +40,8 @@ if sys.argv[1] == "-p":
     lib.write_to_logs(err, logfile_name)
 else:
     skip_build_photon_controller = False
+err = ""
+lib.write_to_logs(err, logfile_name)
 
 # Photon controller prerequisites
 err = "Copying PowerCLI scripts from /photon repo"
@@ -54,7 +56,7 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Build photon controller 
-vm_name = config.TEMPLATE().photon_controller_vm_name
+vm_name = config.CLOUD_BUILDER().photon_controller_vm_name
 if skip_build_photon_controller:
     skip_build_photon_controller = True 
 else:
@@ -75,4 +77,7 @@ lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# CUSTOM SCRIPTING FOR THE PATTERN GOES HERE
+# Run Terraform on Photon Controller
+err = "Building Cloud Builder with Terraform"
+lib.write_to_logs(err, logfile_name)
+err = lib.run_terraform_on_pattern_controller(ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, config.CLOUD_BUILDER().main_tf_git_url, config.CLOUD_BUILDER().local_py_git_url, config.CLOUD_BUILDER().main_tf_local_dir, config.CLOUD_BUILDER().local_py_local_dir, logfile_name)
