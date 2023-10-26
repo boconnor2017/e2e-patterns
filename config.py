@@ -112,9 +112,15 @@ class NSX():
 class CLOUD_BUILDER():
     pattern = "C-03: Cloud Builder"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-007"
-    template_vm_name = UNIVERSAL().vm_naming_convention+"-008"
+    cb_vm_name = UNIVERSAL().vm_naming_convention+"-008"
+    cb_ova_source = "VMware-Cloud-Builder-5.0.0.0-21822418_OVF10.ova" #Must be downloaded to /usr/local/drop of photon controller
     ip = E2EP_ENVIRONMENT().subnet_prefix+"12"
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcfcb-01"
     fqdn = domain_hostname+"."+DNS().zone
     photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
     password = UNIVERSAL().password+UNIVERSAL().password    
+    terraform_source = UNIVERSAL().home_dir+"/terraform/install-vcf-cb/main.tf"
+    main_tf_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-vcf-cb/main.tf"
+    local_py_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-vcf-cb/local.py"
+    local_py_local_dir = "/usr/local/drop/local.py"
+    main_tf_local_dir = "/usr/local/drop/main.tf"
