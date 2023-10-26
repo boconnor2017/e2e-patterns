@@ -1,0 +1,269 @@
+{
+    "dvSwitchVersion" : "7.0.0",
+    "skipEsxThumbprintValidation" : true,
+    "managementPoolName" : "bringup-networkpool",
+    "sddcManagerSpec" : {
+      "hostname" : "sfo-vcf01",
+      "ipAddress" : "10.0.0.4",
+      "netmask" : "255.255.255.0",
+      "localUserPassword" : "xxxxxxx",
+      "rootUserCredentials" : {
+        "username" : "root",
+        "password" : "xxxxxxx"
+      },
+      "secondUserCredentials" : {
+        "username" : "vcf",
+        "password" : "xxxxxxx"
+      }
+    },
+    "sddcId" : "sddcId-public-api-01",
+    "esxLicense" : "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX",
+    "taskName" : "workflowconfig/workflowspec-ems.json",
+    "ntpServers" : [ "10.0.0.250" ],
+    "dnsSpec" : {
+      "subdomain" : "vrack.vsphere.local",
+      "domain" : "vsphere.local",
+      "nameserver" : "10.0.0.250",
+      "secondaryNameserver" : "10.0.0.250"
+    },
+    "networkSpecs" : [ {
+      "subnet" : "10.0.0.0/22",
+      "vlanId" : "0",
+      "mtu" : "1500",
+      "networkType" : "MANAGEMENT",
+      "gateway" : "10.0.0.250"
+    }, {
+      "subnet" : "10.0.4.0/24",
+      "includeIpAddressRanges" : [ {
+        "startIpAddress" : "10.0.4.7",
+        "endIpAddress" : "10.0.4.48"
+      }, {
+        "startIpAddress" : "10.0.4.3",
+        "endIpAddress" : "10.0.4.6"
+      } ],
+      "includeIpAddress" : [ "10.0.4.50", "10.0.4.49" ],
+      "vlanId" : "0",
+      "mtu" : "8940",
+      "networkType" : "VSAN",
+      "gateway" : "10.0.4.253"
+    }, {
+      "subnet" : "10.0.8.0/24",
+      "includeIpAddressRanges" : [ {
+        "startIpAddress" : "10.0.8.3",
+        "endIpAddress" : "10.0.8.50"
+      } ],
+      "vlanId" : "0",
+      "mtu" : "8940",
+      "networkType" : "VMOTION",
+      "gateway" : "10.0.8.253"
+    } ],
+    "nsxtSpec" : {
+      "nsxtManagerSize" : "medium",
+      "nsxtManagers" : [ {
+        "hostname" : "sfo-m01-nsx01a",
+        "ip" : "10.0.0.31"
+      }, {
+        "hostname" : "sfo-m01-nsx01b",
+        "ip" : "10.0.0.32"
+      }, {
+        "hostname" : "sfo-m01-nsx01c",
+        "ip" : "10.0.0.33"
+      } ],
+      "rootNsxtManagerPassword" : "xxxxxxx",
+      "nsxtAdminPassword" : "xxxxxxx",
+      "nsxtAuditPassword" : "xxxxxxx",
+      "overLayTransportZone" : {
+        "zoneName" : "sfo-m01-tz-overlay01",
+        "networkName" : "net-overlay"
+      },
+      "vlanTransportZone" : {
+        "zoneName" : "sfo-m01-tz-vlan01",
+        "networkName" : "net-vlan"
+      },
+      "vip" : "10.0.0.30",
+      "vipFqdn" : "sfo-m01-nsx01",
+      "nsxtLicense" : "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX",
+      "transportVlanId" : 0,
+      "ipAddressPoolSpec" : {
+        "name" : "sfo01-m01-cl01-tep01",
+        "description" : "ESXi Host Overlay TEP IP Pool",
+        "subnets" : [ {
+          "ipAddressPoolRanges" : [ {
+            "start" : "172.16.14.101",
+            "end" : "172.16.14.108"
+          } ],
+          "cidr" : "172.16.14.0/24",
+          "gateway" : "172.16.14.1"
+        } ]
+      }
+    },
+    "vsanSpec" : {
+      "vsanName" : "sfo-m01-cl01-ds-vsan01",
+      "licenseFile" : "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX",
+      "datastoreName" : "sfo-m01-cl01-ds-vsan01"
+    },
+    "dvsSpecs" : [ {
+      "mtu" : 8940,
+      "niocSpecs" : [ {
+        "trafficType" : "VSAN",
+        "value" : "HIGH"
+      }, {
+        "trafficType" : "VMOTION",
+        "value" : "LOW"
+      }, {
+        "trafficType" : "VDP",
+        "value" : "LOW"
+      }, {
+        "trafficType" : "VIRTUALMACHINE",
+        "value" : "HIGH"
+      }, {
+        "trafficType" : "MANAGEMENT",
+        "value" : "NORMAL"
+      }, {
+        "trafficType" : "NFS",
+        "value" : "LOW"
+      }, {
+        "trafficType" : "HBR",
+        "value" : "LOW"
+      }, {
+        "trafficType" : "FAULTTOLERANCE",
+        "value" : "LOW"
+      }, {
+        "trafficType" : "ISCSI",
+        "value" : "LOW"
+      } ],
+      "dvsName" : "sfo-m01-cl01-vds01",
+      "vmnics" : [ "vmnic0", "vmnic1" ],
+      "networks" : [ "MANAGEMENT", "VSAN", "VMOTION" ]
+    } ],
+    "clusterSpec" : {
+      "clusterName" : "sfo-m01-cl01",
+      "clusterEvcMode" : "",
+      "resourcePoolSpecs" : [ {
+        "cpuSharesLevel" : "high",
+        "cpuSharesValue" : 0,
+        "name" : "sfo-m01-cl01-rp-sddc-mgmt",
+        "memorySharesValue" : 0,
+        "cpuReservationPercentage" : 0,
+        "memoryLimit" : -1,
+        "memoryReservationPercentage" : 0,
+        "cpuReservationExpandable" : true,
+        "memoryReservationExpandable" : true,
+        "memorySharesLevel" : "normal",
+        "cpuLimit" : -1,
+        "type" : "management"
+      }, {
+        "cpuSharesLevel" : "high",
+        "cpuSharesValue" : 0,
+        "name" : "sfo-m01-cl01-rp-sddc-network",
+        "memorySharesValue" : 0,
+        "cpuReservationPercentage" : 0,
+        "memoryLimit" : -1,
+        "memoryReservationPercentage" : 0,
+        "cpuReservationExpandable" : true,
+        "memoryReservationExpandable" : true,
+        "memorySharesLevel" : "normal",
+        "cpuLimit" : -1,
+        "type" : "network"
+      }, {
+        "cpuSharesLevel" : "normal",
+        "cpuSharesValue" : 0,
+        "name" : "sfo-m01-cl01-rp-sddc-compute",
+        "memorySharesValue" : 0,
+        "cpuReservationPercentage" : 0,
+        "memoryLimit" : -1,
+        "memoryReservationPercentage" : 0,
+        "cpuReservationExpandable" : true,
+        "memoryReservationExpandable" : true,
+        "memorySharesLevel" : "normal",
+        "cpuLimit" : -1,
+        "type" : "compute"
+      }, {
+        "name" : "sfo-m01-cl01-rp-user-compute",
+        "type" : "compute",
+        "cpuReservationMhz" : 2100,
+        "cpuLimit" : -1,
+        "cpuReservationExpandable" : true,
+        "cpuSharesLevel" : "normal",
+        "memoryReservationMb" : 3128,
+        "memoryReservationExpandable" : true,
+        "memorySharesLevel" : "normal",
+        "memorySharesValue" : 0
+      } ]
+    },
+    "pscSpecs" : [ {
+      "pscId" : "psc-1",
+      "pscSsoSpec" : {
+        "ssoDomain" : "vsphere.local"
+      },
+      "adminUserSsoPassword" : "xxxxxxx"
+    } ],
+    "vcenterSpec" : {
+      "vcenterIp" : "10.0.0.6",
+      "vcenterHostname" : "sfo-m01-vc01",
+      "licenseFile" : "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX",
+      "rootVcenterPassword" : "xxxxxxx",
+      "vmSize" : "tiny"
+    },
+    "hostSpecs" : [ {
+      "credentials" : {
+        "username" : "root",
+        "password" : "xxxxxxx"
+      },
+      "ipAddressPrivate" : {
+        "subnet" : "255.255.252.0",
+        "cidr" : "",
+        "ipAddress" : "10.0.0.100",
+        "gateway" : "10.0.0.250"
+      },
+      "hostname" : "sfo01-m01-esx01",
+      "vSwitch" : "vSwitch0",
+      "serverId" : "host-0",
+      "association" : "sfo-m01-dc01"
+    }, {
+      "credentials" : {
+        "username" : "root",
+        "password" : "xxxxxxx"
+      },
+      "ipAddressPrivate" : {
+        "subnet" : "255.255.252.0",
+        "cidr" : "",
+        "ipAddress" : "10.0.0.101",
+        "gateway" : "10.0.0.250"
+      },
+      "hostname" : "sfo01-m01-esx02",
+      "vSwitch" : "vSwitch0",
+      "serverId" : "host-1",
+      "association" : "sfo-m01-dc01"
+    }, {
+      "credentials" : {
+        "username" : "root",
+        "password" : "xxxxxxx"
+      },
+      "ipAddressPrivate" : {
+        "subnet" : "255.255.255.0",
+        "cidr" : "",
+        "ipAddress" : "10.0.0.102",
+        "gateway" : "10.0.0.250"
+      },
+      "hostname" : "sfo01-m01-esx03",
+      "vSwitch" : "vSwitch0",
+      "serverId" : "host-2",
+      "association" : "sfo-m01-dc01"
+    }, {
+      "credentials" : {
+        "username" : "root",
+        "password" : "xxxxxxx"
+      },
+      "ipAddressPrivate" : {
+        "subnet" : "255.255.255.0",
+        "cidr" : "",
+        "ipAddress" : "10.0.0.103",
+        "gateway" : "10.0.0.250"
+      },
+      "hostname" : "sfo01-m01-esx04",
+      "vSwitch" : "vSwitch0",
+      "serverId" : "host-3",
+      "association" : "sfo-m01-dc01"
+    } ]
+  }
