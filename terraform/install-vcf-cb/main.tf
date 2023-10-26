@@ -84,33 +84,19 @@ resource "vsphere_virtual_machine" "nsxt01" {
   }
   vapp {
     properties = {
-      "nsx_role"               = var.nsx_role,
-      "nsx_ip_0"               = var.nsx_ip_0,
-      "nsx_netmask_0"          = var.nsx_netmask_0,
-      "nsx_gateway_0"          = var.nsx_gateway_0,
-      "nsx_dns1_0"             = var.nsx_dns1_0,
-      "nsx_domain_0"           = var.nsx_domain_0,
-      "nsx_ntp_0"              = var.nsx_ntp_0,
-      "nsx_isSSHEnabled"       = var.nsx_isSSHEnabled,
-      "nsx_allowSSHRootLogin"  = var.nsx_allowSSHRootLogin,
-      "nsx_passwd_0"           = var.nsx_passwd_0,
-      "nsx_cli_passwd_0"       = var.nsx_cli_passwd_0,
-      "nsx_cli_audit_passwd_0" = var.nsx_cli_audit_passwd_0,
-      "nsx_hostname"           = var.nsx_hostname
-
-      "FIPS_ENABLE"              = "False"
-      "guestinfo.ADMIN_PASSWORD" = "VMware1!VMware1!"
-      "guestinfo.ADMIN_USERNAME" = "admin"
-      "guestinfo.DNS"            = "172.16.0.9"
-      "guestinfo.domain"         = "e2e.local"
-      "guestinfo.gateway"        = "172.16.0.1"
-      "guestinfo.hostname"       = "e2ep-009"
-      "guestinfo.ip0"            = "172.16.0.12"
-      "guestinfo.netmask0"       = "255.255.255.0"
-      "guestinfo.ntp"            = "pool.ntp.org"
-      "guestinfo.ROOT_PASSWORD"  = "VMware1!VMware1!"
-      "guestinfo.searchpath"     = "e2e.local"
-      "vm.vmname"                = "e2ep-009"
+      "FIPS_ENABLE"              = var.FIPS_ENABLE,
+      "guestinfo.ADMIN_PASSWORD" = var.guestinfo_ADMIN_PASSWORD,
+      "guestinfo.ADMIN_USERNAME" = var.guestinfo_ADMIN_USERNAME,
+      "guestinfo.DNS"            = var.guestinfo_DNS,
+      "guestinfo.domain"         = var.guestinfo_domain,
+      "guestinfo.gateway"        = var.guestinfo_gateway,
+      "guestinfo.hostname"       = var.guestinfo_hostname,
+      "guestinfo.ip0"            = var.guestinfo_ip0,
+      "guestinfo.netmask0"       = var.guestinfo_netmask0,
+      "guestinfo.ntp"            = var.guestinfo_ntp,
+      "guestinfo.ROOT_PASSWORD"  = var.guestinfo_ROOT_PASSWORD,
+      "guestinfo.searchpath"     = var.guestinfo_searchpath,
+      "vm.vmname"                = var.vm_vmname
     }
   }
 }
