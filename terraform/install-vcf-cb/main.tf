@@ -79,7 +79,7 @@ resource "vsphere_virtual_machine" "nsxt01" {
     allow_unverified_ssl_cert = true
     local_ovf_path            = var.local_ovf_path
     disk_provisioning         = "thin"
-    deployment_option         = var.deployment_option
+    #deployment_option         = var.deployment_option
  
   }
   vapp {
