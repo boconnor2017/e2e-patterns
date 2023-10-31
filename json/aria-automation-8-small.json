@@ -1,0 +1,249 @@
+{
+  "environmentId": "",
+  "environmentName": "vRS Small Environment - Simple Spec",
+  "environmentHealth": "",
+  "logHistory": "",
+  "infrastructure": {
+    "properties": {
+      "dataCenterName": "",
+      "regionName": "default",
+      "zoneName": "default",
+      "vCenterName": "",
+      "vCenterHost": "",
+      "vcUsername": "",
+      "vcPassword": "",
+      "acceptEULA": "true",
+      "enableTelemetry": "true",
+      "adminEmail": "",
+      "defaultPassword": "",
+      "certificate": "",
+      "cluster": "",
+      "storage": "",
+      "folderName": "",
+      "resourcePool": "",
+      "diskMode": "thin",
+      "network": "",
+      "masterVidmEnabled": "",
+      "dns": "",
+      "domain": "",
+      "gateway": "",
+      "netmask": "",
+      "searchpath": "",
+      "timeSyncMode": "host",
+      "ntp": "",
+      "isDhcp": "false",
+      "_isRedeploy": "false",
+      "_isResume": "false"
+    }
+  },
+  "products": [
+    {
+      "id": "vra",
+      "version": "8.0.0",
+      "patchHistory": null,
+      "snapshotHistory": null,
+      "logHistory": null,
+      "clusterVIP": {
+        "clusterVips": []
+      },
+      "nodes": [
+        {
+          "type": "vra-server-primary",
+          "properties": {
+            "vmName": "vra-server-primary",
+            "hostName": "",
+            "ip": ""
+          }
+        },
+        {
+          "type": "db",
+          "properties": {
+            "ip": "",
+            "vmName": "db",
+            "hostName": ""
+          }
+        },
+        {
+          "type": "iaas-web",
+          "properties": {
+            "vmName": "iaas-web",
+            "hostName": "",
+            "ip": ""
+          }
+        },
+        {
+          "type": "iaas-manager-active",
+          "properties": {
+            "vmName": "iaas-manager-active",
+            "hostName": "",
+            "ip": ""
+          }
+        },
+        {
+          "type": "iaas-dem-worker",
+          "properties": {
+            "hostName": "",
+            "vmName": "iaas-dem-worker",
+            "ip": ""
+          }
+        },
+        {
+          "type": "proxy-agent-vsphere",
+          "properties": {
+            "hostName": "",
+            "vmName": "proxy-agent-vsphere",
+            "ip": ""
+          }
+        }
+      ],
+      "properties": {
+        "windowsUserName": "sqa\\sampaths.admin",
+        "cafeCertificate": "",
+        "msCertificate": "",
+        "webCertificate": "",
+        "useComponentCertificate": false,
+        "certificate": "",
+        "productPassword": "",
+        "licenseRef": "",
+        "windowsPassword": "",
+        "timeSyncMode": "host",
+        "ntp": "",
+        "configureWindowVM": "false",
+        "affinityRule": false,
+        "configureAffinitySeparateAll": "true",
+        "monitorvRAWithvROps": false,
+        "configureClusterVIP": "false"
+      }
+    },
+    {
+      "id": "vrli",
+      "version": "8.0.0",
+      "patchHistory": null,
+      "snapshotHistory": null,
+      "logHistory": null,
+      "clusterVIP": {
+        "clusterVips": []
+      },
+      "nodes": [
+        {
+          "type": "vrli-master",
+          "properties": {
+            "vmName": "vrli-master",
+            "hostName": "",
+            "ip": ""
+          }
+        }
+      ],
+      "properties": {
+        "certificate": "",
+        "productPassword": "",
+        "licenseRef": "",
+        "nodeSize": "small",
+        "configureClusterVIP": "false",
+        "affinityRule": false,
+        "configureAffinitySeparateAll": "true",
+        "ntp": "",
+        "timeSyncMode": "host"
+      }
+    },
+    {
+      "id": "vrni",
+      "version": "5.0.0",
+      "patchHistory": null,
+      "snapshotHistory": null,
+      "logHistory": null,
+      "clusterVIP": {
+        "clusterVips": []
+      },
+      "nodes": [
+        {
+          "type": "vrni-platform",
+          "properties": {
+            "vmName": "vrni-platform",
+            "vrniNodeSize": "medium",
+            "ip": ""
+          }
+        },
+        {
+          "type": "vrni-collector",
+          "properties": {
+            "vmName": "vrni-collector",
+            "vrniNodeSize": "medium",
+            "ip": ""
+          }
+        }
+      ],
+      "properties": {
+        "certificate": "",
+        "productPassword": "",
+        "licenseRef": "",
+        "ntp": "",
+        "affinityRule": false,
+        "configureAffinitySeparateAll": "true",
+        "masterVidmEnabled": false
+      }
+    },
+    {
+      "id": "vrops",
+      "version": "8.0.0",
+      "patchHistory": null,
+      "snapshotHistory": null,
+      "logHistory": null,
+      "clusterVIP": {
+        "clusterVips": []
+      },
+      "nodes": [
+        {
+          "type": "master",
+          "properties": {
+            "vmName": "master",
+            "hostName": "",
+            "ip": ""
+          }
+        }
+      ],
+      "properties": {
+        "certificate": "",
+        "productPassword": "",
+        "licenseRef": "",
+        "disableTls": "TLSv1",
+        "timeSyncMode": "host",
+        "ntp": "",
+        "affinityRule": false,
+        "configureAffinitySeparateAll": "true",
+        "deployOption": "small"
+      }
+    },
+    {
+      "id": "vrbc",
+      "version": "7.6.0",
+      "patchHistory": null,
+      "snapshotHistory": null,
+      "logHistory": null,
+      "clusterVIP": {
+        "clusterVips": []
+      },
+      "nodes": [
+        {
+          "type": "vrb-server",
+          "properties": {
+            "vmName": "vrb-server",
+            "hostName": "",
+            "ip": ""
+          }
+        }
+      ],
+      "properties": {
+        "certificate": "",
+        "productPassword": "",
+        "licenseRef": "",
+        "currency": "USD - US Dollar",
+        "vrbAuthType": "standalone",
+        "timeSyncMode": "host",
+        "ntp": "",
+        "affinityRule": false,
+        "configureAffinitySeparateAll": "true"
+      }
+    }
+  ]
+}
