@@ -56,6 +56,7 @@ class LOGS():
     nsx = "_nsx.log"
     aria = "_aria.log"
     vcf = "_vcf.log"
+    esxi = "_esxi.log"
 
 class TEMPLATE():
     pattern = "A-00: Template"
@@ -89,8 +90,9 @@ class VCSA():
     datacenter = "e2e"
 
 class ESXI():
-    pattern = "C-01A: Add ESXi host to vCenter"
+    pattern = "C-01A: Add ESXi host to vCenter or C-01B: Building nested ESXi Host"
     username = "root"
+    nested_esxi_ova_source = "Nested_ESXi8.0u2_Appliance_Template_v1.ova" #Must be downloaded to /usr/local/drop of Master controller
 
 class NSX():
     pattern = "C-02: NSX Manager"
