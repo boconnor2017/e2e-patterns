@@ -1,7 +1,7 @@
 # Description: Parses VCF JSON File for DNS Entries
 # Author: Brendan O'Connor
 # Date: November 2023
-# Version: 1.0
+# Version: 1.1
 
 # Base imports
 import os
