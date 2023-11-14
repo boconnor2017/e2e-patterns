@@ -27,4 +27,4 @@ import lib
 token = lib.get_dns_token()
 domain_name = sys.argv[1]
 ip = sys.argv[2]
-create_dns_record(token, domain_name, config.DNS().zone, ip)
+lib.create_dns_record(token, domain_name, config.DNS().zone, ip)
