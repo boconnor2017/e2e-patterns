@@ -92,7 +92,7 @@ class VCSA():
 class ESXI():
     pattern = "C-01A: Add ESXi host to vCenter or C-01B: Building nested ESXi Host"
     username = "root"
-    nested_esxi_ova_source = "Nested_ESXi8.0u2_Appliance_Template_v1.ova" #Must be downloaded to /usr/local/drop of Master controller
+    nested_esxi_ova_source = "Nested_ESXi6.7u3_Appliance_Template_v1.ova" #Must be downloaded to /usr/local/drop of Master controller
 
 class NSX():
     pattern = "C-02: NSX Manager"
