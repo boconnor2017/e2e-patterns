@@ -123,6 +123,8 @@ def get_vm_ip_address(vm_name):
     ip_address_raw = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
     ip_address_raw = str(ip_address_raw)
     ip_address = ip_address_raw[-17:-5]
+    ip_address = ip_address.replace("n", "")
+    ip_address = ip_address.replace("\\", "")
     return ip_address
 
 def change_vm_ip_address(vm_name, new_ip, new_subnet, new_df_gw):
