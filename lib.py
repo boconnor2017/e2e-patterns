@@ -55,6 +55,10 @@ def api_get(api_url):
     api_response = requests.get(api_url)
     return api_response
 
+def api_post(api_url):
+    api_response = requests.post(api_url)
+    return api_response
+
 ## E2E LOGGING
 def write_to_logs(err, logfile_name):
     tstamp = str(datetime.now())
