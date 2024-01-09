@@ -1,7 +1,7 @@
 # Configuration for the E2E Patterns Lab
 # Author: Brendan O'Connor
-# Date: September 2023
-# Version: 2.0
+# Date: January 2024
+# Version: 2.1 - added support for multiple hosts including ESXi 8
 
 # Environment Variables (example: 172.16.0.0/24 subnet) - below are things that are part of your environment, editing these are REQUIRED
 class E2EP_ENVIRONMENT():
@@ -11,7 +11,7 @@ class E2EP_ENVIRONMENT():
     default_gw = subnet_prefix+"1" #default: .01 gateway address
     ntp_server = "pool.ntp.org"
     esxi_host_ip = subnet_prefix+"201" #ESXi6 supported CPU
-    esxi2_host_ip = subnet_prefix+"203" #ESXi8 supported CPU
+    esxi8_host_ip = subnet_prefix+"203" #ESXi8 supported CPU
     esxi_host_username = "root" #default username to login to esxi host
     esxi_host_password = "VMware1!" #password to login to esxi host
     esxi_host_datastore = "datastore1" #datastore that will be used as the target storage for patterns
@@ -93,7 +93,8 @@ class VCSA():
 class ESXI():
     pattern = "C-01A: Add ESXi host to vCenter or C-01B: Building nested ESXi Host"
     username = "root"
-    nested_esxi_ova_source = "Nested_ESXi6.7u3_Appliance_Template_v1.ova" #Must be downloaded to /usr/local/drop of Master controller
+    nested_esxi6_ova_source = "Nested_ESXi6.7u3_Appliance_Template_v1.ova" #Must be downloaded to /usr/local/drop of Master controller
+    nested_esxi8_ova_source = "Nested_ESXi8.0u2_Appliance_Template_v1.ova" #Must be downloaded to /usr/local/drop of Master controller
 
 class NSX():
     pattern = "C-02: NSX Manager"
