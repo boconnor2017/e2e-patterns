@@ -57,6 +57,7 @@ def api_get(api_url):
 
 def api_post(api_url):
     api_response = requests.post(api_url)
+    api_response.headers['Content-Type: application/json']
     return api_response
 
 ## E2E LOGGING
@@ -113,6 +114,24 @@ def build_photon_with_ovftool_container(vm_name, vm_source):
     docker_cmd = docker_cmd+"--name='"+vm_name+"' "
     docker_cmd = docker_cmd+"'"+vm_source+"' "
     docker_cmd = docker_cmd+"vi://'"+config.E2EP_ENVIRONMENT().esxi_host_username+"':'"+config.E2EP_ENVIRONMENT().esxi_host_password+"'@"+config.E2EP_ENVIRONMENT().esxi_host_ip
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir="/root/home", remove=True, command=docker_cmd)
+    return str(err)
+
+def build_nested_esxi8_with_ovftool_container(vm_name, vm_source):
+    docker_image = "ovftool" 
+    docker_volume = {"/usr/local/drop":{'bind':'/root/home', 'mode':'rw'}}
+    docker_cmd = "--sourceType=OVA "
+    docker_cmd = docker_cmd+"--acceptAllEulas "
+    docker_cmd = docker_cmd+"--allowExtraConfig "
+    docker_cmd = docker_cmd+"--noSSLVerify "
+    docker_cmd = docker_cmd+"--diskMode=thin "
+    docker_cmd = docker_cmd+"--powerOn "
+    docker_cmd = docker_cmd+"--datastore='"+config.E2EP_ENVIRONMENT().esxi_host_datastore+"' "
+    docker_cmd = docker_cmd+"--network='"+config.E2EP_ENVIRONMENT().esxi_host_virtual_switch+"' "
+    docker_cmd = docker_cmd+"--name='"+vm_name+"' "
+    docker_cmd = docker_cmd+"'"+vm_source+"' "
+    docker_cmd = docker_cmd+"vi://'"+config.E2EP_ENVIRONMENT().esxi_host_username+"':'"+config.E2EP_ENVIRONMENT().esxi_host_password+"'@"+config.E2EP_ENVIRONMENT().esxi8_host_ip
     dclient = docker.from_env()
     err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir="/root/home", remove=True, command=docker_cmd)
     return str(err)
