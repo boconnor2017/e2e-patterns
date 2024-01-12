@@ -100,6 +100,15 @@ def e2e_patterns_header(logfile_name, pattern_name):
     write_to_logs(err, logfile_name)
 
 # E2E LIBRARY
+def run_terraform_container_and_pass_args(docker_cmd):
+    # Docker SDK for Python: https://docker-py.readthedocs.io/en/stable/containers.html#
+    # docker_cmd = terraform command such as plan, init, or apply
+    docker_image = "hashicorp/terraform"
+    docker_volume = {os.getcwd():{'bind':os.getcwd(), 'mode':'rw'}}
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir=os.getcwd(), remove=True, command=docker_cmd)
+    return str(err)
+    
 def build_photon_with_ovftool_container(vm_name, vm_source):
     docker_image = "ovftool" 
     docker_volume = {"/usr/local/drop":{'bind':'/root/home', 'mode':'rw'}}
