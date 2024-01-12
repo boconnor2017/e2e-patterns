@@ -1,36 +1,36 @@
 provider "vsphere" {
-  user     = "root"
-  password = "VMware1!"
-  vsphere_server = "172.16.0.201"
+  user     = var.vsphere_user
+  password = var.vsphere_pass
+  vsphere_server = var.vsphere_serer
   allow_unverified_ssl = true
 }
 
 data "vsphere_datacenter" "datacenter" {
-  name = "ha-datacenter"
+  name = var.datacenter_name
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = "datastore1"
+  name          = var.datastore_name
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_network" "network" {
-  name          = "VM Network"
+  name          = var.network_name
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_host" "host" {
-  name          = "esxi1"
+  name          = var.esxi_host_name
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 resource "vsphere_virtual_machine" "vm" {
-  name             = "tf-test-01"
+  name             = var.vm_name
   datastore_id     = data.vsphere_datastore.datastore.id
   resource_pool_id = data.vsphere_host.host.resource_pool_id
-  num_cpus         = 1
-  memory           = 1024
-  guest_id         = "other3xLinux64Guest"
+  num_cpus         = var.cpu
+  memory           = var.memory
+  guest_id         = var.guest
   network_interface {
     network_id = data.vsphere_network.network.id
   }
