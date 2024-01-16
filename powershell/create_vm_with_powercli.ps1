@@ -1,3 +1,7 @@
 #!/bin/sh
-Connect-VIServer -Server 172.16.0.201 -Protocol https -User root -Password VMware1! -Force
+param(
+[string]$a
+)
+$b = $a.Split(" ")
+Connect-VIServer -Server b[1] -Protocol https -User b[2] -Password b[3] -Force
 New-VM -Name THISWORKS
