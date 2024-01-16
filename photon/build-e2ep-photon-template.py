@@ -32,4 +32,32 @@ lib.write_to_logs(err, logfile_name)
 # Build Standard VM
 err = "Building standard virtual machine."
 lib.write_to_logs(err, logfile_name)
-lib.create_vm_with_powercli(config.PHOTONOS().template_name)
+err = lib.create_vm_with_powercli(config.PHOTONOS().template_name)
+err = str(err)
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# Prompt user to attach ISO
+err = "Prompting user to attach ISO"
+lib.write_to_logs(err, logfile_name)
+print("The script is paused. Manual configuration is required to continue.")
+print("    Step 1: Click \"Edit Settings\" for virtual machine "+config.PHOTONOS().template_name)
+print("    Step 2: Change \"Memory\" to 2048 MB")
+print("    Step 3: Change \"Hard Disk\" to 16 GB")
+print("    Step 4: Click \"Add other device\"")
+print("    Step 5: Add a \"CD/DVD drive\"")
+print("    Step 6: Select \"Datastore ISO file\" from the CD/DVD Drive and select the PhotonOS ISO.")
+print("    Step 7: Ensure \"Connect\" checkbox is selected next to the CD/DVD Drive.")
+print("    Step 8: Click \"Save\".")
+print("")
+input("When these steps are completed, press <ENTER>")
+
+# Start VM with PowerCLI 
+err = "Starting VM "+config.PHOTONOS().template_name
+lib.write_to_logs(err, logfile_name)
+err = lib.start_vm_with_powercli(config.PHOTONOS().template_name)
+err = str(err)
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
