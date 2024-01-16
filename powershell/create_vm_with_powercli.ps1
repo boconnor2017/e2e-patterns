@@ -4,5 +4,5 @@ param(
 )
 $b = $a.Split(" ")
 Set-PowerCLIConfiguration -Scope User -ParticipateInCEIP $true
-Connect-VIServer -Server b[1] -Protocol https -User b[2] -Password b[3] -Force
-New-VM -Name b[4]
+Connect-VIServer -Server $b[0] -Protocol https -User $b[1] -Password $b[2] -Force
+New-VM -Name $b[3]
