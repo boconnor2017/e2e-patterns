@@ -100,16 +100,8 @@ def e2e_patterns_header(logfile_name, pattern_name):
     write_to_logs(err, logfile_name)
 
 # E2E LIBRARY
-def run_terraform_container_and_pass_args(docker_cmd):
-    # Docker SDK for Python: https://docker-py.readthedocs.io/en/stable/containers.html#
-    # docker_cmd = terraform command such as plan, init, or apply
-    docker_image = "hashicorp/terraform"
-    docker_volume = {os.getcwd():{'bind':os.getcwd(), 'mode':'rw'}}
-    dclient = docker.from_env()
-    err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir=os.getcwd(), remove=True, command=docker_cmd)
-    return str(err)
-    
 def build_photon_with_ovftool_container(vm_name, vm_source):
+    # Being deprecated
     docker_image = "ovftool" 
     docker_volume = {"/usr/local/drop":{'bind':'/root/home', 'mode':'rw'}}
     docker_cmd = "--sourceType=OVA "
@@ -219,6 +211,7 @@ def download_file_to_photon_controller(ip, un, pw, url, local_file):
     send_command_over_ssh(cmd, ip, un, pw)
 
 def build_photon_controller(vm_name, vm_source, logfile_name):
+    # Being deprecated
     class VM():
         name = vm_name 
         source = vm_source 
@@ -472,4 +465,18 @@ def run_terraform_on_pattern_controller(ip, un, pw, main_tf_git_url, local_py_gi
     err = ""
     write_to_logs(err, logfile_name)
 
-    
+def create_vm_with_powercli(vm_name):
+    url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/create_vm_with_powercli.ps1"
+    urllib.request.urlretrieve(url, 'create_vm_with_powercli.ps1')
+    docker_rm = True
+    docker_image = "vmware/powerclicore"
+    docker_entrypoint = "/usr/bin/pwsh"
+    docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+    docker_cmd = "/tmp/create_vm_with_powercli.ps1 \""
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_username+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_password+" "
+    docker_cmd = docker_cmd+vm_name+"\""
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    return err
