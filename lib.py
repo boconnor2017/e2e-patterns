@@ -483,12 +483,12 @@ def create_vm_with_powercli(vm_name):
 
 def start_vm_with_powercli(vm_name):
     url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/start_vm_with_powercli.ps1"
-    urllib.request.urlretrieve(url, 'create_vm_with_powercli.ps1')
+    urllib.request.urlretrieve(url, 'start_vm_with_powercli.ps1')
     docker_rm = True
     docker_image = "vmware/powerclicore"
     docker_entrypoint = "/usr/bin/pwsh"
     docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
-    docker_cmd = "/tmp/create_vm_with_powercli.ps1 \""
+    docker_cmd = "/tmp/start_vm_with_powercli.ps1 \""
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_username+" "
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_password+" "
