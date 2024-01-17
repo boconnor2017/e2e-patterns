@@ -68,6 +68,8 @@ class SCRIPTS():
     create_vm_with_powercli_filename = "create_vm_with_powercli.ps1"
     get_vm_ip_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/get_vm_ip.ps1"
     get_vm_ip_with_powercli_filename = "get_vm_ip.ps1"
+    change_photonos_default_password_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/change_photonos_default_password_with_powershell.ps1"
+    change_photonos_default_password_with_powercli_filename = "change_photonos_default_password_with_powershell.ps1"
     change_vm_ip_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/change_vm_ip_with_powercli.ps1"
     change_vm_ip_with_powercli_filename = "change_vm_ip_with_powercli.ps1"
 
@@ -79,7 +81,7 @@ class MINIKUBE():
     ip = E2EP_ENVIRONMENT().subnet_prefix+"40"
 
 class PHOTONOS():
-    pattern = "A-06: Build Photon Template from ISO"
+    pattern = "A-06: Build Photon Template from OVA using ovftool"
     template_name = "photonos_4.0_template"
     username = "root" #default username to login to photon vms 
     password = "VMware1!VMware1!" #default password to login to photon vms
