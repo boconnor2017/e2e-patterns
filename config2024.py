@@ -23,6 +23,19 @@ The following IP ranges are used for this lab by default.
 - x.x.x.11 = nsx
 '''
 
+class E2EP_ENVIRONMENT():
+    subnet_mask = "255.255.255.0"
+    subnet_size = "24" #CIDR block, default /24 (/24 recommended)
+    subnet_prefix = "172.16.0." #first four numbers of the subnet
+    default_gw = subnet_prefix+"1" #default: .01 gateway address
+    ntp_server = "pool.ntp.org"
+    esxi_host_ip = subnet_prefix+"201" #ESXi6 supported CPU
+    esxi8_host_ip = subnet_prefix+"203" #ESXi8 supported CPU
+    esxi_host_username = "root" #default username to login to esxi host
+    esxi_host_password = "VMware1!" #password to login to esxi host
+    esxi_host_datastore = "datastore1" #datastore that will be used as the target storage for patterns
+    esxi_host_virtual_switch = "VM Network" #virtual switch that will be used as the target port group for patterns
+
 class UNIVERSAL():
     github_repo = "https://github.com/boconnor2017/e2e-patterns"
     home_dir = "/usr/local/e2e-patterns"
@@ -64,6 +77,9 @@ class MINIKUBE():
 class PHOTONOS():
     pattern = "A-06: Build Photon Template from ISO"
     template_name = "photonos_4.0_template"
+    username = "root" #default username to login to photon vms 
+    password = "VMware1!VMware1!" #default password to login to photon vms
+    source = "photon-ova-4.0-ca7c9e9330.ova"
 
 # Shared Services Pattern variables
 class DNS():
