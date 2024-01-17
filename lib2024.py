@@ -80,6 +80,24 @@ def docker_powercli_create_vm(vm_name):
     err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
     return err
 
+def docker_powercli_change_vm_ip_address(vm_name, new_ip, new_subnet, new_df_gw):
+    download_file_from_github(config.SCRIPTS().change_vm_ip_with_powercli_url, config.SCRIPTS().change_vm_ip_with_powercli_filename) 
+    docker_rm = True
+    docker_entrypoint = "/usr/bin/pwsh"
+    docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+    docker_image = "vmware/powerclicore"
+    docker_cmd = "/tmp/"+config.SCRIPTS().change_vm_ip_with_powercli_filename+" \""
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_username+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_password+" "
+    docker_cmd = docker_cmd+vm_name+" "
+    docker_cmd = docker_cmd+new_ip+" "
+    docker_cmd = docker_cmd+new_subnet+" "
+    docker_cmd = docker_cmd+new_df_gw+" "
+    docker_cmd = docker_cmd+"\""
+    dclient = docker.from_env()
+    dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+
 def docker_powercli_get_vm_ip_address(vm_name):
     download_file_from_github(config.SCRIPTS().get_vm_ip_with_powercli_url, config.SCRIPTS().get_vm_ip_with_powercli_filename) 
     docker_rm = True
