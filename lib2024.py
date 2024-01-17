@@ -81,11 +81,12 @@ def docker_powercli_create_vm(vm_name):
     return err
 
 def docker_powercli_get_vm_ip_address(vm_name):
+    download_file_from_github(config.SCRIPTS().get_vm_ip_with_powercli_url, config.SCRIPTS().get_vm_ip_with_powercli_filename) 
     docker_rm = True
     docker_entrypoint = "/usr/bin/pwsh"
     docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
     docker_image = "vmware/powerclicore"
-    docker_cmd = "/tmp/get-vm-ip.ps1 \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
+    docker_cmd = "/tmp/"+config.SCRIPTS().get_vm_ip_with_powercli_filename+" \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+" "+vm_name+"\""
     dclient = docker.from_env()
     ip_address_raw = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
     ip_address_raw = str(ip_address_raw)
