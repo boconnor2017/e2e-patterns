@@ -80,11 +80,3 @@ class PHOTONOS():
     username = "root" #default username to login to photon vms 
     password = "VMware1!VMware1!" #default password to login to photon vms
     source = "photon-ova-4.0-ca7c9e9330.ova"
-
-# Shared Services Pattern variables
-class DNS():
-    ip = "172.16.0.9"
-    zone = "e2e.local"
-    vm_name = UNIVERSAL().vm_naming_convention+"-002"
-    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
-    port = "5380"
