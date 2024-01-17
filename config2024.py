@@ -72,6 +72,10 @@ class SCRIPTS():
     change_photonos_default_password_with_powercli_filename = "change_photonos_default_password_with_powershell.ps1"
     change_vm_ip_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/change_vm_ip_with_powercli.ps1"
     change_vm_ip_with_powercli_filename = "change_vm_ip_with_powercli.ps1"
+    refresh_e2e_patterns_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/refresh-e2e-patterns.sh"
+    refresh_e2e_patterns_filename = "refresh-e2e-patterns.sh"
+    photon_prep_script_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh"
+    photon_prep_script_filename = "prep-photon.sh"
 
 # Basic PhotonOS Pattern variables
 class MINIKUBE():
