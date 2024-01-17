@@ -65,6 +65,10 @@ class TEMPLATE():
     template_vm_name = UNIVERSAL().vm_naming_convention+"-template"
     ip = E2EP_ENVIRONMENT().subnet_prefix+"250"
 
+class SCRIPTS():
+    create_vm_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/create_vm_with_powercli.ps1"
+    create_vm_with_powercli_filename = "create_vm_with_powercli.ps1"
+    
 class PHOTONOS():
     pattern = "A-06: Build Photon Template from ISO"
     template_name = "photonos_4.0_template"
