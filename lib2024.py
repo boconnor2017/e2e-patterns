@@ -129,6 +129,15 @@ def docker_powercli_get_vm_ip_address(vm_name):
     ip_address = ip_address.replace("\\", "")
     return ip_address
 
+def paramiko_send_command_over_ssh(cmd, ip, un, pw):
+    pclient = paramiko.SSHClient()
+    pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    pclient.connect(hostname=ip, username=un, password=pw)
+    stdin, stdout, stderr = pclient.exec_command(cmd, timeout=None)
+    stdout=stdout.readlines()
+    pclient.close()
+    return stdout
+
 def run_local_shell_cmd(cmd):
     err = subprocess.run(cmd, capture_output=True)
     return err
