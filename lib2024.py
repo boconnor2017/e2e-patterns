@@ -135,6 +135,12 @@ def paramiko_download_file_to_remote_photon_vm(ip, un, pw, url, filepath, filena
     cmd = "curl "+url+" >> "+filepath+filename
     paramiko_send_command_over_ssh(cmd, ip, un, pw)
 
+def paramiko_run_sh_on_remote_photon_vm(ip, un, pw, entrypoint, shscript):
+    # entrypoint format: /foo/bar/
+    # shscript format: shfile.sh
+    cmd = "sh "+entrypoint+shscript
+    paramiko_send_command_over_ssh(cmd, ip, un, pw)
+
 def paramiko_send_command_over_ssh(cmd, ip, un, pw):
     pclient = paramiko.SSHClient()
     pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
