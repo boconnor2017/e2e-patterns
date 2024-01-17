@@ -71,3 +71,5 @@ def docker_powercli_create_vm(vm_name):
 def run_local_shell_cmd(cmd):
     err = subprocess.run(cmd, capture_output=True)
     return err
+
+# TEST 04!!!
