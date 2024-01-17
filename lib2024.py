@@ -154,6 +154,7 @@ def e2e_build_node_controller(vm_name, logfile_name):
     err = "Step 2: docker_powercli_change_default_photonos_password()"
     write_to_logs(err, logfile_name)
     err = docker_powercli_change_default_photonos_password(vm_name, config.PHOTONOS().password)
+    err = str(err)
     write_to_logs(err, logfile_name)
     err = ""
     write_to_logs(err, logfile_name)
