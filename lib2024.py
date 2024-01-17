@@ -53,7 +53,7 @@ def write_to_logs(err, logfile_name):
     logfile.write(tstamp+": "+err+" \n")
     logfile.close
 
-def docker_powercli_create_vm():
+def docker_powercli_create_vm(vm_name):
     download_file_from_github(config.SCRIPTS().create_vm_with_powercli_url, config.SCRIPTS().create_vm_with_powercli_filename)
     docker_rm = True
     docker_image = "vmware/powerclicore"
