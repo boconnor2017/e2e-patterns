@@ -47,11 +47,23 @@ def e2e_patterns_header(logfile_name, pattern_name):
     err = ""
     write_to_logs(err, logfile_name)
 
-def write_to_logs(err, logfile_name):
-    tstamp = str(datetime.now())
-    logfile = open(logfile_name, "a")
-    logfile.write(tstamp+": "+err+" \n")
-    logfile.close
+def docker_ovftool_deploy_photon(vm_name):
+    docker_image = "ovftool" 
+    docker_volume = {"/usr/local/drop":{'bind':'/root/home', 'mode':'rw'}}
+    docker_cmd = "--sourceType=OVA "
+    docker_cmd = docker_cmd+"--acceptAllEulas "
+    docker_cmd = docker_cmd+"--allowExtraConfig "
+    docker_cmd = docker_cmd+"--noSSLVerify "
+    docker_cmd = docker_cmd+"--diskMode=thin "
+    docker_cmd = docker_cmd+"--powerOn "
+    docker_cmd = docker_cmd+"--datastore='"+config.E2EP_ENVIRONMENT().esxi_host_datastore+"' "
+    docker_cmd = docker_cmd+"--network='"+config.E2EP_ENVIRONMENT().esxi_host_virtual_switch+"' "
+    docker_cmd = docker_cmd+"--name='"+vm_name+"' "
+    docker_cmd = docker_cmd+"'"+config.PHOTONOS().source+"' "
+    docker_cmd = docker_cmd+"vi://'"+config.E2EP_ENVIRONMENT().esxi_host_username+"':'"+config.E2EP_ENVIRONMENT().esxi_host_password+"'@"+config.E2EP_ENVIRONMENT().esxi_host_ip
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir="/root/home", remove=True, command=docker_cmd)
+    return str(err)
 
 def docker_powercli_create_vm(vm_name):
     download_file_from_github(config.SCRIPTS().create_vm_with_powercli_url, config.SCRIPTS().create_vm_with_powercli_filename)
@@ -72,4 +84,8 @@ def run_local_shell_cmd(cmd):
     err = subprocess.run(cmd, capture_output=True)
     return err
 
-# TEST 04!!!
+def write_to_logs(err, logfile_name):
+    tstamp = str(datetime.now())
+    logfile = open(logfile_name, "a")
+    logfile.write(tstamp+": "+err+" \n")
+    logfile.close
