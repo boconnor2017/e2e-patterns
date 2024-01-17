@@ -66,8 +66,8 @@ class TEMPLATE():
 class SCRIPTS():
     create_vm_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/create_vm_with_powercli.ps1"
     create_vm_with_powercli_filename = "create_vm_with_powercli.ps1"
-    get_vm_ip_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/get_vm_ip.ps1"
-    get_vm_ip_filename = "get_vm_ip.ps1"
+    get_vm_ip_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/get_vm_ip.ps1"
+    get_vm_ip__with_powercli_filename = "get_vm_ip.ps1"
 
 # Basic PhotonOS Pattern variables
 class MINIKUBE():
