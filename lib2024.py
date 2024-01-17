@@ -52,3 +52,18 @@ def write_to_logs(err, logfile_name):
     logfile = open(logfile_name, "a")
     logfile.write(tstamp+": "+err+" \n")
     logfile.close
+
+def docker_powercli_create_vm():
+    download_file_from_github(config.SCRIPTS().create_vm_with_powercli_url, config.SCRIPTS().create_vm_with_powercli_filename)
+    docker_rm = True
+    docker_image = "vmware/powerclicore"
+    docker_entrypoint = "/usr/bin/pwsh"
+    docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+    docker_cmd = "/tmp/"+config.SCRIPTS().create_vm_with_powercli_filename+" \""
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_username+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_password+" "
+    docker_cmd = docker_cmd+vm_name+"\""
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    return err
