@@ -52,4 +52,4 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Create Photon Appliance using ovftool
-lib.docker_ovftool_deploy_photon(vsys.argv[1])
+lib.docker_ovftool_deploy_photon(sys.argv[1])
