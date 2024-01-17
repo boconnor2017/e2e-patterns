@@ -129,6 +129,12 @@ def docker_powercli_get_vm_ip_address(vm_name):
     ip_address = ip_address.replace("\\", "")
     return ip_address
 
+def paramiko_download_file_to_remote_photon_vm(ip, un, pw, url, filepath, filename):
+    # filepath format: /foo/bar/
+    # filename format: somefile.xyz
+    cmd = "curl "+url+" >> "+filepath+filename
+    paramiko_send_command_over_ssh(cmd, ip, un, pw)
+
 def paramiko_send_command_over_ssh(cmd, ip, un, pw):
     pclient = paramiko.SSHClient()
     pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
