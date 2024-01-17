@@ -1,4 +1,4 @@
-# E2E Patterns Python Library 2024 (TEST3!!!)
+# E2E Patterns Python Library 2024
 # Author: Brendan O'Connor
 # Date: January 2024
 # Version: 3.0
@@ -66,4 +66,8 @@ def docker_powercli_create_vm(vm_name):
     docker_cmd = docker_cmd+vm_name+"\""
     dclient = docker.from_env()
     err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    return err
+
+def run_local_shell_cmd(cmd):
+    err = subprocess.run(cmd, capture_output=True)
     return err
