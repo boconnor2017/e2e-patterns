@@ -96,8 +96,8 @@ def docker_powercli_change_vm_ip_address(vm_name, new_ip, new_subnet, new_df_gw)
     docker_cmd = docker_cmd+new_df_gw+" "
     docker_cmd = docker_cmd+"\""
     dclient = docker.from_env()
-    dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
-
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+    return err
 
 def docker_powercli_create_vm(vm_name):
     download_file_from_github(config.SCRIPTS().create_vm_with_powercli_url, config.SCRIPTS().create_vm_with_powercli_filename)
@@ -129,6 +129,80 @@ def docker_powercli_get_vm_ip_address(vm_name):
     ip_address = ip_address.replace("\\", "")
     return ip_address
 
+def e2e_build_node_controller(vm_name, logfile_name):
+    err = "Starting e2e_build_node_controller:"
+    write_to_logs(err, logfile_name)
+    err = "    VM Name: "+vm_name
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Step 1: docker_ovftool_deploy_photon"
+    write_to_logs(err, logfile_name)
+    err = docker_ovftool_deploy_photon(vm_name)
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    seconds = (60*2)
+    write_to_logs(err, logfile_name)
+    err = "Pausing for "+str(seconds)+" seconds to let the ova to complete its build."
+    write_to_logs(err, logfile_name)
+    pause_python_for_duration(seconds)
+    err = "Resuming build."
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Step 2: docker_powercli_change_default_photonos_password()"
+    write_to_logs(err, logfile_name)
+    err = docker_powercli_change_default_photonos_password(vm_name, config.PHOTONOS().password)
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Step 3: docker_powercli_get_vm_ip_address"
+    write_to_logs(err, logfile_name)
+    ip_address = docker_powercli_get_vm_ip_address(vm_name)
+    err = "    IP Address of "+vm_name+": "+ip_address
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    seconds = (60*1)
+    write_to_logs(err, logfile_name)
+    err = "Pausing for "+str(seconds)+" seconds to let the password change to take effect."
+    write_to_logs(err, logfile_name)
+    pause_python_for_duration(seconds)
+    err = "Resuming build."
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Step 4: paramiko_download_file_to_remote_photon_vm()"
+    write_to_logs(err, logfile_name)
+    err = "    File #1: "+config.SCRIPTS().refresh_e2e_patterns_filename
+    write_to_logs(err, logfile_name)
+    paramiko_download_file_to_remote_photon_vm(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, config.SCRIPTS().refresh_e2e_patterns_url, '/usr/local/', config.SCRIPTS().refresh_e2e_patterns_filename)
+    err = "    File #2: "+config.SCRIPTS().photon_prep_script_filename
+    write_to_logs(err, logfile_name)
+    paramiko_download_file_to_remote_photon_vm(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, config.SCRIPTS().photon_prep_script_url, '/usr/local/', config.SCRIPTS().photon_prep_script_filename)
+    err = ""
+    write_to_logs(err, logfile_name)
+    seconds = (60*1)
+    write_to_logs(err, logfile_name)
+    err = "Pausing for "+str(seconds)+" seconds to let the prep scripts to download from github."
+    write_to_logs(err, logfile_name)
+    pause_python_for_duration(seconds)
+    err = "Resuming build."
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Step 5: paramiko_run_sh_on_remote_photon_vm()"
+    write_to_logs(err, logfile_name)
+    err = "    Script: "+config.SCRIPTS().photon_prep_script_filename
+    write_to_logs(err, logfile_name)
+    paramiko_run_sh_on_remote_photon_vm(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, config.SCRIPTS().photon_prep_script_url, '/usr/local/', config.SCRIPTS().photon_prep_script_filename)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "e2e_build_node_controller is finished. "
+    write_to_logs(err, logfile_name)
+
+
 def paramiko_download_file_to_remote_photon_vm(ip, un, pw, url, filepath, filename):
     # filepath format: /foo/bar/
     # filename format: somefile.xyz
@@ -149,6 +223,9 @@ def paramiko_send_command_over_ssh(cmd, ip, un, pw):
     stdout=stdout.readlines()
     pclient.close()
     return stdout
+
+def pause_python_for_duration(seconds):
+    time.sleep(seconds)
 
 def run_local_shell_cmd(cmd):
     err = subprocess.run(cmd, capture_output=True)
