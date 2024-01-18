@@ -256,7 +256,7 @@ def tanium_create_dns_record(tanium_token, domain_name, dns_zone, ip_address):
     api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/records/add?"
     api_url = api_url+"token="+tanium_token
     api_url = api_url+"&domain="+domain_name+"."+dns_zone
-    api_url = api_url+"&zone="+zone
+    api_url = api_url+"&zone="+dns_zone
     api_url = api_url+"&type=A"
     api_url = api_url+"&ttl=3600"
     api_url = api_url+"&overwrite=true"
