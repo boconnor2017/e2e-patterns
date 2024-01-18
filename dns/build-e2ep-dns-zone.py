@@ -69,6 +69,6 @@ lib.write_to_logs(err, logfile_name)
 # Create DNS Zone
 err = "Creating DNS Zone."
 lib.write_to_logs(err, logfile_name)
-api_response = tanium_create_dns_zone(tanium_token, sys.argv[3])
+api_response = lib.tanium_create_dns_zone(tanium_token, sys.argv[3])
 err = "    API Response: "+str(api_response)
 lib.write_to_logs(err, logfile_name)
