@@ -113,7 +113,6 @@ class VCSA():
     ip = E2EP_ENVIRONMENT().subnet_prefix+"10"
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
     fqdn = domain_hostname+"."+DNS().zone
-    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
     sso_domain = "vsphere.local"
     json_filename = "/usr/local/e2e-patterns/vcsa/vcsa.json"
     username = "administrator@"+sso_domain
