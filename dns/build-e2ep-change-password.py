@@ -58,7 +58,7 @@ lib.write_to_logs(err, logfile_name)
 '''
 
 # Get Tanium Token using credentials
-err = "Getting Tanium Token using default credentials:"
+err = "Getting Tanium Token using credentials:"
 lib.write_to_logs(err, logfile_name)
 tanium_token = lib.tanium_get_token(sys.argv[1], sys.argv[2])
 err = "    Tanium Token: "+tanium_token
