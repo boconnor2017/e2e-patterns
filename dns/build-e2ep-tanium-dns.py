@@ -67,7 +67,7 @@ lib.write_to_logs(err, logfile_name)
 # 01. Build Node Controller
 err = "01. Build Node Controller Started."
 lib.write_to_logs(err, logfile_name)
-lib.e2e_build_node_controller(vm_name, logfile_name)
+lib.e2e_build_node_controller(config.DNS().vm_name, logfile_name)
 err = "01. Build Node Controller Finished."
 lib.write_to_logs(err, logfile_name)
 err = ""
