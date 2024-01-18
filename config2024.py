@@ -82,6 +82,8 @@ class SCRIPTS():
     dns_run_docker_compose_shscript = "run-docker-compose.sh"
     get_vm_list_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/get_vm_list_with_powercli.ps1"
     get_vm_list_with_powercli_filename = "get_vm_list_with_powercli.ps1"
+    attach_iso_to_vm_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/attach_iso_to_vm_with_powercli.ps1"
+    attach_iso_to_vm_with_powercli_filename = "attach_iso_to_vm_with_powercli.ps1"
 
 # Basic PhotonOS Pattern variables
 class MINIKUBE():
@@ -104,3 +106,15 @@ class DNS():
     vm_name = UNIVERSAL().vm_naming_convention+"-002"
     photon_source = PHOTONOS().source #Must be downloaded to /usr/local/drop of master controller
     port = "5380"
+
+class VCSA():
+    photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-003" 
+    vcsa_vm_name = UNIVERSAL().vm_naming_convention+"-004"
+    ip = E2EP_ENVIRONMENT().subnet_prefix+"10"
+    domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
+    fqdn = domain_hostname+"."+DNS().zone
+    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
+    sso_domain = "vsphere.local"
+    json_filename = "/usr/local/e2e-patterns/vcsa/vcsa.json"
+    username = "administrator@"+sso_domain
+    datacenter = "e2e"
