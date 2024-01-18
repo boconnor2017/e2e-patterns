@@ -249,7 +249,7 @@ def tanium_get_token(username, password):
 
 def tanium_change_password(tanium_token, new_password):
     api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/user/changePassword?token="+tanium_token+"&pass="+new_password
-    api_response = lib.api_get(api_url)
+    api_response = api_get(api_url)
     return api_response
 
 def write_to_logs(err, logfile_name):
