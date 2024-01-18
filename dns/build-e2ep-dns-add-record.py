@@ -1,7 +1,7 @@
 # Description: Creates DNS record in existing Tanium server
 # Author: Brendan O'Connor
 # Date: November 2023
-# Version: 1.0
+# Version: 1.
 
 # Base imports
 import os
