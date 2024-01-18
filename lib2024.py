@@ -74,6 +74,24 @@ def docker_ovftool_deploy_photon(vm_name):
     err = dclient.containers.run(image=docker_image, volumes=docker_volume, tty=True, working_dir="/root/home", remove=True, command=docker_cmd)
     return str(err)
 
+def docker_powercli_attach_iso_to_vm(vm_name, datastore, filepath, iso):
+    download_file_from_github(config.SCRIPTS().attach_iso_to_vm_with_powercli_url, config.SCRIPTS().attach_iso_to_vm_with_powercli_filename) 
+    docker_rm = True
+    docker_entrypoint = "/usr/bin/pwsh"
+    docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+    docker_image = "vmware/powerclicore"
+    docker_cmd = "/tmp/"+config.SCRIPTS().attach_iso_to_vm_with_powercli_filename+" \""
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_username+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_password+" "
+    docker_cmd = docker_cmd+vm_name+" "
+    docker_cmd = docker_cmd+datastore+" "
+    docker_cmd = docker_cmd+filepath+iso
+    docker_cmd = docker_cmd+"\""
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
+    return err
+
 def docker_powercli_change_default_photonos_password(vm_name, new_vm_password):
     download_file_from_github(config.SCRIPTS().change_photonos_default_password_with_powercli_url, config.SCRIPTS().change_photonos_default_password_with_powercli_filename) 
     docker_entrypoint = "/usr/bin/pwsh"
