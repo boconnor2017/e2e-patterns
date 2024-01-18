@@ -108,6 +108,7 @@ class DNS():
     port = "5380"
 
 class VCSA():
+    pattern = "C-01: vCenter Server"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-003" 
     vcsa_vm_name = UNIVERSAL().vm_naming_convention+"-004"
     ip = E2EP_ENVIRONMENT().subnet_prefix+"10"
