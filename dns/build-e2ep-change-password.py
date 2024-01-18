@@ -1,4 +1,4 @@
-# Description: Changes the Default Password on the Tanium Server
+# Description: Changes the Password on the Tanium Server
 # Author: Brendan O'Connor
 # Date: January 2024
 # Version: 3.0
@@ -51,10 +51,16 @@ lib.e2e_patterns_header(logfile_name, pattern_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Get Tanium Token using first time credentials
+'''
+[1] = username
+[2] = old password
+[3] = new password 
+'''
+
+# Get Tanium Token using credentials
 err = "Getting Tanium Token using default credentials:"
 lib.write_to_logs(err, logfile_name)
-tanium_token = lib.tanium_get_token('admin', 'admin')
+tanium_token = lib.tanium_get_token(sys.argv[1], sys.argv[2])
 err = "    Tanium Token: "+tanium_token
 lib.write_to_logs(err, logfile_name)
 err = ""
@@ -63,5 +69,6 @@ lib.write_to_logs(err, logfile_name)
 # Change Password
 err = "Changing Password."
 lib.write_to_logs(err, logfile_name)
-lib.tanium_change_password(tanium_token, sys.argv[1])
-
+api_response = lib.tanium_change_password(tanium_token, sys.argv[3])
+err = "    API Response: "+str(api_response)
+lib.write_to_logs(err, logfile_name)
