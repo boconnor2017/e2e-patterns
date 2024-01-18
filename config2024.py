@@ -118,3 +118,5 @@ class VCSA():
     json_filename = "/usr/local/e2e-patterns/vcsa/vcsa.json"
     username = "administrator@"+sso_domain
     datacenter = "e2e"
+    iso_folder_on_datastore = "ISO\\"
+    iso_name = "VMware-VCSA-all-8.0.0-20519528.iso"
