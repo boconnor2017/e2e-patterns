@@ -100,5 +100,5 @@ class DNS():
     ip = "172.16.0.9"
     zone = "e2e.local"
     vm_name = UNIVERSAL().vm_naming_convention+"-002"
-    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
+    photon_source = PHOTONOS().source #Must be downloaded to /usr/local/drop of master controller
     port = "5380"
