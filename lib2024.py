@@ -149,8 +149,6 @@ def docker_powercli_get_vm_list():
     vm_list_raw = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
     vm_list_raw = str(vm_list_raw)
     vm_list = ip_address_raw[-17:-5]
-    #ip_address = ip_address.replace("n", "")
-    #ip_address = ip_address.replace("\\", "")
     return vm_list
 
 def e2e_build_node_controller(vm_name, logfile_name):
