@@ -78,6 +78,8 @@ class SCRIPTS():
     photon_prep_script_filename = "prep-photon.sh"
     dns_configure_tanium_ip_tables_entrypoint = "/usr/local/e2e-patterns/dns/"
     dns_configure_tanium_ip_tables_shscript = "configure-tanium-ip-tables.sh"
+    dns_run_docker_compose_entrypoint = "/usr/local/e2e-patterns/dns/"
+    dns_run_docker_compoese_shscript = "run-docker-compose.sh"
 
 # Basic PhotonOS Pattern variables
 class MINIKUBE():
