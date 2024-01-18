@@ -247,6 +247,9 @@ def tanium_get_token(username, password):
     tanium_token = (api_response.json()['token'])
     return tanium_token
 
+def tanium_change_password(tanium_token, new_password):
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/user/changePassword?token="+tanium_token+"&pass="+new_password
+
 def write_to_logs(err, logfile_name):
     tstamp = str(datetime.now())
     logfile = open(logfile_name, "a")
