@@ -252,6 +252,20 @@ def tanium_change_password(tanium_token, new_password):
     api_response = api_get(api_url)
     return api_response
 
+def tanium_create_dns_record(tanium_token, domain_name, dns_zone, ip_address):
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/records/add?"
+    api_url = api_url+"token="+tanium_token
+    api_url = api_url+"&domain="+domain_name+"."+dns_zone
+    api_url = api_url+"&zone="+zone
+    api_url = api_url+"&type=A"
+    api_url = api_url+"&ttl=3600"
+    api_url = api_url+"&overwrite=true"
+    api_url = api_url+"&ipAddress="+ip_address
+    api_url = api_url+"&ptr=true"
+    api_url = api_url+"&createPtrZone=true"
+    api_response = api_get(api_url)
+    return api_response 
+
 def tanium_create_dns_zone(tanium_token, dns_zone):
     api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/create?token="+tanium_token+"&zone="+dns_zone+"&type=Primary"
     api_response = api_get(api_url)
