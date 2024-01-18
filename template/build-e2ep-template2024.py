@@ -58,7 +58,7 @@ lib.write_to_logs(err, logfile_name)
 Samples:
 
 lib.docker_powercli_create_vm('VM-NAME')
-
+lib.e2e_check_for_node_controller('VM-NAME')
 '''
 
 
