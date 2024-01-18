@@ -149,6 +149,25 @@ def docker_powercli_get_vm_list():
     vm_list_raw = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
     vm_list_raw = str(vm_list_raw)
     vm_list = vm_list_raw.split('\\n')
+    vm_list_summarized = ""
+    i=0 
+    for x in vm_list:
+        if i == 14:
+            vm_list_summarized = x
+            i=i+1
+        else: 
+            i=i+1
+    vm_list = []
+    i=0
+    vm_list_raw = vm_list_summarized.split('@')
+    for x in vm_list_raw:
+        x = x.replace("{Name=", "")
+        x = x.replace("}", "")
+        if i == 0:
+            i=i+1
+        else:
+            vm_list.append(x)
+            i=i+1
     return vm_list
 
 def e2e_build_node_controller(vm_name, logfile_name):
