@@ -252,6 +252,11 @@ def tanium_change_password(tanium_token, new_password):
     api_response = api_get(api_url)
     return api_response
 
+def tanium_create_dns_zone(tanium_token, dns_zone):
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/create?token="+tanium_token+"&zone="+dns_zone+"&type=Primary"
+    api_response = api_get(api_url)
+    return api_response
+
 def write_to_logs(err, logfile_name):
     tstamp = str(datetime.now())
     logfile = open(logfile_name, "a")
