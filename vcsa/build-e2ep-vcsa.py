@@ -107,10 +107,10 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # 04. Attach VCSA ISO to node controller
-err = "04. Create mount directory on node controller started."
+err = "04. Attach VCSA ISO to node controller started."
 lib.write_to_logs(err, logfile_name)
 lib.docker_powercli_attach_iso_to_vm(config.VCSA().photon_controller_vm_name, config.E2EP_ENVIRONMENT().esxi_host_datastore, config.VCSA().iso_folder_on_datastore, config.VCSA().iso_name)
-err = "04. Create mount directory on node controller finished."
+err = "04. Attach VCSA ISO to node controller finished."
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
