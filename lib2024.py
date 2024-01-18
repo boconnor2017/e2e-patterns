@@ -241,6 +241,12 @@ def run_local_shell_cmd(cmd):
     err = subprocess.run(cmd, capture_output=True)
     return err
 
+def tanium_get_token(username, password):
+    api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/user/login?user="+username+"&pass="+password+"&includeInfo=true"
+    api_response = api_get(api_url)
+    tanium_token = (api_response.json()['token'])
+    return tanium_token
+
 def write_to_logs(err, logfile_name):
     tstamp = str(datetime.now())
     logfile = open(logfile_name, "a")
