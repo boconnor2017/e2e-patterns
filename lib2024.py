@@ -147,7 +147,7 @@ def docker_powercli_get_vm_list():
     docker_cmd = "/tmp/"+config.SCRIPTS().get_vm_list_with_powercli_filename+" \""+config.E2EP_ENVIRONMENT().esxi_host_ip+" "+config.E2EP_ENVIRONMENT().esxi_host_username+" "+config.E2EP_ENVIRONMENT().esxi_host_password+"\""
     dclient = docker.from_env()
     vm_list_raw = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=docker_rm, command=docker_cmd)
-    vm_list_raw = str(vm_list_raw)
+    vm_list = str(vm_list_raw)
     return vm_list
 
 def e2e_build_node_controller(vm_name, logfile_name):
