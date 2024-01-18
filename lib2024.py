@@ -20,6 +20,15 @@ from vmware.vapi.vsphere.client import create_vsphere_client
 from datetime import datetime
 import config
 
+def api_get(api_url):
+    api_response = requests.get(api_url)
+    return api_response
+
+def api_post(api_url):
+    api_response = requests.post(api_url)
+    api_response.headers['Content-Type: application/json']
+    return api_response
+
 def download_file_from_github(url, filename):
     urllib.request.urlretrieve(url, filename)
 
