@@ -250,9 +250,9 @@ def e2e_check_for_node_controller(vm_name):
     node_controller_exists = 0
     for x in vm_list:
         if x == vm_name:
-            node_controller_exists = 1
+            node_controller_exists = node_controller_exists+1
         else:
-            node_controller_exists = 0
+            node_controller_exists = node_controller_exists+0
     return node_controller_exists
 
 def paramiko_download_file_to_remote_photon_vm(ip, un, pw, url, filepath, filename):
