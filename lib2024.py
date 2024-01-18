@@ -197,7 +197,7 @@ def e2e_build_node_controller(vm_name, logfile_name):
     write_to_logs(err, logfile_name)
     err = "    Script: "+config.SCRIPTS().photon_prep_script_filename
     write_to_logs(err, logfile_name)
-    paramiko_run_sh_on_remote_photon_vm(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, config.SCRIPTS().photon_prep_script_url, '/usr/local/', config.SCRIPTS().photon_prep_script_filename)
+    paramiko_run_sh_on_remote_photon_vm(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, '/usr/local/', config.SCRIPTS().photon_prep_script_filename)
     err = ""
     write_to_logs(err, logfile_name)
     err = "e2e_build_node_controller is finished. "
