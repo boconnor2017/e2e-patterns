@@ -76,6 +76,8 @@ class SCRIPTS():
     refresh_e2e_patterns_filename = "refresh-e2e-patterns.sh"
     photon_prep_script_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/prep-photon.sh"
     photon_prep_script_filename = "prep-photon.sh"
+    dns_configure_tanium_ip_tables_entrypoint = "/usr/local/e2e-patterns/dns/"
+    dns_configure_tanium_ip_tables_shscript = "configure-tanium-ip-tables.sh"
 
 # Basic PhotonOS Pattern variables
 class MINIKUBE():
@@ -90,3 +92,11 @@ class PHOTONOS():
     username = "root" #default username to login to photon vms 
     password = "VMware1!VMware1!" #default password to login to photon vms
     source = "photon-ova-4.0-ca7c9e9330.ova"
+
+class DNS():
+    pattern = "B-01: Containerized DNS Server"
+    ip = "172.16.0.9"
+    zone = "e2e.local"
+    vm_name = UNIVERSAL().vm_naming_convention+"-002"
+    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
+    port = "5380"
