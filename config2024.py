@@ -80,6 +80,8 @@ class SCRIPTS():
     dns_configure_tanium_ip_tables_shscript = "configure-tanium-ip-tables.sh"
     dns_run_docker_compose_entrypoint = "/usr/local/e2e-patterns/dns/"
     dns_run_docker_compose_shscript = "run-docker-compose.sh"
+    get_vm_list_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/get_vm_list_with_powercli.ps1"
+    get_vm_list_with_powercli_filename = "get_vm_list_with_powercli.ps1"
 
 # Basic PhotonOS Pattern variables
 class MINIKUBE():
