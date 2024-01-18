@@ -163,6 +163,7 @@ def docker_powercli_get_vm_list():
     for x in vm_list_raw:
         x = x.replace("{Name=", "")
         x = x.replace("}", "")
+        x = x.replace(" ", "")
         if i == 0:
             i=i+1
         else:
