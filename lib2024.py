@@ -224,10 +224,7 @@ def e2e_build_node_controller(vm_name, logfile_name):
     write_to_logs(err, logfile_name)
     err = "e2e_build_node_controller is finished. "
     write_to_logs(err, logfile_name)
-
-def e2e_check_for_node_controller(vm_name):
-    
-
+  
 def paramiko_download_file_to_remote_photon_vm(ip, un, pw, url, filepath, filename):
     # filepath format: /foo/bar/
     # filename format: somefile.xyz
