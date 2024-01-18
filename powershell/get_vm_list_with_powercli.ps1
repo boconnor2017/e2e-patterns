@@ -11,6 +11,9 @@ param(
 [string]$a
 )
 
+# Parse Command Line Inputs
+$b = $a.Split(" ")
+
 # Connect to ESXi Host
 Connect-VIServer -Server $b[0] -Protocol https -User $b[1] -Password $b[2] -Force
 
