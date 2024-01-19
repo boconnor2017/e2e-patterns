@@ -102,6 +102,8 @@ if node_controller_exists == 1:
     lib.write_to_logs(err, logfile_name)
 else:
     lib.docker_powercli_attach_iso_to_vm(config.VCSA().photon_controller_vm_name, config.E2EP_ENVIRONMENT().esxi_host_datastore, config.VCSA().iso_folder_on_datastore, config.VCSA().iso_name)
+    mount_iso_cmd = "mount -t iso9660 -o loop /dev/cdrom /usr/local/mount/"
+    stdout = lib.paramiko_send_command_over_ssh(mount_iso_cmd, ip_address, config.PHOTONOS().username, config.PHOTONOS().password)
 err = "04. Attach VCSA ISO to node controller finished."
 lib.write_to_logs(err, logfile_name)
 err = ""
