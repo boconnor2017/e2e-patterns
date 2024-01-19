@@ -52,11 +52,8 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 '''
-[1] = username
-[2] = password
-[3] = DNS Zone (syntax: e2e.local)
-[4] = Domain name (syntax test123)
-[5] = IP Address
+[1] = Domain name (syntax test123)
+[2] = IP Address
 '''
 
 # Get Tanium Token using credentials
@@ -71,6 +68,6 @@ lib.write_to_logs(err, logfile_name)
 # Add DNS Record
 err = "Creating DNS Zone."
 lib.write_to_logs(err, logfile_name)
-api_response = lib.tanium_create_dns_record(tanium_token, config.DNS().zone, sys.argv[3], sys.argv[5])
+api_response = lib.tanium_create_dns_record(tanium_token, config.DNS().zone, sys.argv[1], sys.argv[2])
 err = "    API Response: "+str(api_response)
 lib.write_to_logs(err, logfile_name)
