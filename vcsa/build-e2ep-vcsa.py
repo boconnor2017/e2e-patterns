@@ -50,23 +50,6 @@ lib.e2e_patterns_header(logfile_name, pattern_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-'''
-1. Check for node controller
-    if(1) then continue because it exists
-    if(0) then e2e_build_node_controller()
-        a. Get IP address - docker_powercli_get_vm_ip_address
-        b. Create directory /usr/local/mount on node controller - paramiko_send_command_over_ssh()
-        c. [NEW] attach vcenter ISO to node controller using powercli          
-2. Create DNS record - tanium_create_dns_record()
-3. Generate JSON for vCenter configuration 
-4. Write JSON file to node controller 
-5. Create vCenter 
-    a. Pause for 35min 
-6. Configure vCenter
-    a. Get VAPI Session ID 
-    b. Configure datacenter 
-'''
-
 # 01. Check for node controller
 err = "01. Check for node controller started."
 lib.write_to_logs(err, logfile_name)
@@ -99,8 +82,12 @@ lib.write_to_logs(err, logfile_name)
 # 03. Create mount directory on node controller
 err = "03. Create mount directory on node controller started."
 lib.write_to_logs(err, logfile_name)
-cmd = "mkdir /usr/local/mount"
-stdout = lib.paramiko_send_command_over_ssh(cmd, ip_address, config.PHOTONOS().username, config.PHOTONOS().password)
+if node_controller_exists == 1:
+    err = "Skipping 03. Create mount directory on node controller."
+    lib.write_to_logs(err, logfile_name)
+else:
+    cmd = "mkdir /usr/local/mount"
+    stdout = lib.paramiko_send_command_over_ssh(cmd, ip_address, config.PHOTONOS().username, config.PHOTONOS().password)
 err = "03. Create mount directory on node controller finished."
 lib.write_to_logs(err, logfile_name)
 err = ""
@@ -109,7 +96,11 @@ lib.write_to_logs(err, logfile_name)
 # 04. Attach VCSA ISO to node controller
 err = "04. Attach VCSA ISO to node controller started."
 lib.write_to_logs(err, logfile_name)
-lib.docker_powercli_attach_iso_to_vm(config.VCSA().photon_controller_vm_name, config.E2EP_ENVIRONMENT().esxi_host_datastore, config.VCSA().iso_folder_on_datastore, config.VCSA().iso_name)
+if node_controller_exists == 1:
+    err = "Skipping 04. Attach VCSA ISO to node controller."
+    lib.write_to_logs(err, logfile_name)
+else:
+    lib.docker_powercli_attach_iso_to_vm(config.VCSA().photon_controller_vm_name, config.E2EP_ENVIRONMENT().esxi_host_datastore, config.VCSA().iso_folder_on_datastore, config.VCSA().iso_name)
 err = "04. Attach VCSA ISO to node controller finished."
 lib.write_to_logs(err, logfile_name)
 err = ""
@@ -127,4 +118,84 @@ err = "    05B. Creating DNS Record: "+config.VCSA().domain_hostname+" "+config.
 lib.write_to_logs(err, logfile_name)
 lib.tanium_create_dns_record(tanium_token, config.VCSA().domain_hostname, config.DNS().zone, config.VCSA().ip)
 err = "05. Create DNS Record finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# 06. Generate JSON File for vCenter Configuration
+err = "06. Generate JSON File for vCenter Configuration started."
+lib.write_to_logs(err, logfile_name)
+vcsa_config_json_as_string = {
+    "__version": "2.13.0",
+    "__comments": "https://github.com/boconnor2017/e2e-patterns",
+    "new_vcsa": {
+        "esxi": {
+            "hostname": config.E2EP_ENVIRONMENT().esxi_host_ip,
+            "username": config.E2EP_ENVIRONMENT().esxi_host_username,
+            "password": config.E2EP_ENVIRONMENT().esxi_host_password,
+            "deployment_network": config.E2EP_ENVIRONMENT().esxi_host_virtual_switch,
+            "datastore": config.E2EP_ENVIRONMENT().esxi_host_datastore
+        },
+        "appliance": {
+            "__comments": [
+                "E2E Pattern: deploy vcsa"
+            ],
+            "thin_disk_mode": True,
+            "deployment_option": "small",
+            "name": config.VCSA().vcsa_vm_name
+        },
+        "network": {
+            "ip_family": "ipv4",
+            "mode": "static",
+            "system_name": config.VCSA().fqdn,
+            "ip": config.VCSA().ip,
+            "prefix": config.E2EP_ENVIRONMENT().subnet_size,
+            "gateway": config.E2EP_ENVIRONMENT().default_gw,
+            "dns_servers": [
+                config.DNS().ip
+            ]
+        },
+        "os": {
+            "password": config.UNIVERSAL().password,
+            "ntp_servers": config.E2EP_ENVIRONMENT().ntp_server,
+            "ssh_enable": False
+        },
+        "sso": {
+            "password": config.UNIVERSAL().password,
+            "domain_name": config.VCSA().sso_domain
+        }
+    },
+    "ceip": {
+        "description": {
+            "__comments": [
+                "E2E Pattern"
+            ]
+        },
+        "settings": {
+            "ceip_enabled": True
+        }
+    }
+}
+vcsa_config_json = json.dumps(vcsa_config_json_as_string)
+err = "06. Generate JSON File for vCenter Configuration finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# 07. Write JSON file to node controller using paramiko
+err = "07. Write JSON file to node controller using paramiko started."
+lib.write_to_logs(err, logfile_name)
+lib.paramiko_move_file_to_remote_photon_vm(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, vcsa_config_json, config.VCSA().json_filepath, config.VCSA().json_filename)
+err = "07. Write JSON file to node controller using paramiko finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# 08. Install vCenter
+err = "08. Install vCenter started."
+lib.write_to_logs(err, logfile_name)
+lib.e2e_install_vCenter_using_node_controller(ip_address)
+err = "08. Install vCenter started."
+lib.write_to_logs(err, logfile_name)
+err = ""
 lib.write_to_logs(err, logfile_name)
