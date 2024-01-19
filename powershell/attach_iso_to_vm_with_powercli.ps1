@@ -26,6 +26,8 @@ foreach($args in $b){
 Connect-VIServer -Server $b[0] -Protocol https -User $b[1] -Password $b[2] -Force
 
 # Attach ISO to datastore
-$Datastore = $b[4]
-Get-VM -Name $b[3] | Get-CDDrive | `
-Set-CDDrive -IsoPath "[$Datastore] "$b[5] -Confirm:$false
+$cddvddrive = Get-CDDrive -VM $b[3] 
+$datastore = $b[4]
+$pathtoiso = $b[5]
+
+Set-CDDrive -CD $cddvddrive -IsoPath "[$datastore] $pathtoiso" -Connected:$true -StartConnected:$true -Confirm:$false
