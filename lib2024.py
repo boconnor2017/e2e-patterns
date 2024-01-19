@@ -273,6 +273,23 @@ def e2e_check_for_node_controller(vm_name):
             node_controller_exists = node_controller_exists+0
     return node_controller_exists
 
+def e2e_install_vCenter_using_node_controller(nc_ip_address):
+    err = "Starting e2e_install_vCenter_using_node_controller()."
+    write_to_logs(err, logfile_name)
+    run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
+    run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+config.VCSA().json_filepath+config.VCSA().json_filename+" "
+    run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--accept-eula --acknowledge-ceip --no-ssl-certificate-verification "
+    run_vcsa_installer_cmd = run_vcsa_installer_cmd+">> /usr/local/e2e-patterns/vcsa/__vcsa-deploy.log"
+    paramiko_send_command_over_ssh(run_vcsa_installer_cmd, nc_ip_address, config.PHOTONOS().username, config.PHOTONOS().password)
+    seconds = (35*60)
+    err = "Pausing for "+str(seconds)+" seconds ("+(seconds/60)+" minutes) to allow vcenter to complete its build process."
+    write_to_logs(err, logfile_name)
+    err = "vcenter deploy log can be found on the node controller at /usr/local/e2e-patterns/vcsa/_vcsa-deploy.log"
+    write_to_logs(err, logfile_name)
+    pause_python_for_duration(seconds)
+    err = str(seconds)+" pause has completed. Resuming script."
+    write_to_logs(err, logfile_name)    
+
 def paramiko_download_file_to_remote_photon_vm(ip, un, pw, url, filepath, filename):
     # filepath format: /foo/bar/
     # filename format: somefile.xyz
