@@ -282,7 +282,7 @@ def e2e_install_vCenter_using_node_controller(nc_ip_address, logfile_name):
     run_vcsa_installer_cmd = run_vcsa_installer_cmd+">> /usr/local/e2e-patterns/vcsa/__vcsa-deploy.log"
     paramiko_send_command_over_ssh(run_vcsa_installer_cmd, nc_ip_address, config.PHOTONOS().username, config.PHOTONOS().password)
     seconds = (35*60)
-    err = "Pausing for "+str(seconds)+" seconds ("+(seconds/60)+" minutes) to allow vcenter to complete its build process."
+    err = "Pausing for "+str(seconds)+" seconds ("+str(seconds/60)+" minutes) to allow vcenter to complete its build process."
     write_to_logs(err, logfile_name)
     err = "vcenter deploy log can be found on the node controller at /usr/local/e2e-patterns/vcsa/_vcsa-deploy.log"
     write_to_logs(err, logfile_name)
