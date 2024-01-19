@@ -36,8 +36,8 @@ class E2EP_ENVIRONMENT():
     subnet_size = "24" #CIDR block, default /24 (/24 recommended)
     subnet_prefix = "172.16.0." #first four numbers of the subnet
     default_gw = subnet_prefix+"1" #default: .01 gateway address
-    ntp_server = "pool.ntp.org"
-    esxi_host_ip = subnet_prefix+"201" 
+    ntp_server = "pool.ntp.org" #NTP Server
+    esxi_host_ip = subnet_prefix+"201" #IP of target ESXi host
     esxi_host_username = "root" #default username to login to esxi host
     esxi_host_password = "VMware1!" #password to login to esxi host
     esxi_host_datastore = "datastore1" #datastore that will be used as the target storage for patterns
