@@ -273,7 +273,7 @@ def e2e_check_for_node_controller(vm_name):
             node_controller_exists = node_controller_exists+0
     return node_controller_exists
 
-def e2e_install_vCenter_using_node_controller(nc_ip_address):
+def e2e_install_vCenter_using_node_controller(nc_ip_address, logfile_name):
     err = "Starting e2e_install_vCenter_using_node_controller()."
     write_to_logs(err, logfile_name)
     run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
