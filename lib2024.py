@@ -285,6 +285,13 @@ def paramiko_run_sh_on_remote_photon_vm(ip, un, pw, entrypoint, shscript):
     cmd = "sh "+entrypoint+shscript
     paramiko_send_command_over_ssh(cmd, ip, un, pw)
 
+def paramiko_move_file_to_remote_photon_vm(ip, un, pw, file_as_var, filepath, filename):
+    # file_as_var: read contents of file into a variable
+    # filepath format: /foo/bar/
+    # filename format: somefile.xyz
+    cmd = "echo "+file_as_var+" >> "+filepath+filename
+    paramiko_send_command_over_ssh(cmd, ip, un, pw)
+
 def paramiko_send_command_over_ssh(cmd, ip, un, pw):
     pclient = paramiko.SSHClient()
     pclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
