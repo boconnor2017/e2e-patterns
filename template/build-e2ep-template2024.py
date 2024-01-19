@@ -54,6 +54,35 @@ lib.e2e_patterns_header(logfile_name, pattern_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
+# 01. Check for node controller
+err = "01. Check for node controller started."
+lib.write_to_logs(err, logfile_name)
+node_controller_exists = lib.e2e_check_for_node_controller(config.VCSA().photon_controller_vm_name)
+if node_controller_exists == 1:
+    err = "    "+config.VCSA().photon_controller_vm_name+" exists."
+    lib.write_to_logs(err, logfile_name)
+else:
+    err = "    "+config.VCSA().photon_controller_vm_name+" does not exist."
+    lib.write_to_logs(err, logfile_name)
+    err = "    Running e2e_build_node_controller()."
+    lib.write_to_logs(err, logfile_name)
+    lib.e2e_build_node_controller(config.VCSA().photon_controller_vm_name, logfile_name)
+err = "01. Check for node controller finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# 02. Get IP Address of the node controller 
+err = "02. Get IP Address of the node controller started."
+lib.write_to_logs(err, logfile_name)
+ip_address = lib.docker_powercli_get_vm_ip_address(config.VCSA().photon_controller_vm_name)
+err = "    IP Address of "+config.VCSA().photon_controller_vm_name+" is "+ip_address
+lib.write_to_logs(err, logfile_name)
+err = "02. Get IP Address of the node controller finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
 '''
 Samples:
 
