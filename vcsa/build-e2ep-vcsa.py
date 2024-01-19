@@ -195,7 +195,7 @@ lib.write_to_logs(err, logfile_name)
 # 08. Install vCenter
 err = "08. Install vCenter started."
 lib.write_to_logs(err, logfile_name)
-lib.e2e_install_vCenter_using_node_controller(ip_address)
+lib.e2e_install_vCenter_using_node_controller(ip_address, logfile_name)
 err = "08. Install vCenter started."
 lib.write_to_logs(err, logfile_name)
 err = ""
