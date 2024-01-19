@@ -115,7 +115,8 @@ class VCSA():
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcsa-01"
     fqdn = domain_hostname+"."+DNS().zone
     sso_domain = "vsphere.local"
-    json_filename = "/usr/local/e2e-patterns/vcsa/vcsa.json"
+    json_filepath = "/usr/local/e2e-patterns/vcsa/"
+    json_filename = "vcsa.json"
     username = "administrator@"+sso_domain
     datacenter = "e2e"
     iso_folder_on_datastore = "ISO\\"
