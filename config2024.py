@@ -21,6 +21,14 @@ The following IP ranges are used for this lab by default.
 - x.x.x.09 = dns
 - x.x.x.10 = vcsa
 - x.x.x.11 = nsx
+
+[!] IMPORTANT: this configuration file is designed to work with ONE ESXi host.
+[!] In the event that your lab contains multiple ESXi hosts, run a master controller PER host.
+[!] The config file used by the associated Master Controller should contain the proper 
+[!] E2EP_ENVIRONMENT().esxi_host_xxxx parameter for the host it is paired with. Other parameters
+[!] that are not specific to the esxi host can remain global.
+[!] Patterns can be GLOBAL across as many physical ESXi hosts as desired. As long as the 
+[!] pattern prerequisites are met somewhere in the ecosystem, the pattern will work. 
 '''
 
 class E2EP_ENVIRONMENT():
@@ -30,7 +38,6 @@ class E2EP_ENVIRONMENT():
     default_gw = subnet_prefix+"1" #default: .01 gateway address
     ntp_server = "pool.ntp.org"
     esxi_host_ip = subnet_prefix+"201" #ESXi6 supported CPU
-    esxi8_host_ip = subnet_prefix+"203" #ESXi8 supported CPU
     esxi_host_username = "root" #default username to login to esxi host
     esxi_host_password = "VMware1!" #password to login to esxi host
     esxi_host_datastore = "datastore1" #datastore that will be used as the target storage for patterns
