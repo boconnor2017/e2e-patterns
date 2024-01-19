@@ -56,5 +56,5 @@ lib.write_to_logs(err, logfile_name)
 '''
 
 # Create datacenter in vCenter
-vcenter_session_id = lib.e2e_get_vcenter_session_id(config.VCSA().fqdn, config.VCSA().username, config.VCSA().password)
+vcenter_session_id = lib.e2e_get_vcenter_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
 lib.e2e_create_datacenter_in_vcenter(vcenter_session_id, config.VCSA().fqdn, sys.argv[1])
