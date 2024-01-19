@@ -273,6 +273,22 @@ def e2e_check_for_node_controller(vm_name):
             node_controller_exists = node_controller_exists+0
     return node_controller_exists
 
+def e2e_create_datacenter_in_vcenter(vcenter_session_id, vcenter_hostname, datacenter_name):
+    api_call = requests.post("https://"+vcenter_hostname+"/api/vcenter/datacenter", verify=False, headers={
+    "vmware-api-session-id": vcenter_session_id
+    }, json={
+    "folder": "group-d1",
+    "name": datacenter_name
+    })
+    datacenter = api_call.json()
+    return datacenter
+
+def e2e_get_vcenter_session_id(vcenter_hostname, vcenter_username, vcenter_password):
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    sess = requests.post("https://"+vcenter_hostname+"/rest/com/vmware/cis/session", auth=(vcenter_username, vcenter_password), verify=False)
+    session_id = sess.json()['value']
+    return(session_id)
+
 def e2e_install_vCenter_using_node_controller(nc_ip_address, logfile_name):
     err = "Starting e2e_install_vCenter_using_node_controller()."
     write_to_logs(err, logfile_name)
