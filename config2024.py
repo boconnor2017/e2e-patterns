@@ -4,24 +4,6 @@
 # Version: 3.0
 
 '''
-Below are variables that are created to manage the lab environment. 
-- UNIVERSAL() is a class containing variables that are applied universally to a pattern.
-- LOGS() is a class containing variables that apply to logging.
-- TEMPLATE() is a class used by default.
-- SCRIPTS() is a class used to pull various scripts used by A patterns.
-- DNS() is a class containing variables that apply to the DNS pattern.
-- VCSA() is a class containing variables that apply to the vcenter server pattern.
-- NSX() is a class containing variables that apply to the NSX pattern.
-
-The recommended subnet size to support the e2e-patterns lab is /24.
-The subnet must be configured on the physical network. 
-The following IP ranges are used for this lab by default. 
-- x.x.x.01-08 = reserved for physical equipment
-- x.x.x.200-254 = reserved for physical equipment
-- x.x.x.09 = dns
-- x.x.x.10 = vcsa
-- x.x.x.11 = nsx
-
 [!] IMPORTANT: this configuration file is designed to work with ONE ESXi host.
 [!] In the event that your lab contains multiple ESXi hosts, run a master controller PER host.
 [!] The config file used by the associated Master Controller should contain the proper 
@@ -29,8 +11,30 @@ The following IP ranges are used for this lab by default.
 [!] that are not specific to the esxi host can remain global.
 [!] Patterns can be GLOBAL across as many physical ESXi hosts as desired. As long as the 
 [!] pattern prerequisites are met somewhere in the ecosystem, the pattern will work. 
-'''
 
+The following are variables used to pair to a physical ESXi host.
+- E2EP_ENVIRONMENT() is a class containing variables for the physical target compute, storage, network.
+
+The following are global variables that are created to manage the lab environment. 
+- UNIVERSAL() is a class containing variables that are applied universally to all patterns.
+- LOGS() is a class containing variables that apply to logging.
+- TEMPLATE() is a default class used in templates.
+- SCRIPTS() is a class used to pull various scripts used by all patterns.
+
+IPAM:
+    The recommended subnet size to support the e2e-patterns lab is /24.
+    The subnet must be configured on the physical network. 
+    The following IP ranges are used for this lab by default. 
+    - x.x.x.01-08 = reserved
+    - x.x.x.200-254 = reserved
+    - x.x.x.09 = dns (B-01)
+    - x.x.x.10 = vcsa (C-01)
+    - x.x.x.11 = nsx (C-02)
+    - x.x.x.12-20 = nested ESXi hosts (D-01)
+    - x.x.x.21 = cloud builder (D-02)
+
+'''
+# Target Host and Network Parameters
 class E2EP_ENVIRONMENT():
     subnet_mask = "255.255.255.0"
     subnet_size = "24" #CIDR block, default /24 (/24 recommended)
@@ -43,6 +47,7 @@ class E2EP_ENVIRONMENT():
     esxi_host_datastore = "datastore1" #datastore that will be used as the target storage for patterns
     esxi_host_virtual_switch = "VM Network" #virtual switch that will be used as the target port group for patterns
 
+# Global Parameters
 class UNIVERSAL():
     github_repo = "https://github.com/boconnor2017/e2e-patterns"
     home_dir = "/usr/local/e2e-patterns"
@@ -92,7 +97,7 @@ class SCRIPTS():
     attach_iso_to_vm_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/attach_iso_to_vm_with_powercli.ps1"
     attach_iso_to_vm_with_powercli_filename = "attach_iso_to_vm_with_powercli.ps1"
 
-# Basic PhotonOS Pattern variables
+# (A) Basic PhotonOS Pattern variables
 class MINIKUBE():
     pattern = "A-04: Kubernetes"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-k8"
@@ -106,6 +111,7 @@ class PHOTONOS():
     password = "VMware1!VMware1!" #default password to login to photon vms
     source = "photon-ova-4.0-ca7c9e9330.ova"
 
+# (B) Shared Services Patterns
 class DNS():
     pattern = "B-01: Containerized DNS Server"
     ip = "172.16.0.9"
@@ -114,6 +120,7 @@ class DNS():
     photon_source = PHOTONOS().source #Must be downloaded to /usr/local/drop of master controller
     port = "5380"
 
+# (C) Workload Domain Patterns
 class VCSA():
     pattern = "C-01: vCenter Server"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-003" 
