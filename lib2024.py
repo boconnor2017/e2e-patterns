@@ -355,6 +355,8 @@ def run_local_shell_cmd(cmd):
     err = subprocess.run(cmd, capture_output=True)
     return err
 
+# Technitium API Guide: https://github.com/TechnitiumSoftware/DnsServer/blob/master/APIDOCS.md
+# Typo: "tanium" below should be changed to "Technitium"
 def tanium_get_token(username, password):
     api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/user/login?user="+username+"&pass="+password+"&includeInfo=true"
     api_response = api_get(api_url)
@@ -367,6 +369,7 @@ def tanium_change_password(tanium_token, new_password):
     return api_response
 
 def tanium_create_dns_record(tanium_token, domain_name, dns_zone, ip_address):
+    # Syntax: http://localhost:5380/api/zones/records/add?token=x&domain=example.com&zone=example.com
     api_url = "http://"+config.DNS().ip+":"+config.DNS().port+"/api/zones/records/add?"
     api_url = api_url+"token="+tanium_token
     api_url = api_url+"&domain="+domain_name+"."+dns_zone
