@@ -66,7 +66,11 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # Add DNS Record
-err = "Creating DNS Zone."
+err = "Creating DNS Record:"
+lib.write_to_logs(err, logfile_name)
+err = "    Domain Name: "+sys.argv[1]
+lib.write_to_logs(err, logfile_name)
+err = "    IP Address: "+sys.argv[2]
 lib.write_to_logs(err, logfile_name)
 api_response = lib.tanium_create_dns_record(tanium_token, config.DNS().zone, sys.argv[1], sys.argv[2])
 err = "    API Response: "+str(api_response)
