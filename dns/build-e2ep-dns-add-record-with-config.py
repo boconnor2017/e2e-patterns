@@ -68,6 +68,8 @@ lib.write_to_logs(err, logfile_name)
 # Add DNS Record
 err = "Creating DNS Record:"
 lib.write_to_logs(err, logfile_name)
+err = "    Tanium Token: "+tanium_token
+lib.write_to_logs(err, logfile_name)
 err = "    Domain Name: "+sys.argv[1]
 lib.write_to_logs(err, logfile_name)
 err = "    IP Address: "+sys.argv[2]
