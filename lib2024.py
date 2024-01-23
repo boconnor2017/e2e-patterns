@@ -351,6 +351,11 @@ def paramiko_send_command_over_ssh(cmd, ip, un, pw):
 def pause_python_for_duration(seconds):
     time.sleep(seconds)
 
+def populate_var_from_file(file_name):
+    with open(file_name) as file:
+        file_txt = file.read()
+        return file_txt
+
 def run_local_shell_cmd(cmd):
     err = subprocess.run(cmd, capture_output=True)
     return err
