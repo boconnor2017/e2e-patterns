@@ -29,6 +29,11 @@ def api_post(api_url):
     api_response.headers['Content-Type: application/json']
     return api_response
 
+def append_text_to_file(text, file_name):
+    new_file = open(file_name, "a")
+    new_file.writelines(text)
+    new_file.close()
+
 def download_file_from_github(url, filename):
     urllib.request.urlretrieve(url, filename)
 
