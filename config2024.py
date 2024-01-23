@@ -145,7 +145,6 @@ class CLOUD_BUILDER():
     ip = E2EP_ENVIRONMENT().subnet_prefix+"12"
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcfcb-01"
     fqdn = domain_hostname+"."+DNS().zone
-    photon_source = E2EP_ENVIRONMENT().photonos_source #Must be downloaded to /usr/local/drop of master controller
     password = UNIVERSAL().password+UNIVERSAL().password    
     terraform_source = UNIVERSAL().home_dir+"/terraform/install-vcf-cb/main.tf"
     main_tf_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-vcf-cb/main.tf"
