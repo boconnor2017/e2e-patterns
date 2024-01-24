@@ -53,6 +53,7 @@ class E2EP_ENVIRONMENT():
     default_gw = subnet_prefix+"1" #default: .01 gateway address
     ntp_server = "pool.ntp.org" #NTP Server
     esxi_host_ip = subnet_prefix+"201" #IP of target ESXi host
+    esxi_host_hostname = "esxi1" #hostname of the ESXi host
     esxi_host_username = "root" #default username to login to esxi host
     esxi_host_password = "VMware1!" #password to login to esxi host
     esxi_host_datastore = "datastore1" #datastore that will be used as the target storage for patterns
