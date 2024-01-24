@@ -107,6 +107,8 @@ class SCRIPTS():
     get_vm_list_with_powercli_filename = "get_vm_list_with_powercli.ps1"
     attach_iso_to_vm_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/attach_iso_to_vm_with_powercli.ps1"
     attach_iso_to_vm_with_powercli_filename = "attach_iso_to_vm_with_powercli.ps1"
+    build_nested_esxi8_main_tf_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/create_nested_esxi8/main.tf"
+    build_nested_esxi8_main_tf_filename = "main.tf"
 
 # (A) Basic PhotonOS Pattern variables
 class MINIKUBE():
