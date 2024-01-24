@@ -110,13 +110,13 @@ lib.write_to_logs(err, logfile_name)
 err = "03. Create terraform variables file started."
 lib.write_to_logs(err, logfile_name)
 tf_var_txt = ["# Python generated var file",
-"variable \"vsphere_user\" { default = \""+config.E2EP_ENVIRONMENT().esxi_host_username+"\" }",
+"variable \"vsphere_user\" { default = \""+config.VCSA().username+"\" }",
 "variable \"vsphere_pass\" { default = \""+config.UNIVERSAL().password+"\" }",
-"variable \"vsphere_serer\" { default = \""+config.E2EP_ENVIRONMENT().esxi_host_ip+"\" }",
-"variable \"datacenter_name\" { default = \"ha-datacenter\" }",
+"variable \"vsphere_serer\" { default = \""+config.VCSA().ip+"\" }",
+"variable \"datacenter_name\" { default = \""+config.VCSA().datacenter+"\" }",
 "variable \"datastore_name\" { default = \""+config.E2EP_ENVIRONMENT().esxi_host_datastore+"\" }",
 "variable \"network_name\" { default = \""+config.E2EP_ENVIRONMENT().esxi_host_virtual_switch+"\" }",
-"variable \"esxi_host_name\" { default = \""+config.E2EP_ENVIRONMENT().esxi_host_hostname+"\" }",
+"variable \"esxi_host_name\" { default = \""+config.E2EP_ENVIRONMENT().esxi_host_ip+"\" }",
 "variable \"vm_name\" { default = \""+sys.argv[1]+"\" }",
 "variable \"cpu\" { default = 4 }",
 "variable \"memory\" { default = 16384 }",
@@ -159,6 +159,7 @@ lib.write_to_logs(err, logfile_name)
 
 # 05. Run Terraform on node controller 
 # Upload nested ova to /usr/local/drop on the node controller
+# rm /usr/local/drop/*tf*
 # (cp main.tf /usr/local/drop/main.tf; cp var.tf /usr/local/drop/var.tf; cd /usr/local/drop; docker  run  -v $(pwd):$(pwd) -w $(pwd) -i -t hashicorp/terraform init)
-# (cp main.tf /usr/local/drop/main.tf; cp var.tf /usr/local/drop/var.tf; cd /usr/local/drop; docker  run  -v $(pwd):$(pwd) -w $(pwd) -i -t hashicorp/terraform plan -out=/usr/local/plan.tf)
-# (cp main.tf /usr/local/drop/main.tf; cp var.tf /usr/local/drop/var.tf; cd /usr/local/drop; docker  run  -v $(pwd):$(pwd) -w $(pwd) -i -t hashicorp/terraform apply "/usr/local/drop/plan.tf")
+# (cd /usr/local/drop; docker  run  -v $(pwd):$(pwd) -w $(pwd) -i -t hashicorp/terraform plan -out=/usr/local/plan.tf)
+# (cd /usr/local/drop; docker  run  -v $(pwd):$(pwd) -w $(pwd) -i -t hashicorp/terraform apply "/usr/local/drop/plan.tf")
