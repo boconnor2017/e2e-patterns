@@ -128,7 +128,8 @@ tf_var_txt = ["# Python generated var file",
 "variable \"dns\" { default = \""+config.DNS().ip+"\" }",
 "variable \"domain\" { default = \""+config.DNS().zone+"\" }",
 "variable \"ntp\" { default = \""+config.E2EP_ENVIRONMENT().ntp_server+"\" }",
-"variable \"guest_password\" { default = \""+config.E2EP_ENVIRONMENT().ntp_server+"\" }"
+"variable \"guest_password\" { default = \""+config.E2EP_ENVIRONMENT().ntp_server+"\" }",
+"variable \"local_ovf_path\" { default = \""+config.NESTED_ESXI8().nested_esxi8_ova_source+"\" }"
 ]
 
 var_file_name = "var.tf"
@@ -155,3 +156,9 @@ err = "04. Move terraform variable file to node controller finished."
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
+
+# 05. Run Terraform on node controller 
+# Upload nested ova to /usr/local/drop on the node controller
+# (cp main.tf /usr/local/drop/main.tf; cp var.tf /usr/local/drop/var.tf; cd /usr/local/drop; docker  run  -v $(pwd):$(pwd) -w $(pwd) -i -t hashicorp/terraform init)
+# (cp main.tf /usr/local/drop/main.tf; cp var.tf /usr/local/drop/var.tf; cd /usr/local/drop; docker  run  -v $(pwd):$(pwd) -w $(pwd) -i -t hashicorp/terraform plan -out=/usr/local/plan.tf)
+# (cp main.tf /usr/local/drop/main.tf; cp var.tf /usr/local/drop/var.tf; cd /usr/local/drop; docker  run  -v $(pwd):$(pwd) -w $(pwd) -i -t hashicorp/terraform apply "/usr/local/drop/plan.tf")
