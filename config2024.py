@@ -30,8 +30,19 @@ IPAM:
     - x.x.x.09 = dns (B-01)
     - x.x.x.10 = vcsa (C-01)
     - x.x.x.11 = nsx (C-02)
-    - x.x.x.12-20 = nested ESXi hosts (D-01)
+    - x.x.x.12 = kubernetes
+
     - x.x.x.21 = cloud builder (D-02)
+    - x.x.x.22 = vcf sddc manager
+    - x.x.x.23 = vcf management nsx manager 01
+    - x.x.x.24 = vcf management nsx manager 02
+    - x.x.x.25 = vcf management nsx manager 03
+    - x.x.x.26 = vcf management nsx manager VIP
+    - x.x.x.27 = vcf management vcenter
+    - x.x.x.28 = vcf management esxi host 01
+    - x.x.x.29 = vcf management esxi host 02
+    - x.x.x.30 = vcf management esxi host 03
+    - x.x.x.31 = vcf management esxi host 04
 
 '''
 # Target Host and Network Parameters
@@ -102,7 +113,7 @@ class MINIKUBE():
     pattern = "A-04: Kubernetes"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-k8"
     template_vm_name = UNIVERSAL().vm_naming_convention+"-k8"
-    ip = E2EP_ENVIRONMENT().subnet_prefix+"40"
+    ip = E2EP_ENVIRONMENT().subnet_prefix+"12"
 
 class PHOTONOS():
     pattern = "A-06: Build Photon Template from OVA using ovftool"
@@ -139,10 +150,10 @@ class VCSA():
 # (D) VCF Patterns
 class CLOUD_BUILDER():
     pattern = "C-03: Cloud Builder"
-    photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-007"
-    cb_vm_name = UNIVERSAL().vm_naming_convention+"-008"
+    photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-005"
+    cb_vm_name = UNIVERSAL().vm_naming_convention+"-006"
     cb_ova_source = "VMware-Cloud-Builder-5.0.0.0-21822418_OVF10.ova" #Must be downloaded to /usr/local/drop of photon controller
-    ip = E2EP_ENVIRONMENT().subnet_prefix+"12"
+    ip = E2EP_ENVIRONMENT().subnet_prefix+"21"
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcfcb-01"
     fqdn = domain_hostname+"."+DNS().zone
     password = UNIVERSAL().password+UNIVERSAL().password    
@@ -151,3 +162,8 @@ class CLOUD_BUILDER():
     local_py_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-vcf-cb/local.py"
     local_py_local_dir = "/usr/local/drop/local.py"
     main_tf_local_dir = "/usr/local/drop/main.tf"
+
+class NESTED_ESXI8():
+    pattern = "D-01: Nested ESXi 8"
+    esxi_vm_name = [UNIVERSAL().vm_naming_convention+"-007", UNIVERSAL().vm_naming_convention+"-008", UNIVERSAL().vm_naming_convention+"-009", UNIVERSAL().vm_naming_convention+"-010"]
+    ip = [E2EP_ENVIRONMENT().subnet_prefix+"28", E2EP_ENVIRONMENT().subnet_prefix+"29", E2EP_ENVIRONMENT().subnet_prefix+"30", E2EP_ENVIRONMENT().subnet_prefix+"31"]
