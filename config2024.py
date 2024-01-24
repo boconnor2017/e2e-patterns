@@ -171,3 +171,4 @@ class NESTED_ESXI8():
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-007"
     esxi_vm_name = [UNIVERSAL().vm_naming_convention+"-008", UNIVERSAL().vm_naming_convention+"-009", UNIVERSAL().vm_naming_convention+"-010", UNIVERSAL().vm_naming_convention+"-011"]
     ip = [E2EP_ENVIRONMENT().subnet_prefix+"28", E2EP_ENVIRONMENT().subnet_prefix+"29", E2EP_ENVIRONMENT().subnet_prefix+"30", E2EP_ENVIRONMENT().subnet_prefix+"31"]
+    domain_hostname = [UNIVERSAL().fqdn_naming_convention+"vcf-esxi-01", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-02", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-03", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-04"]
