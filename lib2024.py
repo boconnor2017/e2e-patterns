@@ -398,6 +398,12 @@ def tanium_create_dns_zone(tanium_token, dns_zone):
     api_response = api_get(api_url)
     return api_response
 
+def vapi_get_vc_session_id(vcenter_hostname, vcenter_username, vcenter_password):
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    sess = requests.post("https://"+vcenter_hostname+"/rest/com/vmware/cis/session", auth=(vcenter_username, vcenter_password), verify=False)
+    session_id = sess.json()['value']
+    return(session_id)
+
 def write_to_logs(err, logfile_name):
     tstamp = str(datetime.now())
     logfile = open(logfile_name, "a")
