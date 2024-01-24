@@ -398,6 +398,19 @@ def tanium_create_dns_zone(tanium_token, dns_zone):
     api_response = api_get(api_url)
     return api_response
 
+def vapi_add_host_to_vcenter(session_id, vcenter_hostname, esxi_hostname, esxi_password, esxi_username, vc_folder):
+  api_call = requests.post("https://"+vcenter_hostname+"/api/vcenter/host", verify=False, headers={
+   "vmware-api-session-id": session_id
+   }, json={
+   "folder": vc_folder,
+   "hostname": esxi_hostname,
+   "password": esxi_password,
+   "thumbprint_verification": "NONE",
+   "user_name": esxi_username
+  })
+  esxi_host = api_call.json()
+  return esxi_host
+
 def vapi_get_vcenter_folders(session_id, vcenter_hostname):
     api_call = requests.get("https://"+vcenter_hostname+"/api/vcenter/folder", verify=False, headers={
     "vmware-api-session-id": session_id
