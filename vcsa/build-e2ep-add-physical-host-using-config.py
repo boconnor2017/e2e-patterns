@@ -3,74 +3,62 @@
 # Date: January 2024
 # Version: 1.0
 
+# lib and config filenames for the year 
+# Must be available in /e2e-patterns repository
+lib_filename = "lib2024.py"
+config_filename = "config2024.py"
+
 # Base imports
 import os
 import shutil
-import sys
-import json
 
-# Get pattern config file and library
-des_dir = str(os.getcwd())
-os.chdir("../")
-src_dir = str(os.getcwd())
-os.chdir(des_dir)
-src_file = src_dir+'/config.py'
-outpt = shutil.copy(src_file, des_dir)
-src_file = src_dir+'/lib.py'
-outpt = shutil.copy(src_file, des_dir)
+# Copy latest lib and config files
+fullpath = os.getcwd()
+dirs = fullpath.split('/')
+count_dirs = len(dirs)
+currdir = dirs[count_dirs-1]
+homedir = dirs[count_dirs-2]
+shell_dir = ""
+i=0 
+for x in dirs:
+    if i == 0:
+        shell_dir = "/"
+        i=i+1
+    if i == (count_dirs-1):
+        shell_dir = shell_dir
+    if i == (count_dirs-2):
+        shell_dir = shell_dir
+    else:
+        shell_dir = shell_dir+dirs[i]+"/"
+        i=i+1
+
+lib_path = shell_dir+homedir+"/"+lib_filename
+config_path = shell_dir+homedir+"/"+config_filename
+shutil.copy(lib_path, fullpath)
+os.rename(lib_filename, "lib.py")
+shutil.copy(config_path, fullpath)
+os.rename(config_filename, "config.py")
 
 # Import pattern config and library
 import config
 import lib
 
 # Start log file
-logfile_name = config.LOGS().vcsa
-pattern_name = config.ESXI().pattern
+logfile_name = config.LOGS().template
+pattern_name = config.TEMPLATE().pattern
 lib.e2e_patterns_header(logfile_name, pattern_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Photon controller prerequisites
-err = "Copying PowerCLI scripts from /photon repo"
+# 01. Add Physical ESXi to vCenter
+err = "01. Add Physical ESXi to vCenter:"
 lib.write_to_logs(err, logfile_name)
-src_file = src_dir+'/photon/change-photon_default_pw.ps1'
-outpt = shutil.copy(src_file, des_dir)
-src_file = src_dir+'/photon/get-vm-ip.ps1'
-outpt = shutil.copy(src_file, des_dir)
-src_file = src_dir+'/photon/change-vm-ip.ps1'
-outpt = shutil.copy(src_file, des_dir)
-err = ""
+err = "    esxi host: "+config.E2EP_ENVIRONMENT().esxi_host_ip
 lib.write_to_logs(err, logfile_name)
-
-# Get Photon Controller IP
-vm_name = config.VCSA().photon_controller_vm_name
-err = "Getting IP address of photon controller:"
-lib.write_to_logs(err, logfile_name)
-err = "    vm name: "+vm_name
-lib.write_to_logs(err, logfile_name)
-ip_address = lib.get_vm_ip_address(vm_name)
-err = "    ip address: "+ip_address
-lib.write_to_logs(err, logfile_name)
-err = ""
-lib.write_to_logs(err, logfile_name)
-
-# Check for input parameters
-err = "Checking for input parameters:"
-lib.write_to_logs(err, logfile_name)
-err = "    parameters: "+sys.argv[1]
-lib.write_to_logs(err, logfile_name)
-err = ""
-lib.write_to_logs(err, logfile_name)
-
-# Add ESXi to vCenter
-err = "Adding host to vCenter:"
-lib.write_to_logs(err, logfile_name)
-err = "    esxi host: "+sys.argv[1]
-lib.write_to_logs(err, logfile_name)
-session_id = lib.get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
+session_id = lib.vapi_get_vc_session_id(config.VCSA().fqdn, config.VCSA().username, config.UNIVERSAL().password)
 err = "    session id: "+session_id
 lib.write_to_logs(err, logfile_name)
-folders = lib.get_vcenter_folders(session_id, config.VCSA().fqdn)
+folders = lib.vapi_get_vcenter_folders(session_id, config.VCSA().fqdn)
 folders_json_dump = json.dumps(folders)
 folders_json_load = json.loads(folders_json_dump)
 
