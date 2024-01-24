@@ -79,4 +79,4 @@ for folder in folders_json_load:
     i=i+1
 
 vc_folder = folders_json_load[1]["folder"]
-result = lib.add_host_to_vcenter(session_id, config.VCSA().fqdn, config.E2EP_ENVIRONMENT().esxi_host_ip, config.UNIVERSAL().password, config.ESXI().username, vc_folder)
+result = lib.vapi_add_host_to_vcenter(session_id, config.VCSA().fqdn, config.E2EP_ENVIRONMENT().esxi_host_ip, config.UNIVERSAL().password, config.E2EP_ENVIRONMENT().esxi_host_username, vc_folder)
