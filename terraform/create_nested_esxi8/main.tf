@@ -27,19 +27,19 @@ data "vsphere_network" "network" {
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
-data "vsphere_ovf_vm_template" {
+data "vsphere_ovf_vm_template" "ova" {
   name              = "Nested_ESXi8.0u2_Appliance_Template_v2"
   disk_provisioning = "thin"
   resource_pool_id  = data.vsphere_host.host.resource_pool_id
   datastore_id      = data.vsphere_datastore.datastore.id
   host_system_id    = data.vsphere_host.host.id
-  remote_ovf_url    = "https://download3.vmware.com/software/vmw-tools/nested-esxi/Nested_ESXi8.0u2_Appliance_Template_v2.ova"
+  local_ovf_path    = var.local_ovf_path
   ovf_network_map = {
-      network_id = data.vsphere_network.network.id
+      "VM Network" : data.vsphere_network.network.id
   }
 }
 
-resource "vsphere_virtual_machine" {
+resource "vsphere_virtual_machine" "nested_esxi8" {
   name                 = var.vm_name
   datacenter_id        = data.vsphere_datacenter.datacenter.id
   datastore_id         = data.vsphere_datastore.datastore.id
@@ -49,7 +49,7 @@ resource "vsphere_virtual_machine" {
   memory               = var.memory
   guest_id             = var.guest
   dynamic "network_interface" {
-      for_each = data.vsphere_ovf_vm_template.ovf_network_map
+      for_each = data.vsphere_ovf_vm_template.ova.ovf_network_map
       content {
           network_id = network_interface.value
       }
@@ -59,9 +59,9 @@ resource "vsphere_virtual_machine" {
 
   ovf_deploy {
       allow_unverified_ssl_cert = false
-      remote_ovf_url            = data.vsphere_ovf_vm_template.remote_ovf_url
-      disk_provisioning         = data.vsphere_ovf_vm_template.disk_provisioning
-      ovf_network_map           = data.vsphere_ovf_vm_template.ovf_network_map
+      local_ovf_path            = data.vsphere_ovf_vm_template.ova.local_ovf_path
+      disk_provisioning         = data.vsphere_ovf_vm_template.ova.disk_provisioning
+      ovf_network_map           = data.vsphere_ovf_vm_template.ova.ovf_network_map
   }
 
 vapp {
@@ -88,4 +88,3 @@ vapp {
       ]
   }
 }
-
