@@ -17,16 +17,6 @@ data "vsphere_datastore" "datastore" {
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
-data "vsphere_compute_cluster" "cluster" {
-  name          = var.vsphere_compute_cluster_name
-  datacenter_id = data.vsphere_datacenter.datacenter.id
-}
-
-data "vsphere_resource_pool" "default" {
-  name          = format("%s%s", data.vsphere_compute_cluster.cluster.name, "/Resources/Workload")
-  datacenter_id = data.vsphere_datacenter.datacenter.id
-}
-
 data "vsphere_host" "host" {
   name          = var.esxi_host_name
   datacenter_id = data.vsphere_datacenter.datacenter.id
