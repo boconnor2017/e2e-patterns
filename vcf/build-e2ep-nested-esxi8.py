@@ -145,3 +145,13 @@ err = "03. Create terraform variables file finished."
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
+
+# 04. Move terraform variable file to node controller 
+err = "04. Move terraform variable file to node controller started."
+lib.write_to_logs(err, logfile_name)
+file_as_var = lib.populate_var_from_file('var.tf')
+lib.paramiko_move_file_to_remote_photon_vm(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, file_as_var, filepath, 'var.tf')
+err = "04. Move terraform variable file to node controller finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
