@@ -398,6 +398,13 @@ def tanium_create_dns_zone(tanium_token, dns_zone):
     api_response = api_get(api_url)
     return api_response
 
+def vapi_get_vcenter_folders(session_id, vcenter_hostname):
+    api_call = requests.get("https://"+vcenter_hostname+"/api/vcenter/folder", verify=False, headers={
+    "vmware-api-session-id": session_id
+    })
+    folders = api_call.json()
+    return folders
+
 def vapi_get_vc_session_id(vcenter_hostname, vcenter_username, vcenter_password):
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     sess = requests.post("https://"+vcenter_hostname+"/rest/com/vmware/cis/session", auth=(vcenter_username, vcenter_password), verify=False)
