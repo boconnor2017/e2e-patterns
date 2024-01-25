@@ -325,7 +325,7 @@ def e2e_install_vCenter_using_node_controller(nc_ip_address, logfile_name):
     err = str(seconds)+" pause has completed. Resuming script."
     write_to_logs(err, logfile_name)    
 
-def paramiko_delete_file_from_remote_photon_vm(ip, un, pw, url, filepath, filename):
+def paramiko_delete_file_from_remote_photon_vm(ip, un, pw, filepath, filename):
     # filepath format: /foo/bar/
     # filename format: somefile.xyz
     cmd = "rm "+filepath+filename
