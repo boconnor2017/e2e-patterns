@@ -37,30 +37,6 @@ def append_text_to_file(text, file_name):
 def download_file_from_github(url, filename):
     urllib.request.urlretrieve(url, filename)
 
-def e2e_patterns_header(logfile_name, pattern_name):
-    err = ""
-    write_to_logs(err, logfile_name)
-    err = "-----------------------------------------------------"
-    write_to_logs(err, logfile_name)
-    err = "-----------------------------------------------------"
-    write_to_logs(err, logfile_name)
-    err = "-----------------------------------------------------"
-    write_to_logs(err, logfile_name)
-    err = "WELCOME TO E2E PATTERNS 2024!"
-    write_to_logs(err, logfile_name)
-    err = "-----------------------------------------------------"
-    write_to_logs(err, logfile_name)
-    err = "-----------------------------------------------------"
-    write_to_logs(err, logfile_name)
-    err = "-----------------------------------------------------"
-    write_to_logs(err, logfile_name)
-    err = "Starting build of pattern "+pattern_name
-    write_to_logs(err, logfile_name)
-    err = "Author: Brendan O'Connor"
-    write_to_logs(err, logfile_name)
-    err = ""
-    write_to_logs(err, logfile_name)
-
 def docker_ovftool_deploy_photon(vm_name):
     docker_image = "ovftool" 
     docker_volume = {"/usr/local/drop":{'bind':'/root/home', 'mode':'rw'}}
@@ -324,6 +300,34 @@ def e2e_install_vCenter_using_node_controller(nc_ip_address, logfile_name):
     pause_python_for_duration(seconds)
     err = str(seconds)+" pause has completed. Resuming script."
     write_to_logs(err, logfile_name)    
+
+def e2e_patterns_header(logfile_name, pattern_name):
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "    ________  ________    ________"
+    write_to_logs(err, logfile_name)
+    err = "   /  _____/ /_____   /  /  _____/"
+    write_to_logs(err, logfile_name)
+    err = "  /  /____   _____/  /  /  /____"
+    write_to_logs(err, logfile_name)
+    err = " /  _____/  /  _____/  /  _____/"
+    write_to_logs(err, logfile_name)
+    err = "/  /____   /  /_____  /  /____"
+    write_to_logs(err, logfile_name)
+    err = "_______/  /________/ / _______/   2024"
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = "Starting build of pattern "+pattern_name
+    write_to_logs(err, logfile_name)
+    err = "Author: Brendan O'Connor"
+    write_to_logs(err, logfile_name)
+    err = "Source Code: https://github.com/boconnor2017/e2e-patterns"
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
+    err = ""
+    write_to_logs(err, logfile_name)
 
 def paramiko_delete_file_from_remote_photon_vm(ip, un, pw, filepath, filename):
     # filepath format: /foo/bar/
