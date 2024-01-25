@@ -170,7 +170,7 @@ def docker_powercli_get_vm_list():
             i=i+1
     return vm_list
 
-docker_terraform_init(main_tf, var_tf, run_dir):
+def docker_terraform_init(main_tf, var_tf, run_dir):
     # main_tf is the location of main.tf (format: /foo/bar/main.tf)
     # var_tf is the location of the var.tf (format: /foo/bar/var.tf)
     # run_dir is the location where the docker run command is executed (format: /foo/bar) 
