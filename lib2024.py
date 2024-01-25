@@ -170,6 +170,22 @@ def docker_powercli_get_vm_list():
             i=i+1
     return vm_list
 
+docker_terraform_init(main_tf, var_tf, run_dir):
+    # main_tf is the location of main.tf (format: /foo/bar/main.tf)
+    # var_tf is the location of the var.tf (format: /foo/bar/var.tf)
+    # run_dir is the location where the docker run command is executed (format: /foo/bar) 
+    os.chdir(run_dir)
+    shutil.copy(main_tf, run_dir+"/main.tf")
+    shutil.copy(var_tf, run_dir+"/var.tf")
+    docker_rm = True
+    docker_image = "hashicorp/terraform"
+    docker_entrypoint = os.getcwd()
+    docker_volume = {os.getcwd():{'bind':os.getcwd(), 'mode':'rw'}}
+    docker_cmd = "init"
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    return err    
+
 def e2e_build_node_controller(vm_name, logfile_name):
     err = "Starting e2e_build_node_controller:"
     write_to_logs(err, logfile_name)
