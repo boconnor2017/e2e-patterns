@@ -108,8 +108,8 @@ class SCRIPTS():
     get_vm_list_with_powercli_filename = "get_vm_list_with_powercli.ps1"
     attach_iso_to_vm_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/attach_iso_to_vm_with_powercli.ps1"
     attach_iso_to_vm_with_powercli_filename = "attach_iso_to_vm_with_powercli.ps1"
-    build_nested_esxi8_main_tf_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/create_nested_esxi8/main.tf"
-    build_nested_esxi8_main_tf_filename = "main.tf"
+    build_nested_esxi8_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/build_photon_appliance.ps1"
+    build_nested_esxi8_powercli_filename = "build_photon_appliance.ps1"
 
 # (A) Basic PhotonOS Pattern variables
 class MINIKUBE():
@@ -172,4 +172,5 @@ class NESTED_ESXI8():
     esxi_vm_name = [UNIVERSAL().vm_naming_convention+"-008", UNIVERSAL().vm_naming_convention+"-009", UNIVERSAL().vm_naming_convention+"-010", UNIVERSAL().vm_naming_convention+"-011"]
     ip = [E2EP_ENVIRONMENT().subnet_prefix+"28", E2EP_ENVIRONMENT().subnet_prefix+"29", E2EP_ENVIRONMENT().subnet_prefix+"30", E2EP_ENVIRONMENT().subnet_prefix+"31"]
     domain_hostname = [UNIVERSAL().fqdn_naming_convention+"vcf-esxi-01", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-02", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-03", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-04"]
-    nested_esxi8_ova_source = "/usr/local/drop/Nested_ESXi8.0u2_Appliance_Template_v1.ova"
+    nested_esxi8_ova_filename = "Nested_ESXi8.0u2_Appliance_Template_v1.ova"
+    nested_esxi8_ova_source = "/usr/local/drop/"+nested_esxi8_ova_filename
