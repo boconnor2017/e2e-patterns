@@ -72,5 +72,18 @@ err = "    CPU:"+sys.argv[2]
 lib.write_to_logs(err, logfile_name)
 err = "    Memory (MB):"+sys.argv[3]
 lib.write_to_logs(err, logfile_name)
-lib.docker_powercli_create_nested_esxi8_dhcp(sys.argv[1], sys.argv[2], sys.argv[3])
+err = "    Hostname:"+sys.argv[4]
+lib.write_to_logs(err, logfile_name)
+err = "    IP Address:"+sys.argv[5]
+lib.write_to_logs(err, logfile_name)
+err = "    Netmask:"+sys.argv[6]
+lib.write_to_logs(err, logfile_name)
+err = "    Gateway:"+sys.argv[7]
+lib.write_to_logs(err, logfile_name)
+err = "    DNS:"+sys.argv[8]
+lib.write_to_logs(err, logfile_name)
+err = "    Domain:"+sys.argv[9]
+lib.write_to_logs(err, logfile_name)
+err = "    NTP:"+sys.argv[10]
+lib.write_to_logs(err, logfile_name)
 lib.docker_powercli_create_nested_esxi8_custom(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9], sys.argv[10], sys.argv[11])
