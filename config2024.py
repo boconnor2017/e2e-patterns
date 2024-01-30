@@ -176,3 +176,5 @@ class NESTED_ESXI8():
     domain_hostname = [UNIVERSAL().fqdn_naming_convention+"vcf-esxi-01", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-02", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-03", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-04"]
     nested_esxi8_ova_filename = "Nested_ESXi8.0u2_Appliance_Template_v1.ova"
     nested_esxi8_ova_source = "/usr/local/drop/"+nested_esxi8_ova_filename
+    numcpu = "8"
+    mem_mb = "32768"
