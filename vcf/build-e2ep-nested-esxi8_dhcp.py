@@ -64,4 +64,4 @@ err = "    CPU:"+sys.argv[2]
 lib.write_to_logs(err, logfile_name)
 err = "    Memory (MB):"+sys.argv[3]
 lib.write_to_logs(err, logfile_name)
-lib.docker_powercli_create_photon(sys.argv[1], sys.argv[2], sys.argv[3])
+lib.docker_powercli_create_nested_esxi8_dhcp(sys.argv[1], sys.argv[2], sys.argv[3])
