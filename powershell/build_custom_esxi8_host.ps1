@@ -1,5 +1,5 @@
 #!/bin/sh
-# PowerCLI Script to deploy a photon appliance to a host (vCenter required)
+# PowerCLI Script to deploy a custom nested esxi 8 host (vCenter required)
 # Author: Brendan O'Connor
 # Date: January 2024
 
