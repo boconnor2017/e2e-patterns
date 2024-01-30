@@ -108,8 +108,10 @@ class SCRIPTS():
     get_vm_list_with_powercli_filename = "get_vm_list_with_powercli.ps1"
     attach_iso_to_vm_with_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/attach_iso_to_vm_with_powercli.ps1"
     attach_iso_to_vm_with_powercli_filename = "attach_iso_to_vm_with_powercli.ps1"
-    build_nested_esxi8_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/build_photon_appliance.ps1"
-    build_nested_esxi8_powercli_filename = "build_photon_appliance.ps1"
+    build_nested_esxi8_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/build_dhcp_esxi8_host.ps1"
+    build_nested_esxi8_powercli_filename = "build_dhcp_esxi8_host.ps1"
+    build_nested_custom_esxi8_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/build_custom_esxi8_host.ps1"
+    build_nested_custom_esxi8_powercli_filename = "build_custom_esxi8_host.ps1"
 
 # (A) Basic PhotonOS Pattern variables
 class MINIKUBE():
