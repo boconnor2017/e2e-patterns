@@ -122,6 +122,36 @@ def docker_powercli_create_vm(vm_name):
     err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
     return err
 
+def docker_powercli_create_nested_esxi8_custom(vm_name, numcpu, mem_mb, hostname, ip_address, netmask, gateway, dns, domain, ntp, password):
+    #Docker run command needs to execute from /usr/local/drop so as to properly mount ova binaries
+    #This function requires E2E Patterns vCenter (see section C in the wiki)
+    os.chdir('/usr/local/drop')
+    download_file_from_github(config.SCRIPTS().build_nested_custom_esxi8_powercli_url, config.SCRIPTS().build_nested_custom_esxi8_powercli_filename)
+    docker_rm = True
+    docker_image = "vmware/powerclicore"
+    docker_entrypoint = "/usr/bin/pwsh"
+    docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+    docker_cmd = "/tmp/"+config.SCRIPTS().build_nested_custom_esxi8_powercli_filename+" \""
+    docker_cmd = docker_cmd+config.VCSA().ip+" "
+    docker_cmd = docker_cmd+config.VCSA().username+" "
+    docker_cmd = docker_cmd+config.UNIVERSAL().password+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
+    docker_cmd = docker_cmd+"/tmp/"+config.NESTED_ESXI8().nested_esxi8_ova_filename+" "
+    docker_cmd = docker_cmd+vm_name+" "
+    docker_cmd = docker_cmd+numcpu+" "
+    docker_cmd = docker_cmd+mem_mb+" "
+    docker_cmd = docker_cmd+hostname+" "
+    docker_cmd = docker_cmd+ip_address+" "
+    docker_cmd = docker_cmd+netmask+" "
+    docker_cmd = docker_cmd+gateway+" "
+    docker_cmd = docker_cmd+dns+" "
+    docker_cmd = docker_cmd+domain+" "
+    docker_cmd = docker_cmd+ntp+" "
+    docker_cmd = docker_cmd+password+"\""
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    return err
+
 def docker_powercli_create_nested_esxi8_dhcp(vm_name, numcpu, mem_mb):
     #Docker run command needs to execute from /usr/local/drop so as to properly mount ova binaries
     #This function requires E2E Patterns vCenter (see section C in the wiki)
