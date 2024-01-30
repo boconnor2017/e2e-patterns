@@ -1,7 +1,11 @@
-# Description: Builds a nested ESXi host using PowerCLI (DHCP)
+# Python template for E2E Patterns 2024
+# Python files should follow this naming convention: build-e2e-pattern-<NAME>.py
+# Copy Template Below
+# # # # # # # # # # # # # # # # # #
+# Description: Installs <SOMETHING INTERESTING> on a Photon controller
 # Author: Brendan O'Connor
-# Date: January 2024
-# Version: 1.0
+# Date: <MONTH YEAR>
+# Version: <VERSION NUMBER>
 
 # lib and config filenames for the year 
 # Must be available in /e2e-patterns repository
@@ -56,4 +60,12 @@ lib.write_to_logs(err, logfile_name)
 [2] Number of CPUs
 [3] Memory (MB)
 '''
+err = "Building nested ESXi host:"
+lib.write_to_logs(err, logfile_name)
+err = "    VM Name:"+sys.argv[1]
+lib.write_to_logs(err, logfile_name)
+err = "    CPU:"+sys.argv[2]
+lib.write_to_logs(err, logfile_name)
+err = "    Memory (MB):"+sys.argv[3]
+lib.write_to_logs(err, logfile_name)
 lib.docker_powercli_create_photon(sys.argv[1], sys.argv[2], sys.argv[3])
