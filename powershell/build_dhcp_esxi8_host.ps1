@@ -1,5 +1,5 @@
 #!/bin/sh
-# PowerCLI Script to deploy a photon appliance to a host (vCenter required)
+# PowerCLI Script to deploy a nested ESXi host (vCenter required)
 # Author: Brendan O'Connor
 # Date: January 2024
 
@@ -8,7 +8,7 @@
 # 1: vCenter User (administrator@vsphere.local recommended)
 # 2: vCenter Password
 # 3: ESXi Host where OVA will be deployed
-# 4: Path to photon ova binaries 
+# 4: Path to Nested ESXi ova binaries 
 # 5: Name of the virtual machine
 # 6: Number of CPUs
 # 7: Memory (MB)
