@@ -1,11 +1,7 @@
-# Python template for E2E Patterns 2024
-# Python files should follow this naming convention: build-e2e-pattern-<NAME>.py
-# Copy Template Below
-# # # # # # # # # # # # # # # # # #
-# Description: Installs <SOMETHING INTERESTING> on a Photon controller
+# Description: Builds a nested ESXi host using PowerCLI (DHCP)
 # Author: Brendan O'Connor
-# Date: <MONTH YEAR>
-# Version: <VERSION NUMBER>
+# Date: January 2024
+# Version: 1.0
 
 # lib and config filenames for the year 
 # Must be available in /e2e-patterns repository
