@@ -122,7 +122,7 @@ def docker_powercli_create_vm(vm_name):
     err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
     return err
 
-def docker_powercli_create_photon(vm_name, numcpu, mem_mb):
+def docker_powercli_create_nested_esxi8_dhcp(vm_name, numcpu, mem_mb):
     #Docker run command needs to execute from /usr/local/drop so as to properly mount ova binaries
     #This function requires E2E Patterns vCenter (see section C in the wiki)
     os.chdir('/usr/local/drop')
