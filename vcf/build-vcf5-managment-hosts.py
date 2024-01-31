@@ -64,8 +64,11 @@ lib.write_to_logs(err, logfile_name)
 [10] NTP
 [11] Password
 '''
-# Build 4x Nested ESXi Hosts using config file
-err = "Build 4x Nested ESXi Hosts using config file:"
+# 01. Build 4x Nested ESXi Hosts using config file
+err = "01. Build 4x Nested ESXi Hosts using config file started."
+lib.write_to_logs(err, logfile_name)
+logfile_name = fullpath+"/"+logfile_name
+err = "    01A. Specify proper logfile to account for directory change: "+logfile_name
 lib.write_to_logs(err, logfile_name)
 i=0 
 for x in config.NESTED_ESXI8().esxi_vm_name:
@@ -77,7 +80,7 @@ for x in config.NESTED_ESXI8().esxi_vm_name:
     lib.write_to_logs(err, logfile_name)
     err = "        Memory (MB): "+config.NESTED_ESXI8().mem_mb
     lib.write_to_logs(err, logfile_name)
-    err = "        hostname: "+config.NESTED_ESXI8().esxi_vm_name[i]
+    err = "        hostname: "+config.NESTED_ESXI8().domain_hostname[i]
     lib.write_to_logs(err, logfile_name)
     err = "        IP Address: "+config.NESTED_ESXI8().ip[i]
     lib.write_to_logs(err, logfile_name)
@@ -91,7 +94,7 @@ for x in config.NESTED_ESXI8().esxi_vm_name:
     lib.write_to_logs(err, logfile_name)
     err = "        NTP: "+config.E2EP_ENVIRONMENT().ntp_server
     lib.write_to_logs(err, logfile_name)
-    lib.docker_powercli_create_nested_esxi8_custom(config.NESTED_ESXI8().esxi_vm_name[i], config.NESTED_ESXI8().numcpu, config.NESTED_ESXI8().mem_mb, config.NESTED_ESXI8().esxi_vm_name[i], config.NESTED_ESXI8().ip[i], config.E2EP_ENVIRONMENT().subnet_mask, config.E2EP_ENVIRONMENT().default_gw, config.DNS().ip+",8.8.8.8", config.DNS().zone, config.E2EP_ENVIRONMENT().ntp_server, config.UNIVERSAL().password)
+    lib.docker_powercli_create_nested_esxi8_custom(config.NESTED_ESXI8().esxi_vm_name[i], config.NESTED_ESXI8().numcpu, config.NESTED_ESXI8().mem_mb, config.NESTED_ESXI8().domain_hostname[i], config.NESTED_ESXI8().ip[i], config.E2EP_ENVIRONMENT().subnet_mask, config.E2EP_ENVIRONMENT().default_gw, config.DNS().ip+",8.8.8.8", config.DNS().zone, config.E2EP_ENVIRONMENT().ntp_server, config.UNIVERSAL().password)
     i=i+1
 
 err = "Management domain finished."
