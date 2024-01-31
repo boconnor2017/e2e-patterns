@@ -44,6 +44,22 @@ IPAM:
     - x.x.x.30 = vcf management esxi host 03
     - x.x.x.31 = vcf management esxi host 04
 
+NAMING CONVENTION:
+    The virtual machines that make up each pattern can have a custom naming convention.
+    See UNIVERSAL().vm_naming_convention. To mitigate repetitive vm names, a counter (number)
+    is added to the naming convention. The following are the ranges:
+    - 001 = Master Controller (per host)
+    - 002 = DNS
+    - 003 = VCSA node controller
+    - 004 = VCSA 
+    - 005 = Cloud Builder node controller
+    - 006 = Cloud Builder
+    - 007 = Nested ESXi node controller 
+    - 008 = Nested ESXi Management #1
+    - 009 = Nested ESXi Management #2
+    - 010 = Nested ESXi Management #3
+    - 011 = Nested ESXi Management #4
+
 '''
 # Target Host and Network Parameters
 class E2EP_ENVIRONMENT():
@@ -176,5 +192,5 @@ class NESTED_ESXI8():
     domain_hostname = [UNIVERSAL().fqdn_naming_convention+"vcf-esxi-01", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-02", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-03", UNIVERSAL().fqdn_naming_convention+"vcf-esxi-04"]
     nested_esxi8_ova_filename = "Nested_ESXi8.0u2_Appliance_Template_v1.ova"
     nested_esxi8_ova_source = "/usr/local/drop/"+nested_esxi8_ova_filename
-    numcpu = "8"
-    mem_mb = "32768"
+    numcpu = "4"
+    mem_mb = "16384"
