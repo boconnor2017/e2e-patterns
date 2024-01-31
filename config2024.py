@@ -189,7 +189,7 @@ class NESTED_ESXI8():
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-007"
     esxi_vm_name = [UNIVERSAL().vm_naming_convention+"-008", UNIVERSAL().vm_naming_convention+"-009", UNIVERSAL().vm_naming_convention+"-010", UNIVERSAL().vm_naming_convention+"-011"]
     ip = [E2EP_ENVIRONMENT().subnet_prefix+"28", E2EP_ENVIRONMENT().subnet_prefix+"29", E2EP_ENVIRONMENT().subnet_prefix+"30", E2EP_ENVIRONMENT().subnet_prefix+"31"]
-    domain_hostname = [UNIVERSAL().fqdn_naming_convention+"esxi-01", UNIVERSAL().fqdn_naming_convention+"esxi-02", UNIVERSAL().fqdn_naming_convention+"esxi-03", UNIVERSAL().fqdn_naming_convention+"esxi-04"]
+    domain_hostname = [UNIVERSAL().fqdn_naming_convention+"esxi-01."+DNS().zone, UNIVERSAL().fqdn_naming_convention+"esxi-02."+DNS().zone, UNIVERSAL().fqdn_naming_convention+"esxi-03."+DNS().zone, UNIVERSAL().fqdn_naming_convention+"esxi-04."+DNS().zone]
     nested_esxi8_ova_filename = "Nested_ESXi8.0u2_Appliance_Template_v1.ova"
     nested_esxi8_ova_source = "/usr/local/drop/"+nested_esxi8_ova_filename
     numcpu = "4"
