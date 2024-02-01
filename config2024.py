@@ -178,11 +178,7 @@ class CLOUD_BUILDER():
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcfcb-01"
     fqdn = domain_hostname+"."+DNS().zone
     password = UNIVERSAL().password+UNIVERSAL().password    
-    terraform_source = UNIVERSAL().home_dir+"/terraform/install-vcf-cb/main.tf"
-    main_tf_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-vcf-cb/main.tf"
-    local_py_git_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/terraform/install-vcf-cb/local.py"
-    local_py_local_dir = "/usr/local/drop/local.py"
-    main_tf_local_dir = "/usr/local/drop/main.tf"
+
 
 class NESTED_ESXI8():
     pattern = "D-01: Nested ESXi 8"
