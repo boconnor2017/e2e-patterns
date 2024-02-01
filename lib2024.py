@@ -162,7 +162,6 @@ def docker_powercli_create_cloud_builder(vm_name):
     docker_entrypoint = "/usr/bin/pwsh"
     docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
     docker_cmd = "/tmp/"+config.SCRIPTS().build_cloud_builder_powercli_filename+" \""
-    docker_cmd = docker_cmd+
     docker_cmd = docker_cmd+config.VCSA().ip+" "
     docker_cmd = docker_cmd+config.VCSA().username+" "
     docker_cmd = docker_cmd+config.UNIVERSAL().password+" "
