@@ -128,6 +128,8 @@ class SCRIPTS():
     build_nested_esxi8_powercli_filename = "build_dhcp_esxi8_host.ps1"
     build_nested_custom_esxi8_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/build_custom_esxi8_host.ps1"
     build_nested_custom_esxi8_powercli_filename = "build_custom_esxi8_host.ps1"
+    build_cloud_builder_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/build_cloud_builder.ps1"
+    build_cloud_builder_powercli_filename = "build_cloud_builder.ps1"
 
 # (A) Basic PhotonOS Pattern variables
 class MINIKUBE():
