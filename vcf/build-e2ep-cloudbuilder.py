@@ -1,22 +1,43 @@
-# Description: Installs CLoud Builder using a Photon controller
+# Description: Builds CloudBuilder for VCF 5.1
 # Author: Brendan O'Connor
-# Date: October 2023
-# Version: 1.0
+# Date: February 2024
+# Version: 2.0
+
+# lib and config filenames for the year 
+# Must be available in /e2e-patterns repository
+lib_filename = "lib2024.py"
+config_filename = "config2024.py"
 
 # Base imports
 import os
 import shutil
-import sys
 
-# Get pattern config file and library
-des_dir = str(os.getcwd())
-os.chdir("../")
-src_dir = str(os.getcwd())
-os.chdir(des_dir)
-src_file = src_dir+'/config.py'
-outpt = shutil.copy(src_file, des_dir)
-src_file = src_dir+'/lib.py'
-outpt = shutil.copy(src_file, des_dir)
+# Copy latest lib and config files
+fullpath = os.getcwd()
+dirs = fullpath.split('/')
+count_dirs = len(dirs)
+currdir = dirs[count_dirs-1]
+homedir = dirs[count_dirs-2]
+shell_dir = ""
+i=0 
+for x in dirs:
+    if i == 0:
+        shell_dir = "/"
+        i=i+1
+    if i == (count_dirs-1):
+        shell_dir = shell_dir
+    if i == (count_dirs-2):
+        shell_dir = shell_dir
+    else:
+        shell_dir = shell_dir+dirs[i]+"/"
+        i=i+1
+
+lib_path = shell_dir+homedir+"/"+lib_filename
+config_path = shell_dir+homedir+"/"+config_filename
+shutil.copy(lib_path, fullpath)
+os.rename(lib_filename, "lib.py")
+shutil.copy(config_path, fullpath)
+os.rename(config_filename, "config.py")
 
 # Import pattern config and library
 import config
@@ -29,55 +50,51 @@ lib.e2e_patterns_header(logfile_name, pattern_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Check for input parameters
-err = "Checking for input parameters:"
+# 01. Check for node controller
+err = "01. Check for node controller started."
 lib.write_to_logs(err, logfile_name)
-err = "    parameters: "+sys.argv[1]
-lib.write_to_logs(err, logfile_name)
-if sys.argv[1] == "-p":
-    skip_build_photon_controller = True
-    err = "    skipping build photon controller"
+node_controller_exists = lib.e2e_check_for_node_controller(config.VCSA().photon_controller_vm_name)
+if node_controller_exists == 1:
+    err = "    "+config.VCSA().photon_controller_vm_name+" exists."
     lib.write_to_logs(err, logfile_name)
 else:
-    skip_build_photon_controller = False
-err = ""
-lib.write_to_logs(err, logfile_name)
-
-# Photon controller prerequisites
-err = "Copying PowerCLI scripts from /photon repo"
-lib.write_to_logs(err, logfile_name)
-src_file = src_dir+'/photon/change-photon_default_pw.ps1'
-outpt = shutil.copy(src_file, des_dir)
-src_file = src_dir+'/photon/get-vm-ip.ps1'
-outpt = shutil.copy(src_file, des_dir)
-src_file = src_dir+'/photon/change-vm-ip.ps1'
-outpt = shutil.copy(src_file, des_dir)
-err = ""
-lib.write_to_logs(err, logfile_name)
-
-# Build photon controller 
-vm_name = config.CLOUD_BUILDER().photon_controller_vm_name
-if skip_build_photon_controller:
-    skip_build_photon_controller = True 
-else:
-    err = "Building photon controller."
+    err = "    "+config.VCSA().photon_controller_vm_name+" does not exist."
     lib.write_to_logs(err, logfile_name)
-    lib.build_photon_controller(vm_name, config.E2EP_ENVIRONMENT().photonos_source, logfile_name)
-    err = ""
+    err = "    Running e2e_build_node_controller()."
     lib.write_to_logs(err, logfile_name)
-
-# Get Photon Controller IP
-err = "Getting IP address of photon controller:"
-lib.write_to_logs(err, logfile_name)
-err = "    vm name: "+vm_name
-lib.write_to_logs(err, logfile_name)
-ip_address = lib.get_vm_ip_address(vm_name)
-err = "    ip address: "+ip_address
+    lib.e2e_build_node_controller(config.VCSA().photon_controller_vm_name, logfile_name)
+err = "01. Check for node controller finished."
 lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# Run Terraform on Photon Controller
-err = "Building Cloud Builder with Terraform"
+# 02. Get IP Address of the node controller 
+err = "02. Get IP Address of the node controller started."
 lib.write_to_logs(err, logfile_name)
-err = lib.run_terraform_on_pattern_controller(ip_address, config.E2EP_ENVIRONMENT().photonos_username, config.E2EP_ENVIRONMENT().photonos_password, config.CLOUD_BUILDER().main_tf_git_url, config.CLOUD_BUILDER().local_py_git_url, config.CLOUD_BUILDER().main_tf_local_dir, config.CLOUD_BUILDER().local_py_local_dir, logfile_name)
+ip_address = lib.docker_powercli_get_vm_ip_address(config.VCSA().photon_controller_vm_name)
+err = "    IP Address of "+config.VCSA().photon_controller_vm_name+" is "+ip_address
+lib.write_to_logs(err, logfile_name)
+err = "02. Get IP Address of the node controller finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# 03. Prompt User to Upload cloudbuilder ova
+err = "03. Prompt User to Upload cloudbuilder ova started."
+lib.write_to_logs(err, logfile_name)
+if node_controller_exists != 1:
+    err = "    Prompting user to upload "+config.CLOUD_BUILDER().cb_ova_source+" to "+ip_address
+    lib.write_to_logs(err, logfile_name)
+    print("The script is paused. User input is required.")
+    print("Please upload "+config.CLOUD_BUILDER().cb_ova_source+" to "+ip_address+" /usr/local/drop repository.")
+    print("")
+    print("")
+    userprompt = input("Hit ENTER key when finished.")
+    err = "    User prompt: "+userprompt
+    lib.write_to_logs(err, logfile_name)    
+err = "03. Prompt User to Upload cloudbuilder ova finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# CUSTOM
