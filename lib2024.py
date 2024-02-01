@@ -152,6 +152,35 @@ def docker_powercli_create_nested_esxi8_custom(vm_name, numcpu, mem_mb, hostname
     err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
     return err
 
+def docker_powercli_create_cloud_builder(vm_name):
+    #Docker run command needs to execute from /usr/local/drop so as to properly mount ova binaries
+    #This function requires E2E Patterns vCenter (see section C in the wiki)
+    os.chdir('/usr/local/drop')
+    download_file_from_github(config.SCRIPTS().build_cloud_builder_powercli_url, config.SCRIPTS().build_cloud_builder_powercli_filename)
+    docker_rm = True
+    docker_image = "vmware/powerclicore"
+    docker_entrypoint = "/usr/bin/pwsh"
+    docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+    docker_cmd = "/tmp/"+config.SCRIPTS().build_cloud_builder_powercli_filename+" \""
+    docker_cmd = docker_cmd+
+    docker_cmd = docker_cmd+config.VCSA().ip+" "
+    docker_cmd = docker_cmd+config.VCSA().username+" "
+    docker_cmd = docker_cmd+config.UNIVERSAL().password+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
+    docker_cmd = docker_cmd+"/tmp/"+config.CLOUD_BUILDER().cb_ova_source+" "
+    docker_cmd = docker_cmd+vm_name+" "
+    docker_cmd = docker_cmd+config.CLOUD_BUILDER().fqdn+" "
+    docker_cmd = docker_cmd+config.CLOUD_BUILDER().ip+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().subnet_mask+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().default_gw+" "
+    docker_cmd = docker_cmd+config.DNS().ip+",8.8.8.8 "
+    docker_cmd = docker_cmd+config.DNS().zone+" "
+    docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().ntp_server+" "
+    docker_cmd = docker_cmd+config.UNIVERSAL().password+"\""
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    return err
+
 def docker_powercli_create_nested_esxi8_dhcp(vm_name, numcpu, mem_mb):
     #Docker run command needs to execute from /usr/local/drop so as to properly mount ova binaries
     #This function requires E2E Patterns vCenter (see section C in the wiki)
