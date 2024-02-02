@@ -11,6 +11,7 @@ config_filename = "config2024.py"
 # Base imports
 import os
 import shutil
+import sys
 
 # Copy latest lib and config files
 fullpath = os.getcwd()
