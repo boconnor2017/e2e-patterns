@@ -1,4 +1,4 @@
-# Description: Builds CloudBuilder for VCF 5.1
+# Description: Builds CloudBuilder for VCF 5.1 Remote to NC from MC
 # Author: Brendan O'Connor
 # Date: February 2024
 # Version: 2.0
@@ -108,6 +108,9 @@ lib.write_to_logs(err, logfile_name)
 err = "04. Build Cloud Builder started."
 lib.write_to_logs(err, logfile_name)
 err = "    04A. VM Name: "+config.CLOUD_BUILDER().cb_vm_name
+lib.write_to_logs(err, logfile_name)
+logfile_name = fullpath+"/"+logfile_name
+err = "    04B. Specifying proper logfile directory: "+logfile_name
 lib.write_to_logs(err, logfile_name)
 lib.docker_powercli_create_cloud_builder(config.CLOUD_BUILDER().cb_vm_name)
 err = "04. Build Cloud Builder finished."
