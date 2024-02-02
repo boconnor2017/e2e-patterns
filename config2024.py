@@ -175,7 +175,7 @@ class CLOUD_BUILDER():
     pattern = "C-03: Cloud Builder"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-005"
     cb_vm_name = UNIVERSAL().vm_naming_convention+"-006"
-    cb_ova_source = "VMware-Cloud-Builder-5.0.0.0-21822418_OVF10.ova" #Must be downloaded to /usr/local/drop of photon controller
+    cb_ova_source = "VMware-Cloud-Builder-5.1.0.0-22688368_OVF10.ova" #Must be downloaded to /usr/local/drop of photon controller
     ip = E2EP_ENVIRONMENT().subnet_prefix+"21"
     domain_hostname = UNIVERSAL().fqdn_naming_convention+"vcfcb-01"
     fqdn = domain_hostname+"."+DNS().zone
