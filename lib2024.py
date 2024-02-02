@@ -175,7 +175,7 @@ def docker_powercli_create_cloud_builder(vm_name):
     docker_cmd = docker_cmd+config.DNS().ip+",8.8.8.8 "
     docker_cmd = docker_cmd+config.DNS().zone+" "
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().ntp_server+" "
-    docker_cmd = docker_cmd+config.UNIVERSAL().password+"\""
+    docker_cmd = docker_cmd+config.CLOUD_BUILDER().password+"\""
     dclient = docker.from_env()
     err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
     return err
