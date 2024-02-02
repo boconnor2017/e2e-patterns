@@ -1,4 +1,4 @@
-# Description: Builds CloudBuilder for VCF 5.1 Remote to NC from MC
+# Description: Builds CloudBuilder for VCF 5.1
 # Author: Brendan O'Connor
 # Date: February 2024
 # Version: 2.0
