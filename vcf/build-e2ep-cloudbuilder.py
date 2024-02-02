@@ -80,9 +80,9 @@ err = ""
 lib.write_to_logs(err, logfile_name)
 
 # 03. Prompt User to Upload cloudbuilder ova
-err = "03. Prompt User to Upload cloudbuilder ova started."
-lib.write_to_logs(err, logfile_name)
 if node_controller_exists == 0:
+    err = "03. Prompt User to Upload cloudbuilder ova started."
+    lib.write_to_logs(err, logfile_name)
     err = "    Prompting user to upload "+config.CLOUD_BUILDER().cb_ova_source+" to "+ip_address
     lib.write_to_logs(err, logfile_name)
     print("")
@@ -99,10 +99,15 @@ if node_controller_exists == 0:
     print("--------------------------------------------------------------")
     err = "    User prompt: "+userprompt
     lib.write_to_logs(err, logfile_name)    
-err = "03. Prompt User to Upload cloudbuilder ova finished."
-lib.write_to_logs(err, logfile_name)
-err = ""
-lib.write_to_logs(err, logfile_name)
+    err = "03. Prompt User to Upload cloudbuilder ova finished."
+    lib.write_to_logs(err, logfile_name)
+    err = ""
+    lib.write_to_logs(err, logfile_name)
+else:
+    err = "03. Skipping step 3. Prompt not needed."
+    lib.write_to_logs(err, logfile_name)
+    err = ""
+    lib.write_to_logs(err, logfile_name)
 
 # 04. Build Cloud Builder
 err = "04. Build Cloud Builder started."
