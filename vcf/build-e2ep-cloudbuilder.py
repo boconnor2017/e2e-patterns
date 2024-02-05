@@ -11,6 +11,11 @@ config_filename = "config2024.py"
 # Base imports
 import os
 import shutil
+import sys
+
+# Homedir (only needed if calling a wrapper from Master Controller to Node Controller)
+homedir = sys.argv[1]
+os.chdir(homedir)
 
 # Copy latest lib and config files
 fullpath = os.getcwd()
