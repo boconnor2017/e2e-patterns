@@ -112,6 +112,14 @@ else:
 
 
 # 04. Call python wrapper on node controller
-err = "04. Call python wrapper on node controller. Master Controller job is finished."
+err = "04. Call python wrapper on node controller."
+lib.write_to_logs(err, logfile_name)
+err = "    04A. Node Controller IP Address: "+ip_address
+lib.write_to_logs(err, logfile_name)
+err = "    04B. Path to Python wrapper: "+fullpath+"/"
+lib.write_to_logs(err, logfile_name)
+err = "    04C. Python wrapper: "+sys.argv[1]
 lib.write_to_logs(err, logfile_name)
 lib.e2e_run_python_wrapper_on_node_from_master(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, fullpath+"/", sys.argv[1])
+err = "04. Master Controller job is finished."
+lib.write_to_logs(err, logfile_name)
