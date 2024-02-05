@@ -164,7 +164,7 @@ def docker_powercli_create_cloud_builder(vm_name):
     docker_cmd = "/tmp/"+config.SCRIPTS().build_cloud_builder_powercli_filename+" \'"
     docker_cmd = docker_cmd+config.VCSA().ip+" "
     docker_cmd = docker_cmd+config.VCSA().username+" "
-    docker_cmd = docker_cmd+config.CLOUD_BUILDER().password+" "
+    docker_cmd = docker_cmd+config.VCSA().password+" "
     docker_cmd = docker_cmd+config.E2EP_ENVIRONMENT().esxi_host_ip+" "
     docker_cmd = docker_cmd+"/tmp/"+config.CLOUD_BUILDER().cb_ova_source+" "
     docker_cmd = docker_cmd+vm_name+" "
