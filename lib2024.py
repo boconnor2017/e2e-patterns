@@ -428,7 +428,8 @@ def e2e_patterns_header(logfile_name, pattern_name):
 def e2e_run_python_wrapper_on_node_from_master(ip, un, pw, path_to_wrapper, wrapper_py):
     # path_to_wrapper = e2e_patterns directory (format "foo/bar/")
     # wrapper_py = python script (format "e2ep_something.py")
-    cmd = "python3 "+path_to_wrapper+wrapper_py
+    os.chdir(path_to_wrapper)
+    cmd = "python3 "+wrapper_py
     paramiko_send_command_over_ssh(cmd, ip, un, pw)
 
 def paramiko_delete_file_from_remote_photon_vm(ip, un, pw, filepath, filename):
