@@ -80,7 +80,38 @@ lib.write_to_logs(err, logfile_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-# 03. Call python wrapper on node controller
-err = "03. Call python wrapper on node controller. Master Controller job is finished."
+# 03. Prompt User to Upload cloudbuilder ova
+if node_controller_exists == 0:
+    err = "03. Prompt User to Upload cloudbuilder ova started."
+    lib.write_to_logs(err, logfile_name)
+    err = "    Prompting user to upload "+config.CLOUD_BUILDER().cb_ova_source+" to "+ip_address
+    lib.write_to_logs(err, logfile_name)
+    print("")
+    print("")
+    print("--------------------------------------------------------------")
+    print("The script is paused. User input is required.")
+    print("Please upload "+config.CLOUD_BUILDER().cb_ova_source+" to "+ip_address+" /usr/local/drop repository.")
+    print("The cloud builder ova is a large file, it is recommended you change the disk size of the node controller to 50GB.")
+    print("")
+    print("")
+    userprompt = input("Hit ENTER key when finished.")
+    print("")
+    print("")
+    print("--------------------------------------------------------------")
+    err = "    User prompt: "+userprompt
+    lib.write_to_logs(err, logfile_name)    
+    err = "03. Prompt User to Upload cloudbuilder ova finished."
+    lib.write_to_logs(err, logfile_name)
+    err = ""
+    lib.write_to_logs(err, logfile_name)
+else:
+    err = "03. Skipping step 3. Prompt not needed."
+    lib.write_to_logs(err, logfile_name)
+    err = ""
+    lib.write_to_logs(err, logfile_name)
+
+
+# 04. Call python wrapper on node controller
+err = "04. Call python wrapper on node controller. Master Controller job is finished."
 lib.write_to_logs(err, logfile_name)
 lib.e2e_run_python_wrapper_on_node_from_master(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, fullpath+"/", sys.argv[1])
