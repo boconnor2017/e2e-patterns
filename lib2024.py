@@ -250,6 +250,22 @@ def docker_powercli_get_vm_list():
             i=i+1
     return vm_list
 
+def docker_powercli_snapshot_vm(vm_name, snapshot_name):
+    download_file_from_github(config.SCRIPTS().snapshot_vm_powercli_url, config.SCRIPTS().snapshot_vm_powercli_filename)
+    docker_rm = True
+    docker_image = "vmware/powerclicore"
+    docker_entrypoint = "/usr/bin/pwsh"
+    docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+    docker_cmd = "/tmp/"+config.SCRIPTS().snapshot_vm_powercli_filename+" \""
+    docker_cmd = docker_cmd+config.VCSA().ip+" "
+    docker_cmd = docker_cmd+config.VCSA().username+" "
+    docker_cmd = docker_cmd+config.UNIVERSAL().password+" "
+    docker_cmd = docker_cmd+vm_name+" "
+    docker_cmd = docker_cmd+snapshot_name+"\""
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    return err
+
 def docker_terraform_init(main_tf, var_tf, run_dir):
     # main_tf is the location of main.tf (format: /foo/bar/main.tf)
     # var_tf is the location of the var.tf (format: /foo/bar/var.tf)
