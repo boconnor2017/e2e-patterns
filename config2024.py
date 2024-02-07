@@ -174,7 +174,7 @@ class VCSA():
 
 # (D) VCF Patterns
 class CLOUD_BUILDER():
-    pattern = "C-03: Cloud Builder"
+    pattern = "D-03: Cloud Builder"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-005"
     cb_vm_name = UNIVERSAL().vm_naming_convention+"-006"
     cb_ova_source = "VMware-Cloud-Builder-5.1.0.0-22688368_OVF10.ova" #Must be downloaded to /usr/local/drop of photon controller
@@ -185,7 +185,7 @@ class CLOUD_BUILDER():
 
 
 class NESTED_ESXI8():
-    pattern = "D-01: Nested ESXi 8"
+    pattern = "D-01 & D-02: Nested ESXi 8"
     photon_controller_vm_name = UNIVERSAL().vm_naming_convention+"-007"
     esxi_vm_name = [UNIVERSAL().vm_naming_convention+"-008", UNIVERSAL().vm_naming_convention+"-009", UNIVERSAL().vm_naming_convention+"-010", UNIVERSAL().vm_naming_convention+"-011"]
     ip = [E2EP_ENVIRONMENT().subnet_prefix+"28", E2EP_ENVIRONMENT().subnet_prefix+"29", E2EP_ENVIRONMENT().subnet_prefix+"30", E2EP_ENVIRONMENT().subnet_prefix+"31"]
