@@ -1,7 +1,7 @@
 # Description: Builds nested management hosts for VCF 5.1
 # Author: Brendan O'Connor
 # Date: January 2024
-# Version: 1.0
+# Version: 1.1
 
 # lib and config filenames for the year 
 # Must be available in /e2e-patterns repository
@@ -12,6 +12,10 @@ config_filename = "config2024.py"
 import os
 import shutil
 import sys
+
+# Homedir (only needed if calling a wrapper from Master Controller to Node Controller)
+homedir = sys.argv[1]
+os.chdir(homedir)
 
 # Copy latest lib and config files
 fullpath = os.getcwd()
@@ -51,19 +55,6 @@ lib.e2e_patterns_header(logfile_name, pattern_name)
 err = ""
 lib.write_to_logs(err, logfile_name)
 
-'''
-[1] VM Name
-[2] Number of CPUs
-[3] Memory (MB)
-[4] Hostname
-[5] IP Address
-[6] Netmask 
-[7] Gateway
-[8] DNS (comma separated NO SPACES)
-[9] Domain
-[10] NTP
-[11] Password
-'''
 # 01. Build 4x Nested ESXi Hosts using config file
 err = "01. Build 4x Nested ESXi Hosts using config file started."
 lib.write_to_logs(err, logfile_name)
