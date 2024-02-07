@@ -202,6 +202,24 @@ def docker_powercli_create_nested_esxi8_dhcp(vm_name, numcpu, mem_mb):
     err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
     return err
 
+def docker_powercli_expand_nested_esxi8_storage(vm_name, capacity_gb):
+    #vm_name: name of the vm running esxi 8
+    #capacity_gb: (number) new desired capacity
+    download_file_from_github(config.SCRIPTS().expand_nested_esxi8_powercli_url, config.SCRIPTS().expand_nested_esxi8_powercli_filename) 
+    docker_rm = True
+    docker_image = "vmware/powerclicore"
+    docker_entrypoint = "/usr/bin/pwsh"
+    docker_volume = {os.getcwd():{'bind':'/tmp', 'mode':'rw'}}
+    docker_cmd = "/tmp/"+config.SCRIPTS().expand_nested_esxi8_powercli_filename+" \""
+    docker_cmd = docker_cmd+config.VCSA().ip+" "
+    docker_cmd = docker_cmd+config.VCSA().username+" "
+    docker_cmd = docker_cmd+config.UNIVERSAL().password+" "
+    docker_cmd = docker_cmd+vm_name+" "
+    docker_cmd = docker_cmd+capacity_gb+"\""
+    dclient = docker.from_env()
+    err = dclient.containers.run(image=docker_image, entrypoint=docker_entrypoint, volumes=docker_volume, remove=True, command=docker_cmd)
+    return err
+
 def docker_powercli_get_vm_ip_address(vm_name):
     download_file_from_github(config.SCRIPTS().get_vm_ip_with_powercli_url, config.SCRIPTS().get_vm_ip_with_powercli_filename) 
     docker_rm = True
