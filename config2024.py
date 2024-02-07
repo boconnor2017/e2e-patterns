@@ -132,6 +132,8 @@ class SCRIPTS():
     build_cloud_builder_powercli_filename = "build_cloud_builder.ps1"
     snapshot_vm_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/snapshot_vm.ps1"
     snapshot_vm_powercli_filename = "snapshot_vm.ps1"
+    expand_nested_esxi8_powercli_url = "https://raw.githubusercontent.com/boconnor2017/e2e-patterns/main/powershell/expand_nested_esxi_storage.ps1"
+    expand_nested_esxi8_powercli_filename = "expand_nested_esxi_storage.ps1"
 
 # (A) Basic PhotonOS Pattern variables
 class MINIKUBE():
