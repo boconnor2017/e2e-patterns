@@ -196,3 +196,4 @@ class NESTED_ESXI8():
     nested_esxi8_ova_source = "/usr/local/drop/"+nested_esxi8_ova_filename
     numcpu = "4"
     mem_mb = "16384"
+    storage_gb = "100"
