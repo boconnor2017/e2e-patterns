@@ -123,3 +123,34 @@ lib.write_to_logs(err, logfile_name)
 lib.e2e_run_python_wrapper_on_node_from_master(ip_address, config.PHOTONOS().username, config.PHOTONOS().password, fullpath+"/", sys.argv[1])
 err = "04. Master Controller job is finished."
 lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# 05. Pause to allow management cluster to complete the build and power cycle
+seconds = (60*2)
+err = "05. Pause to allow management cluster to complete the build and power cycle started."
+lib.write_to_logs(err, logfile_name)
+err = "    05A. Pausing for "+str(seconds)+" seconds."
+lib.write_to_logs(err, logfile_name)
+lib.pause_python_for_duration(seconds)
+err = "    05B. Resuming script."
+lib.write_to_logs(err, logfile_name)
+err = "05. Pause to allow management cluster to complete the build and power cycle finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
+
+# 06. Expand nested ESXi host capacity (GB)
+err = "06. Expand nested ESXi host capacity (GB) started."
+lib.write_to_logs(err, logfile_name)
+i=0
+for x in config.NESTED_ESXI8().esxi_vm_name:
+    err = "    VM Name: "+x
+    lib.write_to_logs(err, logfile_name)
+    err = "    Capacity (GB): "+config.NESTED_ESXI8().storage_gb
+    lib.write_to_logs(err, logfile_name)
+    lib.docker_powercli_expand_nested_esxi8_storage(x, config.NESTED_ESXI8().storage_gb)
+err = "Expand Nested ESXi 8 capacity (GB) finished."
+lib.write_to_logs(err, logfile_name)
+err = ""
+lib.write_to_logs(err, logfile_name)
